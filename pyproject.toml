@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "service-web"
+version = "0.1.0"
+description = ""
+authors = ["Pranav Raj H <vinstarpranav@gmail.com>"]
+readme = "README.md"
+packages = [{include = "service_web"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^2.2.2"
+Jinja2 = "^3.1.2"
+SQLAlchemy = "^1.4.41"
+mysqlclient = "^2.1.1"
+Flask-SQLAlchemy = "^2.5.1"
+black = "^22.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
