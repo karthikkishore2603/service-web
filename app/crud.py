@@ -1,6 +1,8 @@
-from . import db 
+from . import db,models
 
 def get_password(username: str) -> str:
-    password = db.Model.Admin.query.filter_by(username=username).first()
-    print(password)
-    return password
+    password=models.Admin.query.filter_by(username=username).first()
+    if password!=None:
+        return password.password
+    else:
+        return None
