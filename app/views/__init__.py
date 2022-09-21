@@ -1,6 +1,6 @@
-from .. import app
-from flask import Flask, render_template
+from .. import app, crud
+from flask import Flask, request, render_template
 
-@app.route("/", methods=["GET", "POST"])
+@app.get("/")
 def login():
-    return render_template("login.html")
+    return "hello"
