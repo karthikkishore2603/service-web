@@ -12,6 +12,6 @@ def login_verify():
     username=request.form.get("username")
     password=request.form.get("password")
     if util.is_valid_password(username,password):
-        return render_template("check.html")
+        return render_template("sidebar_admin.html")
     else:
         return "wrong"
