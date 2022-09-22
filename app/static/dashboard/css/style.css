@@ -7294,8 +7294,7 @@ button.bg-dark:focus {
   .pl-md-4,
   .px-md-4 {
     padding-left: 1.5rem !important; }
-  .p-md-5 {
-    padding: 3rem !important; }
+
   .pt-md-5,
   .py-md-5 {
     padding-top: 3rem !important; }
@@ -8192,6 +8191,8 @@ h1, h2, h3, h4, h5,
   width: 100%; }
 
 #sidebar {
+  min-height: 790px;
+  max-height: 790px;
   min-width: 270px;
   max-width: 270px;
   background: #3445b4;
@@ -8199,7 +8200,7 @@ h1, h2, h3, h4, h5,
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
-  position: relative; }
+  position:fixed; }
   #sidebar .h6 {
     color: #fff; }
   #sidebar.active {
