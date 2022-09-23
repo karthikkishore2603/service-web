@@ -14,4 +14,3 @@ db = SQLAlchemy(app)
 
 
 from . import views, models, crud
-
