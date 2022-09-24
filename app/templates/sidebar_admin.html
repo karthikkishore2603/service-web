@@ -3,69 +3,115 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 		
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{{ url_for('static', filename='dashboard/css/style.css') }}" >
+		<link rel="stylesheet" href="{{ url_for('static', filename='sidebar_style.css') }}" >
+		<link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
 
 		
-		<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar">
-				<div class="custom-menu">
-					<button type="button" id="sidebarCollapse" class="btn btn-primary">
-	          <i class="fa fa-bars"></i>
-	          <span class="sr-only">Toggle Menu</span>
-	        </button>
-        </div>
-				<div class="p-4">
-		  		<h1><a href="index.html" class="logo">Service Web <span>0</span></a></h1>
-	        <ul class="list-unstyled components mb-5">
-	          <li class="nav-link text-white {{ 'active' if is_endpoint('admin_dashboard') else '' }}">
-	            <a href="{{ url_for('admin_dashboard') }}"><span class="fa fa-home mr-3"></span>Dashboard</a>
-	          </li>
-	          <li class="nav-link text-white {{ 'active' if is_endpoint('technician') else '' }}">
-	              <a href="{{ url_for('technician') }}"><span class="fa fa-user mr-3"></span>Technician</a>
-	          </li>
-	          <li class="nav-link text-white {{ 'active' if is_endpoint('onsite') else '' }}">
-              <a href="{{ url_for('onsite') }}"><span class="fa-solid fa-house-laptop"></span> Onsite</a>
-	          </li>
-	          <li class="nav-link text-white {{ 'active' if is_endpoint('instore') else '' }}">
-              <a href="{{ url_for('instore') }}"><span class="fa fa-briefcase mr-3"></span>Instore</a>
-	          </li>
-	          <li>
-              <a href="#"><span class="fa fa-suitcase mr-3"></span> Gallery</a>
-	          </li>
-	          <li>
-              <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
-	          </li>
-	          <li>
-              <a href="#"><span class="fa fa-paper-plane mr-3"></span> Contacts</a>
-	          </li>
-	        </ul>
-
-	        <div class="mb-5">
-						<h3 class="h6 mb-3">Subscribe for newsletter</h3>
-						<form action="#" class="subscribe-form">
-	            <div class="form-group d-flex">
-	            	<div class="icon"><span class="icon-paper-plane"></span></div>
-	              <input type="text" class="form-control" placeholder="Enter Email Address">
-	            </div>
-	          </form>
-					</div>
-
-	        <div class="footer">
-	        	<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-	        </div>
-
-
-	      </div>
-    	</nav>
-		
-
-        
-
-    <script src="{{ url_for('static', filename='dashboard/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard/js/popper.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard/js/main.js') }}"></script>
-  </body>
-</html>
+	<nav>
+		<div class="logo">
+		  <i class="bx bx-menu menu-icon"></i>
+		  <span class="logo-name">Karthik</span>
+		</div>
+  
+		<div class="sidebar">
+		  <div class="logo">
+			<i class="bx bx-menu menu-icon"></i>
+			<span class="logo-name">Service Web</span>
+		  </div>
+  
+		  <div class="sidebar-content">
+			<ul class="lists">
+			  <li class="list">
+				<a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+				  <i class="bx bx-home-alt icon"></i>
+				  <span class="link">Dashboard</span>
+				</a>
+			  </li>
+			  <li class="list" >
+				<a href="{{ url_for('technician') }}" class="nav-link">
+				  <i class="bx bx-bar-chart-alt-2 icon"></i>
+				  <span class="link">Technician</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('onsite') }}" class="nav-link">
+				  <i class="bx bx-bell icon"></i>
+				  <span class="link">Onsite</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('instore') }}" class="nav-link">
+				  <i class="bx bx-message-rounded icon"></i>
+				  <span class="link">Instore</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('chiplevel') }}" class="nav-link">
+				  <i class="bx bx-pie-chart-alt-2 icon"></i>
+				  <span class="link">Chiplevel</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('warranty') }}" class="nav-link">
+				  <i class="bx bx-heart icon"></i>
+				  <span class="link">Warranty</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('expenditure') }}" class="nav-link">
+				  <i class="bx bx-folder-open icon"></i>
+				  <span class="link">Expenditure</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('order') }}" class="nav-link">
+				  <i class="bx bx-folder-open icon"></i>
+				  <span class="link">Order</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="{{ url_for('follow_up') }}" class="nav-link">
+				  <i class="bx bx-folder-open icon"></i>
+				  <span class="link">Follow Up</span>
+				</a>
+			  </li>
+			</ul>
+  
+			<div class="bottom-cotent">
+			  <li class="list">
+				<a href="#" class="nav-link">
+				  <i class="bx bx-cog icon"></i>
+				  <span class="link">------</span>
+				</a>
+			  </li>
+			  <li class="list">
+				<a href="#" class="nav-link">
+				  <i class="bx bx-log-out icon"></i>
+				  <span class="link">------</span>
+				</a>
+			  </li>
+			</div>
+		  </div>
+		</div>
+	  </nav>
+  
+	  <section class="overlay"></section>
+  
+	  <script>
+		const navBar = document.querySelector("nav"),
+		  menuBtns = document.querySelectorAll(".menu-icon"),
+		  overlay = document.querySelector(".overlay");
+  
+		menuBtns.forEach((menuBtn) => {
+		  menuBtn.addEventListener("click", () => {
+			navBar.classList.toggle("open");
+		  });
+		});
+  
+		overlay.addEventListener("click", () => {
+		  navBar.classList.remove("open");
+		});
+	  </script>
