@@ -7,10 +7,30 @@ def admin_dashboard():
 
 @app.get("/admin/technician")
 def technician():
-    return render_template("technician.html")
+    return render_template("technician.html",technicians=crud.get_all_technicians(),admins=crud.get_all_admins())
+
+
+@app.post("/admin/technician")
+def technician_post():
+    data=dict(request.form)
+    type = data.pop("role")
+    crud.create_user(data,type)
+    return render_template("technicians.html")
+
+
+
+@app.get("/admin/customers")
+def customers():
+    return render_template("customers.html")
 
 @app.get("/admin/onsite")
 def onsite():
+    return render_template("onsite.html")
+
+@app.post("/admin/onsite/")
+def onsite_add_task():
+    data=dict(request.form)
+    crud.create_task(data)
     return render_template("onsite.html")
 
 @app.get("/admin/instore")
@@ -36,3 +56,4 @@ def order():
 @app.get("/admin/followup")
 def follow_up():    
     return render_template("follow_up.html")
+

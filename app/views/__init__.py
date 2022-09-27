@@ -11,7 +11,10 @@ def login():
 def login_verify():
     username=request.form.get("username")
     password=request.form.get("password")
-    if util.is_valid_password(username,password):
+    role=request.form.get("role")
+    if not util.is_valid_password(username,password,role):
+        return render_template("check.html")
+    if role=="admin":
         return render_template("admin_dashboard.html")
     else:
-        return "wrong"
+        return render_template("tech_dashboard.html")
