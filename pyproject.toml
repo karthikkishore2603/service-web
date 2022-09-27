@@ -14,6 +14,7 @@ SQLAlchemy = "^1.4.41"
 mysqlclient = "^2.1.1"
 Flask-SQLAlchemy = "^2.5.1"
 black = "^22.8.0"
+PyMySQL = "^1.0.2"
 
 
 [build-system]

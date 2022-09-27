@@ -2,6 +2,7 @@
     "recommendations": [
         "github.copilot",
         "github.codespaces",
-        "GitHub.codespaces"
+        "kiteco.kite",
+        "ms-azuretools.vscode-docker"
     ]
 }

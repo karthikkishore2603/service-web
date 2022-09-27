@@ -1,9 +1,12 @@
-FROM ubuntu
+FROM python:latest
 
-CMD [ "/bin/bash" ]
+COPY ./app /service-app
+WORKDIR /service-app
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install mysql-server -y
-RUN apt-get install mysql-client -y
-RUN service mysql start
+ENV FLASK_RUN_HOST=0.0.0.0
+# RUN apk add --no-cache gcc musl-dev linux-headers
+
+COPY req.txt req.txt
+RUN pip install -r req.txt
+EXPOSE 5000
+CMD ["flask", "run"]
