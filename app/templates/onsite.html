@@ -86,14 +86,7 @@
                                     <option value="warranty" id="warranty">Warranty</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                
-                                <input type="text" class="form-control" placeholder="problem" name="service_charge" required>
-                            </div>
-                            <div class="mb-3">
-                                
-                                <input type="text" class="form-control" placeholder="problem" name="received_charge" required>
-                            </div>
+                            
                             <div class="mb-3">
                                 
                                 <input type="text" class="form-control" placeholder="problem" name="problem" required>
@@ -109,16 +102,15 @@
     </form>
 
     
-        <div>
+        <div class="table-responsive"> 
             <br>
             <h2 class="h3">Work</h2>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">OS.ID</th>
                         <th scope="col">Date</th>
                         <th scope="col">Customer Name</th>
-                        <th scope="col">Technician</th>
                         <th scope="col">Status</th>
                         <th scope="col">View</th>
                     </tr>
@@ -138,23 +130,18 @@
                         <td>
                             <p>{{ task.technician }}</p>
                         </td>
-                        <td>
-                            <p>{{ task.problem }}</p>
-                        </td>
+                        
+                        
                         
                         <td>
-                            <a role="button" class="btn btn-primary btn-sm"   data-bs-target="#updatetask">View</a>
-                            
+                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#updatetask">Update</button>
+                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#">View</button>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            {% if not ideas %}
-            <div style="text-align: center;">
-            <P>You haven't submitted any Ideas</P>
-            </div>
-            {% endif %}
+            
         </div>
 
         <form method="post">
@@ -163,52 +150,20 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Task</h4>
+                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Update Task</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                                <div class="mb-3">
-                                        
-                                    <input type="date" class="form-control"  name="date" required>
-                                </div>
+                                
                                 <div class="mb-3">
                                     
-                                    <input type="text" class="form-control" placeholder="Customer Name"  name="customer_name" required>
-                                </div>
-                                <div class="mb-3">
-                                    
-                                    <input type="text" class="form-control" placeholder="Phone No" name="phone_no" required>
-                                </div>
-                                <div class="mb-3">
-                                    
-                                    <input type="text"  class="form-control" placeholder="Address" name="address" required>
-                                </div>
-                                <div class="mb-3">
-                                    <select class="form-control" name="technician">
-                                        <option value="installation" id="installation">staff</option>
-                                        <option value="service" id="service">Service</option>
-                                        <option value="warranty" id="warranty">Warranty</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <select class="form-control" name="work">
-                                        <option value="installation" id="installation">Installation</option>
-                                        <option value="service" id="service">Service</option>
-                                        <option value="warranty" id="warranty">Warranty</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    
-                                    <input type="text" class="form-control" placeholder="problem" name="service_charge" required>
+                                    <input type="text" class="form-control" placeholder="display_task.date" name="service_charge" required>
                                 </div>
                                 <div class="mb-3">
                                     
                                     <input type="text" class="form-control" placeholder="problem" name="received_charge" required>
                                 </div>
-                                <div class="mb-3">
-                                    
-                                    <input type="text" class="form-control" placeholder="problem" name="problem" required>
-                                </div>
+                                
                                 
                                 <button type="submit" class="btn btn-dark">Add</button>
                                           
