@@ -30,7 +30,11 @@ def get_all_admins() -> list:
     return admins
 
 def create_task(data: dict) -> None:
-    task=models.onsite_add_task(**data)
+    task=models.OnsiteTask(**data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
+
+def display_task() -> list:
+    display_task=models.OnsiteTask.query.all()
+    return display_task

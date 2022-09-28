@@ -15,7 +15,7 @@ def technician_post():
     data=dict(request.form)
     type = data.pop("role")
     crud.create_user(data,type)
-    return render_template("technicians.html")
+    return render_template("technician.html",technicians=crud.get_all_technicians(),admins=crud.get_all_admins())
 
 
 
@@ -25,13 +25,13 @@ def customers():
 
 @app.get("/admin/onsite")
 def onsite():
-    return render_template("onsite.html")
+    return render_template("onsite.html",display_task=crud.display_task())
 
 @app.post("/admin/onsite/")
 def onsite_add_task():
     data=dict(request.form)
     crud.create_task(data)
-    return render_template("onsite.html")
+    return render_template("onsite.html", display_task=crud.display_task())
 
 @app.get("/admin/instore")
 def instore():

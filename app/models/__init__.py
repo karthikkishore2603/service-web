@@ -1,3 +1,4 @@
+from tokenize import Double
 from .. import db
 from sqlalchemy import (
     BigInteger,
@@ -25,18 +26,18 @@ class Technician(db.Model):
     name=Column(String(20),nullable=False)
     phone_no=Column(String(20),nullable=False)
 
-class onsite_add_task(db.Model):
+class OnsiteTask(db.Model):
     __tablename__="onsite_add_task"
     id=Column(Integer,primary_key=True)
     customer_name=Column(String(20),nullable=False)
     address=Column(String(20),nullable=False)
-    phone_no=Column(String(20),nullable=False)
+    phone_no=Column(String(20),nullable=False)   
     problem=Column(String(20),nullable=False)
     work=Column(String(20),nullable=False)
     date=Column(Date,nullable=False)
-    
     technician=Column(String(20),nullable=False)
-    
+    service_charge=Column(Integer,nullable=True)
+    received_charge=Column(Integer,nullable=True)
 
 
 db.create_all()
