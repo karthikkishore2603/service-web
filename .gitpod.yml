@@ -2,15 +2,12 @@
 tasks:
   - init: echo 'init script' # runs during prebuild
     command: echo 'start script'
-  - command: mysql -e 'create user karthik@localhost identified by password;'
-    command: mysql -e 'grant all priveleges on *.* to karthik@loaclhost;'
-    command: mysql -e 'create database service;'
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
   - port: 3000
     onOpen: open-preview
 
-# Importing images
+# Importing imagess
 image:
  file: .gitpod.dockerfile
