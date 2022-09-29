@@ -30,6 +30,7 @@ def onsite():
 @app.post("/admin/onsite/")
 def onsite_add_task():
     data=dict(request.form)
+    print(data)
     crud.create_task(data)
     return render_template("onsite.html", display_task=crud.display_task())
 

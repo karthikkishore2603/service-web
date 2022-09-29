@@ -135,44 +135,48 @@
                         
                         <td>
                             <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#updatetask">Update</button>
-                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#">View</button>
+                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button>
                         </td>
                     </tr>
-                    {% endfor %}
+                    <form method="post">
+                        <div id="updatetask" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
+                            <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="submitIdeaBackdropLabel">Update Task</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                                
+                                            <input type="hidden" value="{{ task.id }}" class="form-control" placeholder="display_task.date" name="task_id">
+                                        </div>
+                                            <div class="mb-3">
+                                                
+                                                <input type="text" class="form-control" placeholder="display_task.date" name="service_charge" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                
+                                                <input type="text" class="form-control" placeholder="problem" name="received_charge" required>
+                                            </div>
+                                            
+                                            
+                                            <button type="submit" class="btn btn-dark">Update</button>
+                                                      
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% endfor -%}
                 </tbody>
             </table>
             
         </div>
 
-        <form method="post">
-            <div id="updatetask" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
-                <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Update Task</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                                
-                                <div class="mb-3">
-                                    
-                                    <input type="text" class="form-control" placeholder="display_task.date" name="service_charge" required>
-                                </div>
-                                <div class="mb-3">
-                                    
-                                    <input type="text" class="form-control" placeholder="problem" name="received_charge" required>
-                                </div>
-                                
-                                
-                                <button type="submit" class="btn btn-dark">Add</button>
-                                          
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </form>
+        
 </div>
 </main>
 

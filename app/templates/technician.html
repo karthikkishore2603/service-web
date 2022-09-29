@@ -89,7 +89,7 @@
                 <tbody class="table-group-divider">{% for admin in admins -%}
                     <tr>
                         <th scope="row">
-                            <p>1</p>
+                            <p>1{{admin.admin_id }}</p>
                         </th>
                         <td>
                             <p>{{ admin.name }}</p>
@@ -111,7 +111,7 @@
                     {% for tech in technicians -%}
                     <tr>
                         <th scope="row">
-                            <p>1</p>
+                            <p>{{ tech.staff_id }}</p>
                         </th>
                         <td>
                             <p>{{ tech.name }}</p>
