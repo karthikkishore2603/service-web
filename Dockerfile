@@ -1,9 +1,5 @@
-FROM ubuntu
+FROM gitpod/workspace-mysql
 
-CMD [ "/bin/bash" ]
-
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install mysql-server -y
-RUN apt-get install mysql-client -y
-RUN service mysql start
+RUN mysql -e 'create user karthik@localhost identified by password;'
+RUN mysql -e 'grant all priveleges on *.* to karthik@loaclhost;'
+RUN mysql -e 'create database service;'
