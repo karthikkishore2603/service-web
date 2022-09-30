@@ -20,7 +20,6 @@ def technician():
 @app.post("/admin/technician")
 def technician_post():
     data = dict(request.form)
-    type = data.pop("role")
 
     try:
         crud.create_technician(data)
@@ -52,7 +51,6 @@ def onsite():
 @app.post("/admin/onsite")
 def onsite_add_task():
     data = dict(request.form)
-    print(data)
     crud.create_task(data)
     return render_template("onsite.html", tasks=crud.get_all_tasks())
 

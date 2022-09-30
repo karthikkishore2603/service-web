@@ -29,8 +29,8 @@ def create_admin(data: dict) -> None:
 
 def create_technician(data: dict) -> None:
     errors = ""
-    if util.is_username_available(data["username"], "admin"):
-        errors = "Username already exists,"
+    if util.is_username_available(data["username"], "technician"):
+        errors = "Username already exists"
 
     if errors:
         raise Exception(errors)
