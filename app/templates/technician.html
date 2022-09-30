@@ -65,13 +65,7 @@
 
                                 <input type="text" class="form-control" placeholder="Phone No" name="phone_no" required>
                             </div>
-                            <div class="mb-3">
-                                <select class="form-control" name="role">
-                                    <option>Select Role</option>
-                                    <option value="admin" id="admin">Admin</option>
-                                    <option value="technician" id="technician">Technician</option>
-                                </select>
-                            </div>
+                    
                             <button type="submit" class="btn btn-dark">Submit</button>
 
                         </div>
@@ -80,10 +74,10 @@
                 </div>
             </div>
         </form>
-        <div>
+        <div class="table-responsive">
             <br>
             <h2 class="h3">Technicians</h2>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">T.ID</th>
@@ -94,28 +88,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    {% for admin in admins -%}
-                    <tr>
-                        <th scope="row">
-                            <p>1{{admin.admin_id }}</p>
-                        </th>
-                        <td>
-                            <p>{{ admin.name }}</p>
-                        </td>
-                        <td>
-                            <p>{{ admin.username }}</p>
-                        </td>
-                        <td>
-                            <p>Admins</p>
-
-                        </td>
-
-                        <td>
-                            <p>{{ admin.phone_no }}</p>
-
-                        </td>
-                    </tr>
-                    {% endfor %}
+            
                     {% for tech in technicians -%}
                     <tr>
                         <th scope="row">
@@ -142,6 +115,8 @@
             </table>
 
         </div>
+
+        
     </div>
     </main>
 
