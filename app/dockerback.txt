@@ -1,3 +1,0 @@
-RUN /bin/mysql -p "\n" -e create user 'karthik'@'localhost' identified by 'password'
-RUN /bin/mysql -p "\n" -e grant all privileges on *.* to 'karthik'@'localhost'
-RUN /bin/mysql -p "\n" -e create database service
