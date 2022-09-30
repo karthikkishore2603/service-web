@@ -50,6 +50,9 @@ def get_all_admins() -> list:
     admins = models.Admin.query.all()
     return admins
 
+def get_all_onsitetasks() -> list:
+    tasks = models.OnsiteTask.query.all()
+    return tasks
 
 def get_admin(username: str) -> models.Admin:
     return models.Admin.query.filter_by(username=username).first()
@@ -64,8 +67,3 @@ def create_task(data: dict) -> None:
     db.session.add(task)
     db.session.commit()
     db.session.flush()
-
-
-def get_all_onsite_task() -> list:
-    tasks = models.OnsiteTask.query.all()
-    return tasks

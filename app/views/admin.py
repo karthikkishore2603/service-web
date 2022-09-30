@@ -46,15 +46,15 @@ def customers():
 
 @app.get("/admin/onsite")
 def onsite():
-    return render_template("onsite.html", display_task=crud.display_task())
+    return render_template("onsite.html", tasks=crud.get_all_tasks())
 
 
 @app.post("/admin/onsite")
 def onsite_add_task():
     data = dict(request.form)
-    request.close()
+    print(data)
     crud.create_task(data)
-    return render_template("onsite.html", display_task=crud.display_task())
+    return render_template("onsite.html", tasks=crud.get_all_tasks())
 
 
 @app.get("/admin/instore")
