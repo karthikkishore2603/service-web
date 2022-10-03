@@ -18,3 +18,9 @@ def is_username_available(username: str, role: str) -> bool:
     if user:
         return True
     return False
+
+def is_customer_available(phone_no: str) -> bool:
+    user = crud.get_customer_by_phone(phone_no)
+    if user:
+        return  True
+    return False

@@ -40,19 +40,19 @@ def technician_post():
 
 @app.get("/admin/customers")
 def customers():
-    return render_template("customers.html")
+    return render_template("customers.html", customers=crud.get_all_customer())
 
 
 @app.get("/admin/onsite")
 def onsite():
-    return render_template("onsite.html", tasks=crud.get_all_tasks())
+    return render_template("onsite.html", tasks=crud.get_all_onsitetasks(),technicians=crud.get_all_technicians())
 
 
 @app.post("/admin/onsite")
 def onsite_add_task():
     data = dict(request.form)
     crud.create_task(data)
-    return render_template("onsite.html", tasks=crud.get_all_tasks())
+    return render_template("onsite.html", tasks=crud.get_all_onsitetasks())
 
 
 @app.get("/admin/instore")

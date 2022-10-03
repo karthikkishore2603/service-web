@@ -50,9 +50,12 @@ def get_all_admins() -> list:
     admins = models.Admin.query.all()
     return admins
 
+
+
 def get_all_onsitetasks() -> list:
     tasks = models.OnsiteTask.query.all()
     return tasks
+
 
 def get_admin(username: str) -> models.Admin:
     return models.Admin.query.filter_by(username=username).first()
@@ -63,7 +66,38 @@ def get_technician(username: str) -> models.Technician:
 
 
 def create_task(data: dict) -> None:
+    customer_data = {}
+    customer_data.update(
+        {
+            "name": data.pop("customer_name"),
+            "phone_no": data.pop("phone_no"),
+            "address": data.pop("address"),
+        }
+    )
+
+    if not util.is_customer_available(customer_data["phone_no"]):
+        create_customer(customer_data)
+    data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
+
     task = models.OnsiteTask(**data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
+
+
+def get_customer_by_phone(phone_no: str) -> models.Customer:
+    return models.Customer.query.filter_by(phone_no=phone_no).first()
+
+
+def create_customer(data: dict) -> None:
+    if util.is_customer_available(data["phone_no"]):
+        print("hello")
+
+    user = models.Customer(**data)
+    db.session.add(user)
+    db.session.commit()
+    db.session.flush()
+
+def get_all_customer()-> list:
+    customers = models.Customer.query.all()
+    return customers

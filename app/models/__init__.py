@@ -26,8 +26,8 @@ class Admin(db.Model):
 
 
 class Technician(db.Model):
-    __tablename__ = "staff"
-    staff_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    __tablename__ = "technician"
+    technician_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(20), nullable=False)
     username = Column(String(20), primary_key=True)
     password = Column(String(20), nullable=False)
@@ -40,11 +40,13 @@ class OnsiteTask(db.Model):
     task_id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
     customer_id = Column(Integer, ForeignKey("customer"))
-    staff_id = Column(Integer, ForeignKey("staff"))
+    technician_id = Column(Integer, ForeignKey("technician"))
     service_type = Column(String(20), nullable=False)
     problem = Column(String(20), nullable=False)
     status = Column(String(20), default="open")
-    review = Column(String(70), nullable=False)
+    review = Column(String(70))
+
+    customer = relationship("Customer")
 
 
 class Resources(db.Model):
