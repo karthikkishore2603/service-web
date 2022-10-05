@@ -59,7 +59,7 @@ def onsite_add_task():
 def instore():
     return render_template("instore.html")
 
-@app.get("/admin/instore")
+@app.get("/admin/instore/add")
 def instore_add_task():
     return render_template("instore_add_task.html")
 

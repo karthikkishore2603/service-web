@@ -69,6 +69,7 @@ class InstoreTask(db.Model):
     __tablename__ = "instore_task"
     in_task_id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
+    status = Column(String(20), default="open")
     customer_id = Column(Integer, ForeignKey("customer.customer_id"))
     service_type = Column(String(20), nullable=False)
     product_details =Column(String(20), nullable=False)
