@@ -46,7 +46,7 @@
               </button>
           </div>        
           
-        <form method="post">
+        <form id="add" method="post">
         <div id="add_task" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
             <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
             <div class="modal-dialog">
@@ -63,6 +63,7 @@
                             <div class="mb-3">
                                 
                                 <input type="text" class="form-control" placeholder="Customer Name"  name="customer_name" required>
+                                
                             </div>
                             <div class="mb-3">
                                 
@@ -138,7 +139,7 @@
                             <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button>
                         </td>
                     </tr>
-                    <form method="post">
+                    <form action="/update" method="post">
                         <div id="updatetask" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
                             <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
                             <div class="modal-dialog">
@@ -150,15 +151,27 @@
                                     <div class="modal-body">
                                         <div class="mb-3">
                                                 
-                                            <input type="hidden" value="{{ task.id }}" class="form-control" placeholder="display_task.date" name="task_id">
+                                            <input type="text"  class="form-control" placeholder="display_task.date" name="task_id">
+                                        </div>
+                                        <div class="mb-3">
+                                                
+                                            <input type="text" class="form-control" placeholder="Materials" name="material" required>
                                         </div>
                                             <div class="mb-3">
                                                 
-                                                <input type="text" class="form-control" placeholder="display_task.date" name="service_charge" required>
+                                                <input type="text" class="form-control" placeholder="Service Charge" name="service_charge" required>
                                             </div>
                                             <div class="mb-3">
                                                 
-                                                <input type="text" class="form-control" placeholder="problem" name="received_charge" required>
+                                                <input type="text" class="form-control" placeholder="Received Charge" name="received_charge" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                
+                                                <input type="text" class="form-control" placeholder="review" name="received_charge" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                
+                                                <input type="text" class="form-control" placeholder="status" name="received_charge" required>
                                             </div>
                                             
                                             

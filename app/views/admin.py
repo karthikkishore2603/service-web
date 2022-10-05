@@ -52,13 +52,16 @@ def onsite():
 def onsite_add_task():
     data = dict(request.form)
     crud.create_task(data)
-    return render_template("onsite.html", tasks=crud.get_all_onsitetasks())
+    return render_template("onsite.html", tasks=crud.get_all_onsitetasks() ,technicians=crud.get_all_technicians())
 
 
 @app.get("/admin/instore")
 def instore():
     return render_template("instore.html")
 
+@app.get("/admin/instore")
+def instore_add_task():
+    return render_template("instore_add_task.html")
 
 @app.get("/admin/chiplevel")
 def chiplevel():
