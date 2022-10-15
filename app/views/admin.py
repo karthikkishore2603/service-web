@@ -58,6 +58,9 @@ def onsite_add_task():
         crud.update_onsitetasks(data)
     return render_template("onsite.html", tasks=crud.get_all_onsitetasks() ,technicians=crud.get_all_technicians())
 
+@app.get("/admin/onsite/viewtask")
+def onsite_task_view():
+    return render_template("onsite_task_view.html")
 
 @app.get("/admin/instore")
 def instore():

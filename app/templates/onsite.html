@@ -139,8 +139,8 @@
                         
                         
                         <td>
-                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#updatetask">Update</button>
-                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button>
+                            
+                            <a href="{{ url_for('onsite_task_view') }}"><button role="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
                         </td>
                     </tr>
                     <form  method="post">
