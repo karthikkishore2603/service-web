@@ -61,10 +61,6 @@
                                 <input type="date" class="form-control"  name="date" required>
                             </div>
                             <div class="mb-3">
-                                                
-                                <input type="hidden"  class="form-control" value="add_task" name="type">
-                            </div>
-                            <div class="mb-3">
                                 
                                 <input type="text" class="form-control" placeholder="Customer Name"  name="customer_name" required>
                                 
@@ -140,57 +136,10 @@
                         
                         <td>
                             
-                            <a href="{{ url_for('onsite_task_view') }}"><button role="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
+                            <a href="{{ url_for('onsite_task_view', task_id=task.task_id) }}"><button role="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
                         </td>
                     </tr>
-                    <form  method="post">
-                        <div id="updatetask" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
-                            <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="submitIdeaBackdropLabel">Update Task</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                                
-                                            <input type="hidden"  class="form-control" value="{{ task.task_id }}"name="task_id">
-                                        </div>
-                                        <div class="mb-3">
-                                                
-                                            <input type="hidden"  class="form-control" value="resource_update" name="type">
-                                        </div>
-                                        <div class="mb-3">
-                                                
-                                            <input type="text" class="form-control" value="10"placeholder="Materials" name="material" required>
-                                        </div>
-                                            <div class="mb-3">
-                                                
-                                                <input type="text" class="form-control" placeholder="Service Charge" name="service_charge" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                
-                                                <input type="text" class="form-control" placeholder="Received Charge" name="received_charge" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                
-                                                <input type="text" class="form-control" placeholder="review" name="received_charge" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                
-                                                <input type="text" class="form-control" placeholder="status" name="received_charge" required>
-                                            </div>
-                                            
-                                            
-                                            <button type="submit" class="btn btn-dark">Update</button>
-                                                      
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    
                     {% endfor -%}
                 </tbody>
             </table>

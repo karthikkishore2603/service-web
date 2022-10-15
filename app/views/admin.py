@@ -51,16 +51,20 @@ def onsite():
 @app.post("/admin/onsite")
 def onsite_add_task():
     data = dict(request.form)
-    type=data.pop('type')
-    if type=='add_task':
-        crud.create_task(data)
-    elif type=='resource_update':
-        crud.update_onsitetasks(data)
+    crud.create_task(data)
     return render_template("onsite.html", tasks=crud.get_all_onsitetasks() ,technicians=crud.get_all_technicians())
 
-@app.get("/admin/onsite/viewtask")
-def onsite_task_view():
-    return render_template("onsite_task_view.html")
+@app.get("/admin/onsite/viewtask/<task_id>")
+def onsite_task_view(task_id):
+    print((crud.get_resources_by_id(task_id)))
+    return render_template("onsite_task_view.html",tasks=crud.get_onsitetask_by_id(task_id), resources=crud.get_resources_by_id(task_id))
+
+@app.post("/admin/onsite/viewtask/<task_id>")
+def onsite_task_update(task_id):
+    data = dict(request.form)
+    data['task_id']=task_id
+    crud.update_onsitetasks(data)
+    return render_template("onsite_task_view.html",tasks=crud.get_onsitetask_by_id(task_id),resources=crud.get_resources_by_id(task_id))
 
 @app.get("/admin/instore")
 def instore():
