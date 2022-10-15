@@ -56,6 +56,21 @@ def get_all_onsitetasks() -> list:
     tasks = models.OnsiteTask.query.all()
     return tasks
 
+def get_task_by_id(task_id: int) -> models.OnsiteTask:
+    return models.Resources.query.filter_by(task_id=task_id).first()
+
+def update_onsitetasks(data) -> list:
+    if util.is_task_available(data['task_id']):
+        task_id = data.pop('task_id')
+        db.session.query(models.Resources).filter(models.Resources.task_id == task_id).update(data)
+        db.session.commit()
+        db.session.flush()
+    else:
+        update_tasks=models.Resources(**data)
+        db.session.add(update_tasks)
+        db.session.commit()
+        db.session.flush()
+
 
 def get_admin(username: str) -> models.Admin:
     return models.Admin.query.filter_by(username=username).first()

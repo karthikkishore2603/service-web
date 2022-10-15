@@ -45,13 +45,17 @@ def customers():
 
 @app.get("/admin/onsite")
 def onsite():
-    return render_template("onsite.html", tasks=crud.get_all_onsitetasks(),technicians=crud.get_all_technicians())
+    return render_template("onsite.html", tasks=crud.get_all_onsitetasks(),technicians=crud.get_all_technicians(),)
 
 
 @app.post("/admin/onsite")
 def onsite_add_task():
     data = dict(request.form)
-    crud.create_task(data)
+    type=data.pop('type')
+    if type=='add_task':
+        crud.create_task(data)
+    elif type=='resource_update':
+        crud.update_onsitetasks(data)
     return render_template("onsite.html", tasks=crud.get_all_onsitetasks() ,technicians=crud.get_all_technicians())
 
 

@@ -24,3 +24,10 @@ def is_customer_available(phone_no: str) -> bool:
     if user:
         return  True
     return False
+
+def is_task_available(task_id: int) -> bool:
+    task = crud.get_task_by_id(task_id)
+    if task==None:
+        return False
+    else:
+        return True

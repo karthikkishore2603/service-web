@@ -61,6 +61,10 @@
                                 <input type="date" class="form-control"  name="date" required>
                             </div>
                             <div class="mb-3">
+                                                
+                                <input type="hidden"  class="form-control" value="add_task" name="type">
+                            </div>
+                            <div class="mb-3">
                                 
                                 <input type="text" class="form-control" placeholder="Customer Name"  name="customer_name" required>
                                 
@@ -126,7 +130,7 @@
                             <p>{{ task.date }}</p>
                         </td>
                         <td>
-                            <p>{{ task.customer_name }}</p>
+                            <p>{{ task.customer.name }}</p>
                         </td>
                         <td>
                             <p>{{ task.technician }}</p>
@@ -139,7 +143,7 @@
                             <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button>
                         </td>
                     </tr>
-                    <form action="/update" method="post">
+                    <form  method="post">
                         <div id="updatetask" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
                             <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
                             <div class="modal-dialog">
@@ -151,11 +155,15 @@
                                     <div class="modal-body">
                                         <div class="mb-3">
                                                 
-                                            <input type="text"  class="form-control" placeholder="display_task.date" name="task_id">
+                                            <input type="hidden"  class="form-control" value="{{ task.task_id }}"name="task_id">
                                         </div>
                                         <div class="mb-3">
                                                 
-                                            <input type="text" class="form-control" placeholder="Materials" name="material" required>
+                                            <input type="hidden"  class="form-control" value="resource_update" name="type">
+                                        </div>
+                                        <div class="mb-3">
+                                                
+                                            <input type="text" class="form-control" value="10"placeholder="Materials" name="material" required>
                                         </div>
                                             <div class="mb-3">
                                                 
