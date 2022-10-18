@@ -45,7 +45,7 @@ def customers():
 
 @app.get("/admin/onsite")
 def onsite():
-    return render_template("onsite.html", tasks=crud.get_all_onsitetasks(),technicians=crud.get_all_technicians(),)
+    return render_template("onsite.html",customers=crud.get_all_customer(), tasks=crud.get_all_onsitetasks(),technicians=crud.get_all_technicians(),)
 
 
 @app.post("/admin/onsite")

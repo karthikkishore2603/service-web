@@ -10,39 +10,83 @@
 
 <div class="page-content p-5" id="content">
     
-    <a href="{{ url_for('instore') }}"><i class="fa fa-chevron-circle-left fa-3x" ></i>
+    <a href="{{ url_for('onsite') }}"><i class="fa fa-chevron-circle-left fa-3x" ></i>
     </a><br>
 
     <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
   
     <div class="container-fluid right-content">
 
-    <h1>Update Task</h1>
+    <h1>View Task</h1>
+    <br>
+    <br>
 
 <form method="post">
+  <div class="row">
+        
+    <div class="col">
+      <h3>Task ID</h3>
+    </div>
+    <div class="col">
+      <h3>{{ tasks.task_id }}</h3>
+    </div>
+    <div class="col">
+      <h3>Date</h3>
+    </div>
+    <div class="col">
+      <h3>{{ tasks.date }}</h3>
+    </div>
+  </div>
+
+
     <div class="row">
         
         <div class="col">
-          <label>Status</label>
-          <select class="form-control" placeholder="Last name">
-            <option>open</option>
-            <option>close</option>
-          </select>
+          <h3>Customer Name</h3>
+        </div>
+        <div class="col">
+          <h3>{{ tasks.customer.name }}</h3>
+        </div>
+        <div class="col">
+          <h3>Phone No</h3>
+        </div>
+        <div class="col">
+          <h3>{{ tasks.customer.phone_no }}</h3>
         </div>
       </div>
 
       <div class="row">
+        
         <div class="col">
-          <label>problem</label>
-          <input value="{{ tasks.problem }}" type="text" name="problem"class="form-control">
+          <h3>Technician</h3>
         </div>
         <div class="col">
-          <label>Customer Phone No</label>
-          <input type="text" class="form-control">
+          <h3>{{ tasks.technician.name }}</h3>
+        </div>
+        <div class="col">
+          <h3></h3>
+        </div>
+        <div class="col">
+          <h3></h3>
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col">
+          <h3>Service Type</h3>
+        </div>
+        <div class="col">
+          <h3>{{ tasks.service_type }}</h3>
+        </div>
+        <div class="col">
+          <h3>Problem</h3>
+        </div>
+        <div class="col">
+          <h3>{{ tasks.problem }}</h3>
         </div>
       </div>
     
-    </div>
     <div class="modal-body">
       <div class="mb-3">
               
@@ -54,15 +98,18 @@
           </div>
           <div class="mb-3">
               
-              <input type="text" class="form-control" value="10"placeholder="Received Charge" name="received_charge" required>
+              <input type="text" class="form-control" value="{{ resources.received_charge }}"placeholder="Received Charge" name="received_charge" required>
           </div>
           <div class="mb-3">
               
-              <input type="text" class="form-control" placeholder="review" name="review" required>
+              <input type="text" class="form-control" value="{{ resources.review }}" placeholder="Customer Feedback" name="review" required>
           </div>
           <div class="mb-3">
-              
-              <input type="text" class="form-control" placeholder="status" name="received_charge" required>
+            <select class="form-control" name="status">
+              {% for status in ["open","pending","closed"] %}
+              <option value={{status}} {{ "selected" if status==resources.status }}>{{status}}</option>
+              {% endfor %}
+          </select>
           </div>
     
           

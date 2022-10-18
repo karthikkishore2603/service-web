@@ -44,7 +44,7 @@ class OnsiteTask(db.Model):
     service_type = Column(String(20), nullable=False)
     problem = Column(String(20), nullable=False)
     
-
+    technician= relationship("Technician")
     customer = relationship("Customer")
 
 
@@ -54,7 +54,7 @@ class Resources(db.Model):
     material = Column(String(20), nullable=False)
     service_charge = Column(Integer, nullable=True)
     received_charge = Column(Integer, nullable=True)
-    status = Column(String(20), default="open")
+    status = Column(String(20))
     review = Column(String(70))
 
 class Customer(db.Model):
@@ -69,24 +69,46 @@ class InstoreTask(db.Model):
     __tablename__ = "instore_task"
     in_task_id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
+    service_type = Column(String(20), nullable=False)
     status = Column(String(20), default="open")
     customer_id = Column(Integer, ForeignKey("customer.customer_id"))
-    service_type = Column(String(20), nullable=False)
-    product_details =Column(String(20), nullable=False)
+    item_id = Column(Integer, ForeignKey("items.item_id"))
+    product_id = Column(Integer, ForeignKey("product.product_id"))
+    technician_id = Column(Integer, ForeignKey("technician"))
+    #chiplevel_id = Column(Integer, ForeignKey("chiplevel"))
     problem = Column(String(20), nullable=False)
-    est_days = Column(Integer, nullable=True)
-    est_charge = Column(Integer, nullable=True)
-    remarks =Column(String(70), nullable=True)
-    items = Column(Integer, ForeignKey("customer.customer_id"))
+    product_details =Column(String(20), nullable=False)
+    
+    est_days = Column(Integer)
+    est_charge = Column(Integer)
+    final_charge = Column(Integer)
+    recived_charge = Column(Integer)
+    remarks =Column(String(70))
+    
 
 
 class Products(db.Model):
     __tablename__ = "product"
-    in_task_id = Column(Integer, primary_key=True)
+    product_id = Column(Integer, primary_key=True, autoincrement=True)
     product_name = Column(String(20), nullable=False)
+    product_company = Column(String(20))
+
+class Items(db.Model):
+    __tablename__ = 'items'
+    item_id = Column(Integer, primary_key=True, autoincrement=True)
+    item_name = Column(String(20), nullable=False)
     serial_no = Column(String(20))
-    description = Column(String(70))
-    nos = Column(Integer, nullable=False)
+    remarks =  Column(String(20))
+
+class Partners(db.Model):
+    __tablename__='partners'
+    partner_id = Column(Integer, primary_key=True, autoincrement=True)
+    partner_name = Column(String(20), nullable=False)
+    phone_no = Column(String(10), nullable=False)
+    partner_address = Column(String(20))
+
+
+
 
 
 

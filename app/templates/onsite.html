@@ -60,15 +60,28 @@
                                     
                                 <input type="date" class="form-control"  name="date" required>
                             </div>
+                            
                             <div class="mb-3">
                                 
-                                <input type="text" class="form-control" placeholder="Customer Name"  name="customer_name" required>
-                                
+                                <input type="text" list="customer_name" class="form-control" placeholder="Customer Name"  name="customer_name" required>
+                                {% for cus in customers -%}
+                                <datalist id="customer_name">
+                                    <option value="{{ cus.name }}">{{ cus.name }}</option>
+
+                                </datalist>
+                                {% endfor -%}
                             </div>
                             <div class="mb-3">
                                 
-                                <input type="text" class="form-control" placeholder="Phone No" name="phone_no" required>
+                                <input type="text" list="phone_no" class="form-control" placeholder="Phone No" name="phone_no" required>
+                                {% for cus in customers -%}
+                                <datalist id="phone_no">
+                                    <option value="{{ cus.phone_no }}">{{ cus.phone_no }}</option>
+
+                                </datalist>
+                                {% endfor -%}
                             </div>
+                            
                             <div class="mb-3">
                                 
                                 <input type="text"  class="form-control" placeholder="Address" name="address" required>
@@ -129,7 +142,7 @@
                             <p>{{ task.customer.name }}</p>
                         </td>
                         <td>
-                            <p>{{ task.technician }}</p>
+                            <p>{{ task.technician.technician_id }}</p>
                         </td>
                         
                         
