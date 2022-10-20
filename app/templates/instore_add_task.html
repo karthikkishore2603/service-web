@@ -16,11 +16,11 @@
     <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
   
     <div class="container-fluid right-content">
-
+<form action="" method="post">
       <div class="row">
         <div class="col"><h1>Add Task</h1></div>
         <div class="col">
-    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#">Save</button>
+    <button class="btn btn-dark" type="submit" data-bs-toggle="modal" data-bs-target="#">Save</button>
     </div>
   </div>
 
@@ -121,6 +121,15 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col">
+          <label>Remarks</label>
+          <input type="text" name="remarks" class="form-control">
+        </div>
+        
+      </div>
+    </form>
+
       <h1>Items</h1>
 
       <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#add_item">Add Item</button>
@@ -165,52 +174,49 @@
     </div>
 
 
-    <form id="add" method="post">
-      <div id="add_item" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
-          <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Item</h4>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                                                    
-                          <div class="mb-3">
-                              
-                              <input type="text" list="customer_name" class="form-control" placeholder="Item Name"  name="item_name" required>
-                              
-                          </div>
-                          
-                          
-                          <div class="mb-3">
-                              
-                              <input type="text"  class="form-control" placeholder="Serial No" name="serial_no" required>
-                          </div>
-                          
-                          
-                          
-                          <div class="mb-3">
-                              
-                              <input type="text" class="form-control" placeholder="Remarks" name="remarks" required>
-                          </div>
-                          
-                          <button type="submit" class="btn btn-dark">Add</button>
-                                    
-                  </div>
-                  
+    
+
+ 
+
+
+<form id="add" action="/admin/instore/add/items" method="post">
+  <div id="add_item" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
+      <!-- Popup contents, todo, make this actual pop on the prev button is clicked -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Item</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
+              <div class="modal-body">
+                                                
+                      <div class="mb-3">
+                          
+                          <input type="text" list="customer_name" class="form-control" placeholder="Item Name"  name="item_name" required>
+                          
+                      </div>
+                      
+                      
+                      <div class="mb-3">
+                          
+                          <input type="text"  class="form-control" placeholder="Serial No" name="serial_no" required>
+                      </div>
+                      
+                      
+                      
+                      <div class="mb-3">
+                          
+                          <input type="text" class="form-control" placeholder="Remarks" name="remarks" required>
+                      </div>
+                      
+                      <button type="submit" class="btn btn-dark">Add</button>
+                                
+              </div>
+              
           </div>
       </div>
-  </form>
-
-  <div class="row">
-    <div class="col">
-      <label>Remarks</label>
-      <input type="text" name="remarks" class="form-control">
-    </div>
-    
   </div>
+</form>
 
     </div>
 </div>

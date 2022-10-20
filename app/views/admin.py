@@ -74,6 +74,19 @@ def instore():
 def instore_add_task():
     return render_template("instore_add_task.html")
 
+@app.post("/admin/instore/add")
+def instore_update_task():
+    data = dict(request.form)
+    
+    print(data)
+    return render_template("instore_add_task.html")
+
+@app.post("/admin/instore/add/items")
+def instore_update_task_items():
+    data = dict(request.form)
+    print(data)
+    return render_template("instore_add_task.html")
+
 @app.get("/admin/chiplevel")
 def chiplevel():
     return render_template("chiplevel.html")
