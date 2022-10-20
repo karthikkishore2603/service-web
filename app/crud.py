@@ -50,11 +50,28 @@ def get_all_admins() -> list:
     admins = models.Admin.query.all()
     return admins
 
-
-
-def get_all_onsitetasks() -> list:
-    tasks = models.OnsiteTask.query.all()
+def get_all_onsitetasks(filter: dict = None) -> list:
+    tasks = models.OnsiteTask.query
+    if filter:
+        customer = get_customer_by_phone(filter["fphone"])
+        if customer:
+            customer_id = customer.customer_id
+            tasks = tasks.filter_by(customer_id=customer_id)
+        if filter["fid"]:
+            tasks = tasks.filter_by(task_id=filter["fid"])
+        if filter["fdate"]:
+            tasks = tasks.filter_by(date=filter["fdate"])
+        if get_technician_id_by_name(filter["ftechnician"]):
+            tasks = tasks.filter_by(technician_id=get_technician_id_by_name(filter["ftechnician"]))
+    tasks = tasks.all()
     return tasks
+
+def get_technician_id_by_name(name: str) -> int:
+    technician = models.Technician.query.filter_by(name=name).first()
+    if(technician):
+        return techician.technician_id
+    else:
+        return None
 
 def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
     return models.OnsiteTask.query.filter_by(task_id=task_id).first()
