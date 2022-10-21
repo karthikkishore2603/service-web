@@ -1,0 +1,10 @@
+drop database service;
+
+create database service;
+
+use service;
+
+show tables;
+
+
+insert into admins value(1,'kk','kk','kk','1234567889');

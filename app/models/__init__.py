@@ -62,7 +62,7 @@ class Customer(db.Model):
     customer_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(20), nullable=False)
     phone_no = Column(String(10), nullable=False)
-    address = Column(String(25), nullable=False)
+    address = Column(String(25))
 
 
 class InstoreTask(db.Model):
@@ -70,12 +70,12 @@ class InstoreTask(db.Model):
     in_task_id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
     service_type = Column(String(20), nullable=False)
-    status = Column(String(20), default="open")
+    status = Column(String(20))
     customer_id = Column(Integer, ForeignKey("customer.customer_id"))
-    item_id = Column(Integer, ForeignKey("items.item_id"))
+    
     product_id = Column(Integer, ForeignKey("product.product_id"))
     technician_id = Column(Integer, ForeignKey("technician"))
-    #chiplevel_id = Column(Integer, ForeignKey("chiplevel"))
+    chiplevel_id = Column(Integer, ForeignKey("chiplevel"))
     problem = Column(String(20), nullable=False)
     product_details =Column(String(20), nullable=False)
     
@@ -84,6 +84,13 @@ class InstoreTask(db.Model):
     final_charge = Column(Integer)
     recived_charge = Column(Integer)
     remarks =Column(String(70))
+    items_received=Column(String(70), nullable=False)
+    serial_no=Column(String(70))
+
+    technician= relationship("Technician")
+    customer = relationship("Customer")
+    product= relationship("Products")
+
     
 
 
@@ -93,12 +100,6 @@ class Products(db.Model):
     product_name = Column(String(20), nullable=False)
     product_company = Column(String(20))
 
-class Items(db.Model):
-    __tablename__ = 'items'
-    item_id = Column(Integer, primary_key=True, autoincrement=True)
-    item_name = Column(String(20), nullable=False)
-    serial_no = Column(String(20))
-    remarks =  Column(String(20))
 
 class Partners(db.Model):
     __tablename__='partners'
@@ -108,8 +109,17 @@ class Partners(db.Model):
     partner_address = Column(String(20))
 
 
-
-
+class Chiplevel(db.Model):
+    __tablename__= 'chiplevel'
+    chiplevel_id = Column(Integer, primary_key=True, autoincrement=True)
+    outward_date =  Column(Date, nullable=False)
+    inward_date =  Column(Date, nullable=False)
+    status = Column(String(20))
+    work = Column(String(20), nullable=False)
+    partner_charge = Column(Integer)
+    customer_charge = Column(Integer)
+    partner_id = Column(Integer, ForeignKey("partners.partner_id"))
+    
 
 
 

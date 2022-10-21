@@ -31,3 +31,16 @@ def is_task_available(task_id: int) -> bool:
         return False
     else:
         return True
+
+def is_product_available(product_name: str) -> bool:
+    product = crud.get_product(product_name)
+    if product:
+        return True
+    return False
+
+def is_instore_task_available(in_task_id: int) -> bool:
+    task = crud.get_instoretask_by_id(in_task_id)
+    if task==None:
+        return False
+    else:
+        return True

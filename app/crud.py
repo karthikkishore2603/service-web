@@ -103,6 +103,92 @@ def create_task(data: dict) -> None:
     db.session.flush()
 
 
+def instore_task(data: dict) -> None:
+    customer_data = {}
+    customer_data.update(
+        {
+            "name": data.pop("customer_name"),
+            "phone_no": data.pop("phone_no"),
+            
+        }
+    )
+
+    if not util.is_customer_available(customer_data["phone_no"]):
+        create_customer(customer_data)
+    data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
+
+    product_detail = {}
+    product_detail.update(
+        {
+            "product_name": data.pop("product_name"),
+            "product_company": data.pop("product_company")
+        }
+    )
+
+    
+    if not util.is_product_available(product_detail['product_name']):
+        create_product(product_detail)
+    data["product_id"] = get_product(product_detail["product_name"]).product_id
+
+    
+
+    task = models.InstoreTask(**data)
+    db.session.add(task)
+    db.session.commit()
+    db.session.flush()
+
+def get_all_instoretasks() -> list:
+    tasks = models.InstoreTask.query.all()
+    return tasks
+
+def get_instoretask_by_id(in_task_id) -> models.InstoreTask:
+    return models.InstoreTask.query.filter_by(in_task_id=in_task_id).first()
+
+
+def update_instoretasks(data) -> list:
+    if util.is_instore_task_available(data['in_task_id']):
+        
+        customer_data = {}
+        customer_data.update(
+            {
+                "name": data.pop("customer_name"),
+                "phone_no": data.pop("phone_no"),
+                
+            }
+        )
+
+        if not util.is_customer_available(customer_data["phone_no"]):
+            create_customer(customer_data)
+        data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
+
+        product_detail = {}
+        product_detail.update(
+            {
+                "product_name": data.pop("product_name"),
+                "product_company": data.pop("product_company")
+            }
+        )
+
+
+        if not util.is_product_available(product_detail['product_name']):
+            create_product(product_detail)
+        data["product_id"] = get_product(product_detail["product_name"]).product_id
+
+
+
+
+        in_task_id = data.pop('in_task_id')
+        db.session.query(models.InstoreTask).filter(models.InstoreTask.in_task_id == in_task_id).update(data)
+        db.session.commit()
+        db.session.flush()
+    else:
+        update_tasks=models.InstoreTask(**data)
+        db.session.add(update_tasks)
+        db.session.commit()
+        db.session.flush()
+
+
+
 def get_customer_by_phone(phone_no: str) -> models.Customer:
     return models.Customer.query.filter_by(phone_no=phone_no).first()
 
@@ -119,3 +205,17 @@ def create_customer(data: dict) -> None:
 def get_all_customer()-> list:
     customers = models.Customer.query.all()
     return customers
+
+
+def get_product(product_name: str) -> models.Products:
+    return models.Products.query.filter_by(product_name=product_name).first()
+
+def create_product(data: dict) -> None:
+    if util.is_product_available(data['product_name']):
+        print("hello")
+    print(data)
+    
+    product = models.Products(**data)
+    db.session.add(product)
+    db.session.commit()
+    db.session.flush()
