@@ -97,6 +97,7 @@ def instore_task_update(in_task_id):
     return render_template("instore_add_task.html",flag=True, tasks=crud.get_instoretask_by_id(in_task_id),technicians=crud.get_all_technicians())
 
 
+
 @app.get("/admin/chiplevel")
 def chiplevel():
     return render_template("chiplevel.html")

@@ -23,7 +23,8 @@
     <button class="btn btn-dark" role="submit" data-bs-toggle="modal" data-bs-target="#">Save</button>
 
     {% if flag and tasks.service_type=='Chiplevel' %}
-    <button class="btn btn-dark" role="submit" data-bs-toggle="modal" data-bs-target="#">Chiplevel</button>
+    <a href="{{ url_for('chiplevel_add') }}">
+    <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Chiplevel</button></a>
     {% endif %}
     </div>
   </div>
