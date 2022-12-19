@@ -120,7 +120,12 @@ class Chiplevel(db.Model):
     customer_charge = Column(Integer)
     partner_id = Column(Integer, ForeignKey("partners.partner_id"))
     
-
+class Quotation(db.Model):
+    __tablename__ = "quotation"
+    quotation_no = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(Date, nullable=False)
+    customer_id = Column(Integer, ForeignKey("customer.customer_id"))
+    customer = relationship("Customer")
 
 
 

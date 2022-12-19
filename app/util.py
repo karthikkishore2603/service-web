@@ -44,3 +44,12 @@ def is_instore_task_available(in_task_id: int) -> bool:
         return False
     else:
         return True
+
+def is_quotation_available(username: str, role: str) -> bool:
+    if role == "admin":
+        user = crud.get_admin(username)
+    else:
+        user = crud.get_technician(username)
+    if user:
+        return True
+    return False

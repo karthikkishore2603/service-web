@@ -236,3 +236,30 @@ def create_product(data: dict) -> None:
     db.session.add(product)
     db.session.commit()
     db.session.flush()
+
+
+
+def create_quotation(data: dict) -> None:
+    customer_data = {}
+    customer_data.update(
+        {
+            "name": data.pop("customer_name"),
+            "phone_no": data.pop("phone_no"),
+            "address": data.pop("address"),
+        }
+    )
+
+    if not util.is_customer_available(customer_data["phone_no"]):
+        create_customer(customer_data)
+    data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
+
+    
+   
+    quotation = models.Quotation(**data)
+    db.session.add(quotation)
+    db.session.commit()
+    db.session.flush()
+
+def get_all_quotation() -> list:
+    quotation = models.Quotation.query.all()
+    return quotation

@@ -124,3 +124,28 @@ def order():
 @app.get("/admin/followup")
 def follow_up():
     return render_template("follow_up.html")
+
+
+
+@app.get("/admin/quotation")
+def quotation():
+    return render_template("quotation.html",quotation=crud.get_all_quotation())
+
+
+
+@app.post("/admin/quotation")
+def quotation_create():
+    data = dict(request.form)
+    try:
+            crud.create_quotation(data)
+    except Exception as e:
+        return render_template(
+            "quotation.html",quotation=crud.get_all_quotation(),
+            errors=str(e).split(",")
+        )
+
+    
+    return render_template("quotation.html",quotation=crud.get_all_quotation())
+
+
+
