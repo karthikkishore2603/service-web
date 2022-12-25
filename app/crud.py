@@ -69,7 +69,7 @@ def get_all_onsitetasks(filter: dict = None) -> list:
 def get_technician_id_by_name(name: str) -> int:
     technician = models.Technician.query.filter_by(name=name).first()
     if(technician):
-        return techician.technician_id
+        return technician.technician_id, technician.username
     else:
         return None
 
@@ -263,3 +263,14 @@ def create_quotation(data: dict) -> None:
 def get_all_quotation() -> list:
     quotation = models.Quotation.query.all()
     return quotation
+
+
+
+#TECHNICIAN PAGE--------------------------------
+def get_onsitetasks_by_tech(filter: dict = None) -> list:
+    tasks = models.OnsiteTask.query
+
+    if get_technician_id_by_name(filter["ftechnician"]):
+            tasks = tasks.filter_by(technician_id=get_technician_id_by_name(filter["ftechnician"]))
+    tasks = tasks.all()
+    return tasks
