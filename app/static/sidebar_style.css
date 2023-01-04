@@ -66,8 +66,3 @@ body {
 }
 
 
-@media (max-device-width: 600px) {
-  .mobile-text {
-    text-align: center !important;
-  }
-}
