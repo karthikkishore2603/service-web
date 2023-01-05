@@ -113,7 +113,6 @@ def create_task(data: dict) -> None:
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
-
     task = models.OnsiteTask(**data)
     db.session.add(task)
     db.session.commit()

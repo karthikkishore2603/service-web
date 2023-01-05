@@ -39,14 +39,15 @@ class OnsiteTask(db.Model):
     __tablename__ = "onsite_task"
     task_id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
-    #creation_date = Column(Date)    
+    creation_date = Column(Date)    
     customer_id = Column(Integer, ForeignKey("customer.customer_id"))
-    technician_id = Column(Integer, ForeignKey("technician"))
-    technician_id_2 = Column(Integer, ForeignKey("technician"))
+    technician_id = Column(Integer, ForeignKey("technician.technician_id"))
+    technician_id_2 = Column(Integer, ForeignKey("technician.technician_id"))
     service_type = Column(String(20), nullable=False)
     problem = Column(String(20), nullable=False)
     
-    technician= relationship("Technician")
+    technician = relationship("Technician", foreign_keys=[technician_id])
+    technician2 = relationship("Technician", foreign_keys=[technician_id_2])
     customer = relationship("Customer")
 
 
