@@ -143,12 +143,16 @@ def chiplevel():
 
 @app.get("/admin/chiplevel/task")
 def chiplevel_add():
-    return render_template("chiplevel_task.html")
+    return render_template("chiplevel_add_task.html")
 
 
 @app.get("/admin/warranty")
 def warranty():
     return render_template("warranty.html")
+
+@app.get("/admin/warranty/task")
+def warranty_add():
+    return render_template("warranty_add_task.html")
 
 
 @app.get("/admin/expenditure")

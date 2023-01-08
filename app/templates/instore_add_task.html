@@ -26,6 +26,10 @@
     <a href="{{ url_for('chiplevel_add') }}">
     <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Chiplevel</button></a>
     {% endif %}
+    {% if flag and tasks.service_type=='Warranty' %}
+    <a href="{{ url_for('warranty_add') }}">
+    <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Warranty</button></a>
+    {% endif %}
     </div>
   </div>
   
