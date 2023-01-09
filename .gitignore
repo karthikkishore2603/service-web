@@ -5,3 +5,4 @@ app/models/__pycache__/__init__.cpython-310.pyc
 app/views/__pycache__/__init__.cpython-310.pyc
 app/views/__pycache__/admin.cpython-310.pyc
 app/views/__pycache__/technician.cpython-310.pyc
+app/views/__init__.py

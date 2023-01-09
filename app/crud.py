@@ -50,6 +50,7 @@ def get_all_admins() -> list:
     admins = models.Admin.query.all()
     return admins
 
+
 def get_all_onsitetasks(filter: dict = None) -> list:
     tasks = models.OnsiteTask.query
     if filter:
@@ -62,28 +63,35 @@ def get_all_onsitetasks(filter: dict = None) -> list:
         if filter["fdate"]:
             tasks = tasks.filter_by(date=filter["fdate"])
         if get_technician_id_by_name(filter["ftechnician"]):
-            tasks = tasks.filter_by(technician_id=get_technician_id_by_name(filter["ftechnician"]))
+            tasks = tasks.filter_by(
+                technician_id=get_technician_id_by_name(filter["ftechnician"])
+            )
     tasks = tasks.all()
     return tasks
 
+
 def get_technician_id_by_name(name: str) -> int:
     technician = models.Technician.query.filter_by(name=name).first()
-    if(technician):
+    if technician:
         return technician.technician_id, technician.username
     else:
         return None
 
+
 def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
     return models.OnsiteTask.query.filter_by(task_id=task_id).first()
 
+
 def update_onsitetasks(data) -> list:
-    if util.is_task_available(data['task_id']):
-        task_id = data.pop('task_id')
-        db.session.query(models.Resources).filter(models.Resources.task_id == task_id).update(data)
+    if util.is_task_available(data["task_id"]):
+        task_id = data.pop("task_id")
+        db.session.query(models.Resources).filter(
+            models.Resources.task_id == task_id
+        ).update(data)
         db.session.commit()
         db.session.flush()
     else:
-        update_tasks=models.Resources(**data)
+        update_tasks = models.Resources(**data)
         db.session.add(update_tasks)
         db.session.commit()
         db.session.flush()
@@ -91,6 +99,7 @@ def update_onsitetasks(data) -> list:
 
 def get_resources_by_id(task_id: int) -> models.Resources:
     return models.Resources.query.filter_by(task_id=task_id).first()
+
 
 def get_admin(username: str) -> models.Admin:
     return models.Admin.query.filter_by(username=username).first()
@@ -125,7 +134,6 @@ def instore_task(data: dict) -> None:
         {
             "name": data.pop("customer_name"),
             "phone_no": data.pop("phone_no"),
-            
         }
     )
 
@@ -137,72 +145,69 @@ def instore_task(data: dict) -> None:
     product_detail.update(
         {
             "product_name": data.pop("product_name"),
-            "product_company": data.pop("product_company")
+            "product_company": data.pop("product_company"),
         }
     )
 
-    
-    if not util.is_product_available(product_detail['product_name']):
+    if not util.is_product_available(product_detail["product_name"]):
         create_product(product_detail)
     data["product_id"] = get_product(product_detail["product_name"]).product_id
-
-    
 
     task = models.InstoreTask(**data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
 
+
 def get_all_instoretasks() -> list:
     tasks = models.InstoreTask.query.all()
     return tasks
+
 
 def get_instoretask_by_id(in_task_id) -> models.InstoreTask:
     return models.InstoreTask.query.filter_by(in_task_id=in_task_id).first()
 
 
 def update_instoretasks(data) -> list:
-    if util.is_instore_task_available(data['in_task_id']):
-        
+    if util.is_instore_task_available(data["in_task_id"]):
+
         customer_data = {}
         customer_data.update(
             {
                 "name": data.pop("customer_name"),
                 "phone_no": data.pop("phone_no"),
-                
             }
         )
 
         if not util.is_customer_available(customer_data["phone_no"]):
             create_customer(customer_data)
-        data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
+        data["customer_id"] = get_customer_by_phone(
+            customer_data["phone_no"]
+        ).customer_id
 
         product_detail = {}
         product_detail.update(
             {
                 "product_name": data.pop("product_name"),
-                "product_company": data.pop("product_company")
+                "product_company": data.pop("product_company"),
             }
         )
 
-
-        if not util.is_product_available(product_detail['product_name']):
+        if not util.is_product_available(product_detail["product_name"]):
             create_product(product_detail)
         data["product_id"] = get_product(product_detail["product_name"]).product_id
 
-
-
-
-        in_task_id = data.pop('in_task_id')
-        db.session.query(models.InstoreTask).filter(models.InstoreTask.in_task_id == in_task_id).update(data)
+        in_task_id = data.pop("in_task_id")
+        db.session.query(models.InstoreTask).filter(
+            models.InstoreTask.in_task_id == in_task_id
+        ).update(data)
         db.session.commit()
         db.session.flush()
     else:
-        update_tasks=models.InstoreTask(**data)
+        update_tasks = models.InstoreTask(**data)
         db.session.add(update_tasks)
         db.session.commit()
         db.session.flush()
-
 
 
 def get_customer_by_phone(phone_no: str) -> models.Customer:
@@ -218,7 +223,8 @@ def create_customer(data: dict) -> None:
     db.session.commit()
     db.session.flush()
 
-def get_all_customer()-> list:
+
+def get_all_customer() -> list:
     customers = models.Customer.query.all()
     return customers
 
@@ -226,16 +232,16 @@ def get_all_customer()-> list:
 def get_product(product_name: str) -> models.Products:
     return models.Products.query.filter_by(product_name=product_name).first()
 
+
 def create_product(data: dict) -> None:
-    if util.is_product_available(data['product_name']):
+    if util.is_product_available(data["product_name"]):
         print("hello")
     print(data)
-    
+
     product = models.Products(**data)
     db.session.add(product)
     db.session.commit()
     db.session.flush()
-
 
 
 def create_quotation(data: dict) -> None:
@@ -252,24 +258,22 @@ def create_quotation(data: dict) -> None:
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
 
-    
-   
     quotation = models.Quotation(**data)
     db.session.add(quotation)
     db.session.commit()
     db.session.flush()
+
 
 def get_all_quotation() -> list:
     quotation = models.Quotation.query.all()
     return quotation
 
 
-
-#TECHNICIAN PAGE--------------------------------
-def get_onsitetasks_by_tech(filter: dict = None) -> list:
-    tasks = models.OnsiteTask.query
-
-    if get_technician_id_by_name(filter["ftechnician"]):
-            tasks = tasks.filter_by(technician_id=get_technician_id_by_name(filter["ftechnician"]))
-    tasks = tasks.all()
+# TECHNICIAN PAGE--------------------------------
+def get_onsitetasks_by_tech(username: str) -> list:
+    tasks = models.OnsiteTask.query.filter(
+        models.OnsiteTask.technician_id == models.Technician.technician_id
+        or models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
+        models.Technician.username == username,
+    ).all()
     return tasks
