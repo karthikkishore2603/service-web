@@ -79,6 +79,10 @@ def get_technician_id_by_name(name: str) -> int:
         return None
 
 
+def get_technician_by_id(technician_id: int) -> models.Technician:
+    return models.Technician.query.filter_by(technician_id=technician_id).first()
+
+
 def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
     return models.OnsiteTask.query.filter_by(task_id=task_id).first()
 
@@ -104,6 +108,10 @@ def get_resources_by_id(task_id: int) -> models.Resources:
 
 def get_admin(username: str) -> models.Admin:
     return models.Admin.query.filter_by(username=username).first()
+
+
+def get_admin_by_id(admin_id: int) -> models.Admin:
+    return models.Admin.query.filter_by(admin_id=admin_id).first()
 
 
 def get_technician(username: str) -> models.Technician:

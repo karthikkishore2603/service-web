@@ -1,20 +1,25 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for
 
 from .. import app, crud, util, models
 
 
 @app.get("/tech/dashboard")
 def tech_dashboard():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
     return render_template("tech_dashboard.html")
 
 
 @app.get("/tech/onsite")
 def tech_onsite():
-    technician = crud.get_technician(username=session["username"])
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
     return render_template(
         "tech_onsite.html",
         customers=crud.get_all_customer(),
-        tasks=crud.get_onsitetasks_by_tech(username=session["username"]),
+        tasks=crud.get_onsitetasks_by_tech(username=technician.username),
     )
 
 @app.get("/tech/onsite/viewtask/<task_id>")
@@ -39,9 +44,15 @@ def tech_onsite_task_update(task_id):
 
 @app.get("/tech/customer")
 def tech_customer():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
     return render_template("tech_customer.html")
 
 
 @app.get("/tech/instore")
 def tech_instore():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
     return render_template("tech_instore.html")
