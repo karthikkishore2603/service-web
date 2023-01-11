@@ -46,12 +46,21 @@ def technician_post():
         admins=crud.get_all_admins(),
     )
 
-@app.get("/admin/technician/work")
-def technician_task_view():
-    
+@app.get("/admin/technician/work/<technician_id>")
+def technician_task_view(technician_id):
     return render_template(
-        "technician_task_view.html"
-    )
+        "technician_task_view.html" ,tasks=crud.get_onsitetask_by_tech_id(technician_id),
+       )
+
+@app.post("/admin/technician")
+def technician_filter():
+    if request.form.get("ftechnician"):
+        return render_template(
+                "technician.html",
+                technicians=crud.get_technicians(username=request.form.get("ftechnician")),
+        )
+    else:
+        return redirect(url_for("technician"))
 
 
 @app.get("/admin/customers")
@@ -62,12 +71,18 @@ def customers():
     return render_template("customers.html", customers=crud.get_all_customer())
 
 
-@app.get("/admin/customers/work")
-def customer_works():
-    
+@app.get("/admin/customers/work/<customer_id>")
+def customer_works(customer_id):
     return render_template(
-        "customer_works.html"
+        "customer_works.html",tasks=crud.get_onsitetask_by_cust_id(customer_id),
     )
+@app.get("/admin/customers/work/<customer_id>")
+def customer_work_download(customer_id):
+    pdf_data = make_response(pdf.create_customer_work_pdf(tasks=crud.get_onsitetask_by_cust_id(customer_id=customer_id)))
+    pdf_data.headers["Content-Disposition"] = "attachment;"
+    pdf_data.headers["Content-Type"] = "application/pdf"
+    return pdf_data
+
 @app.get("/admin/onsite")
 def onsite():
     admin = util.current_user_info(request)
@@ -126,13 +141,10 @@ def onsite_task_update(task_id):
 
 @app.get("/admin/onsite/download/<task_id>")
 def onsite_task_download(task_id):
-    pdf_data = make_response(pdf.create_pdf(tasks=crud.get_onsitetask_by_id(task_id=task_id)))
+    pdf_data = make_response(pdf.create_pdf(tasks=crud.get_onsitetask_by_id(task_id=task_id), resources=crud.get_resources_by_id(task_id)))
     pdf_data.headers["Content-Disposition"] = "attachment;"
     pdf_data.headers["Content-Type"] = "application/pdf"
     return pdf_data
-    print(pdf.create_html(tasks=crud.get_onsitetask_by_id(task_id=task_id)))
-    print((crud.get_resources_by_id(task_id)))
-    return render_template("onsite_task_download.html",tasks=crud.get_onsitetask_by_id(task_id),resources=crud.get_resources_by_id(task_id))
 
 @app.get("/admin/instore")
 def instore():

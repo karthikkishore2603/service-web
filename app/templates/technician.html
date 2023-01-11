@@ -21,17 +21,29 @@
         <!-- How to make this a popup? -->
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitIdea">Add Technician</button>
 
-        <div class="input-group" style="padding-top: 10px;">
+        <form action="/admin/technician" method="post">
+            <div class="input-group" style="padding-top: 10px;">
+                <input type="hidden" name="ftype" value="on" />
+                
+                
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <input type="search" placeholder="Technician" id="form1" class="form-control" name="ftechnician" />
 
-            <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-                <input type="search" id="form1" class="form-control" />
-
+                </div>
+                
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </div>
-            <button type="button" class="btn btn-primary">
-                <i class="fas fa-search"></i>
-            </button>
+        </form>
+        
+        {% for error in errors %}
+        <div class="alert alert-danger" style="width: 250px;" role="alert">
+            {{error}}
         </div>
-
+        {% endfor -%}
         <form method="POST">
             <div id="submitIdea" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="submitIdeaBackdropLabel" aria-hidden="true">
@@ -42,11 +54,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {% for error in errors -%}
-                            <div class="alert alert-danger" role="alert">
-                                {{error}}
-                            </div>
-                            {% endfor -%}
+                            
 
                             <div class="mb-3">
 
@@ -107,7 +115,7 @@
 
                         </td>
                         <td>
-                            <a href="{{ url_for('technician_task_view') }}"><button role="button"
+                            <a href="{{ url_for('technician_task_view', technician_id=tech.technician_id) }}"><button role="button"
                                 class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#viewtask">View</button></a>
                     </tr>

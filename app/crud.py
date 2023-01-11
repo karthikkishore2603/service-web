@@ -71,6 +71,11 @@ def get_all_onsitetasks(filter: dict = None) -> list:
     return tasks
 
 
+def get_technicians(username: str) -> list:
+    technicians = models.Technician.query.filter_by(username=username).all()
+    return technicians
+
+
 def get_technician_id_by_name(name: str) -> int:
     technician = models.Technician.query.filter_by(name=name).first()
     if technician:
@@ -85,6 +90,13 @@ def get_technician_by_id(technician_id: int) -> models.Technician:
 
 def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
     return models.OnsiteTask.query.filter_by(task_id=task_id).first()
+
+
+def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
+    return models.OnsiteTask.query.filter_by(technician_id=technician_id).all() + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()
+
+def get_onsitetask_by_cust_id(customer_id) -> models.OnsiteTask:
+    return models.OnsiteTask.query.filter_by(customer_id=customer_id).all() 
 
 
 def update_onsitetasks(data) -> list:
@@ -104,6 +116,10 @@ def update_onsitetasks(data) -> list:
 
 def get_resources_by_id(task_id: int) -> models.Resources:
     return models.Resources.query.filter_by(task_id=task_id).first()
+
+def get_resources_by_tech_id(tech: int) -> models.Resources:
+    return models.Resources.query.filter_by(task_id=task_id).first()
+
 
 
 def get_admin(username: str) -> models.Admin:

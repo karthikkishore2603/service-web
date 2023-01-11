@@ -6,7 +6,7 @@
 {% endblock %} 
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
+{% include "sidebar_technician.html" %}
 
 <div class="page-content p-5" id="content">
     
@@ -17,17 +17,9 @@
   
     <div class="container-fluid right-content">
     
-<form method="post">
-    <div class="row" >
-      <div class="col" >
-        <h1>Tasks</h1>
-      </div>
-      <div class="col">
-        <a href="{{ url_for('customer_work_download',) }}"><button type="button" class="btn btn-dark">Download</button></a>
-      </div>
-    </div>
         <div class="table-responsive">
-            
+            <br>
+            <h2 class="h3">Work</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -58,7 +50,7 @@
 
                         <td>
 
-                            <a href="{{ url_for('onsite_task_view', task_id=task.task_id) }}"><button role="button"
+                            <a href="{{ url_for('tech_onsite_task_view', task_id=task.task_id) }}"><button role="button"
                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#viewtask">View</button></a>
                         </td>
@@ -70,5 +62,5 @@
 
         </div> 
 
-</form>
+
 {% endblock %}

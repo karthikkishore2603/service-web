@@ -25,7 +25,7 @@
       <h1>View Task</h1>
     </div>
     <div class="col">
-      <a href="{{ url_for('onsite_task_download',task_id=tasks.task_id) }}"><button type="button" class="btn btn-dark">Download</button></a>
+      <a href="{{ url_for('onsite_task_download',task_id=tasks.task_id, resources=resources.task_id) }}"><button type="button" class="btn btn-dark">Download</button></a>
     </div>
   </div>
   <div class="row" >
@@ -56,6 +56,8 @@
         <div class="col">
           <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.customer.name }}</h3>
         </div>
+      </div>
+      <div class="row" >
         <div class="col">
           <h3 style="font-family: 'Times New Roman', serif; ">Phone No</h3>
         </div>
@@ -72,6 +74,8 @@
         <div class="col">
           <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.technician.name }}</h3>
         </div>
+      </div>
+      <div class="row" >
         <div class="col">
           <h3 style="font-family: 'Times New Roman', serif; ">Engineer</h3>
         </div>
@@ -88,6 +92,8 @@
         <div class="col">
           <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.service_type }}</h3>
         </div>
+      </div>
+      <div class="row" >
         <div class="col">
           <h3 style="font-family: 'Times New Roman', serif; ">Problem</h3>
         </div>

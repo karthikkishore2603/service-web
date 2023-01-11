@@ -49,6 +49,11 @@ def tech_customer():
         return render_template("check.html")
     return render_template("tech_customer.html")
 
+@app.get("/tech/customers/work/<customer_id>")
+def tech_customer_works(customer_id):
+    return render_template(
+        "tech_customers_works.html",tasks=crud.get_onsitetask_by_cust_id(customer_id),
+    )
 
 @app.get("/tech/instore")
 def tech_instore():

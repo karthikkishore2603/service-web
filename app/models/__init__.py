@@ -63,7 +63,7 @@ class Resources(db.Model):
 class Customer(db.Model):
     __tablename__ = "customer"
     customer_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(20), nullable=False)
+    name = Column(String(40), nullable=False)
     phone_no = Column(String(10), nullable=False)
     address = Column(String(25))
 
