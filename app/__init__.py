@@ -15,4 +15,4 @@ app.config[
 db = SQLAlchemy(app)
 
 
-from . import views, models, crud
+from . import views, models, crud, pdf

@@ -22,7 +22,7 @@
 
         <!-- How to make this a popup? -->
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#add_task">Add Task</button>
-        <form action="/admin/onsite" method="post">
+        <form action="/tech/onsite" method="post">
             <div class="input-group" style="padding-top: 10px;">
                 <input type="hidden" name="ftype" value="on" />
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
@@ -156,7 +156,7 @@
 
                         <td>
 
-                            <a href="{{ url_for('onsite_task_view', task_id=task.task_id) }}"><button role="button"
+                            <a href="{{ url_for('tech_onsite_task_view', task_id=task.task_id) }}"><button role="button"
                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#viewtask">View</button></a>
                         </td>

@@ -83,8 +83,9 @@
                         <th scope="col">T.ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Username</th>
-                        <th scope="col">Role</th>
+                        
                         <th scope="col">Phone No</th>
+                        <th scope="col">Work</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
@@ -100,14 +101,15 @@
                         <td>
                             <p>{{ tech.username }}</p>
                         </td>
-                        <td>
-                            <p>Technicians</p>
-
-                        </td>
+                        
                         <td>
                             <p>{{ tech.phone_no }}</p>
 
                         </td>
+                        <td>
+                            <a href="{{ url_for('technician_task_view') }}"><button role="button"
+                                class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#viewtask">View</button></a>
                     </tr>
                     {% endfor %}
 

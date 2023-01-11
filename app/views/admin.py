@@ -1,6 +1,6 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, make_response
 
-from .. import app, crud, util, models
+from .. import app, crud, util, models, pdf
 
 
 @app.get("/admin/dashboard")
@@ -37,12 +37,25 @@ def technician_post():
         admins=crud.get_all_admins(),
     )
 
+@app.get("/admin/technician/work")
+def technician_task_view():
+    
+    return render_template(
+        "technician_task_view.html"
+    )
+
 
 @app.get("/admin/customers")
 def customers():
     return render_template("customers.html", customers=crud.get_all_customer())
 
 
+@app.get("/admin/customers/work")
+def customer_works():
+    
+    return render_template(
+        "customer_works.html"
+    )
 @app.get("/admin/onsite")
 def onsite():
     return render_template(
@@ -87,6 +100,15 @@ def onsite_task_update(task_id):
         resources=crud.get_resources_by_id(task_id),
     )
 
+@app.get("/admin/onsite/download/<task_id>")
+def onsite_task_download(task_id):
+    pdf_data = make_response(pdf.create_pdf(tasks=crud.get_onsitetask_by_id(task_id=task_id)))
+    pdf_data.headers["Content-Disposition"] = "attachment;"
+    pdf_data.headers["Content-Type"] = "application/pdf"
+    return pdf_data
+    print(pdf.create_html(tasks=crud.get_onsitetask_by_id(task_id=task_id)))
+    print((crud.get_resources_by_id(task_id)))
+    return render_template("onsite_task_download.html",tasks=crud.get_onsitetask_by_id(task_id),resources=crud.get_resources_by_id(task_id))
 
 @app.get("/admin/instore")
 def instore():

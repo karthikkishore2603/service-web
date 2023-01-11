@@ -1,4 +1,5 @@
 from . import db, models, util
+from datetime import datetime
 
 
 def get_password(username: str, role: str) -> str:
@@ -122,7 +123,7 @@ def create_task(data: dict) -> None:
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
-    task = models.OnsiteTask(**data)
+    task = models.OnsiteTask(creation_date = datetime.now(), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -270,10 +271,14 @@ def get_all_quotation() -> list:
 
 
 # TECHNICIAN PAGE--------------------------------
-def get_onsitetasks_by_tech(username: str) -> list:
+def get_onsitetasks_by_tech(username: str,filter: dict = None) -> list:
     tasks = models.OnsiteTask.query.filter(
-        models.OnsiteTask.technician_id == models.Technician.technician_id
-        or models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
+        models.OnsiteTask.technician_id == models.Technician.technician_id,
+        models.Technician.username == username,
+    ).all() + models.OnsiteTask.query.filter(
+        models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
         models.Technician.username == username,
     ).all()
+
+    
     return tasks

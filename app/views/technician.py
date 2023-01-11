@@ -17,6 +17,25 @@ def tech_onsite():
         tasks=crud.get_onsitetasks_by_tech(username=session["username"]),
     )
 
+@app.get("/tech/onsite/viewtask/<task_id>")
+def tech_onsite_task_view(task_id):
+    print((crud.get_resources_by_id(task_id)))
+    return render_template(
+        "tech_onsite_task_view.html",
+        tasks=crud.get_onsitetask_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id),
+    )
+
+@app.post("/tech/onsite/viewtask/<task_id>")
+def tech_onsite_task_update(task_id):
+    data = dict(request.form)
+    data["task_id"] = task_id
+    crud.update_onsitetasks(data)
+    return render_template(
+        "tech_onsite_task_view.html",
+        tasks=crud.get_onsitetask_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id),
+    )
 
 @app.get("/tech/customer")
 def tech_customer():
