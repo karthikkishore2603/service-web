@@ -33,11 +33,11 @@ def create_technician(data: dict) -> None:
     if util.is_username_available(data["username"], "technician"):
         errors += "Username already exists,"
 
-    if util.is_phone_valid(data["phone"]):
+    if not util.is_phone_valid(data["phone_no"]):
         errors += "Invalid phone number,"
 
     if errors:
-        raise Exception(errors)
+        raise Exception(errors[:-1])
 
     user = models.Technician(**data)
     db.session.add(user)
