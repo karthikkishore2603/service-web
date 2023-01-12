@@ -63,6 +63,12 @@ def is_quotation_available(username: str, role: str) -> bool:
     return False
 
 
+def is_phone_valid(phone_no: str) -> bool:
+    if len(phone_no) == 10 and phone_no.isnumeric():
+        return True
+    return False
+
+
 def create_access_token(
     data: schemas.TokenData, expires_delta: timedelta | None = None
 ):

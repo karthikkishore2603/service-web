@@ -31,10 +31,13 @@ def create_admin(data: dict) -> None:
 def create_technician(data: dict) -> None:
     errors = ""
     if util.is_username_available(data["username"], "technician"):
-        errors = "Username already exists"
+        errors += "Username already exists,"
+
+    if not util.is_phone_valid(data["phone_no"]):
+        errors += "Invalid phone number,"
 
     if errors:
-        raise Exception(errors)
+        raise Exception(errors[:-1])
 
     user = models.Technician(**data)
     db.session.add(user)
@@ -93,10 +96,14 @@ def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
 
 
 def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
-    return models.OnsiteTask.query.filter_by(technician_id=technician_id).all() + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()
+    return (
+        models.OnsiteTask.query.filter_by(technician_id=technician_id).all()
+        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()
+    )
+
 
 def get_onsitetask_by_cust_id(customer_id) -> models.OnsiteTask:
-    return models.OnsiteTask.query.filter_by(customer_id=customer_id).all() 
+    return models.OnsiteTask.query.filter_by(customer_id=customer_id).all()
 
 
 def update_onsitetasks(data) -> list:
@@ -117,9 +124,9 @@ def update_onsitetasks(data) -> list:
 def get_resources_by_id(task_id: int) -> models.Resources:
     return models.Resources.query.filter_by(task_id=task_id).first()
 
-def get_resources_by_tech_id(tech: int) -> models.Resources:
-    return models.Resources.query.filter_by(task_id=task_id).first()
 
+def get_resources_by_tech_id(tech: int) -> models.Resources:
+    return models.Resources.query.filter_by(technician_id=tech).first()
 
 
 def get_admin(username: str) -> models.Admin:
@@ -147,7 +154,7 @@ def create_task(data: dict) -> None:
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
-    task = models.OnsiteTask(creation_date = datetime.now(), **data)
+    task = models.OnsiteTask(creation_date=datetime.now(), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -295,14 +302,16 @@ def get_all_quotation() -> list:
 
 
 # TECHNICIAN PAGE--------------------------------
-def get_onsitetasks_by_tech(username: str,filter: dict = None) -> list:
-    tasks = models.OnsiteTask.query.filter(
-        models.OnsiteTask.technician_id == models.Technician.technician_id,
-        models.Technician.username == username,
-    ).all() + models.OnsiteTask.query.filter(
-        models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
-        models.Technician.username == username,
-    ).all()
+def get_onsitetasks_by_tech(username: str, filter: dict = None) -> list:
+    tasks = (
+        models.OnsiteTask.query.filter(
+            models.OnsiteTask.technician_id == models.Technician.technician_id,
+            models.Technician.username == username,
+        ).all()
+        + models.OnsiteTask.query.filter(
+            models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
+            models.Technician.username == username,
+        ).all()
+    )
 
-    
     return tasks
