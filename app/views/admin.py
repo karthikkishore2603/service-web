@@ -119,8 +119,38 @@ def onsite_add_task():
             tasks=crud.get_all_onsitetasks(filter=data),
             technicians=crud.get_all_technicians(),
         )
-    crud.create_task(data)
+    try:
+        crud.create_task(data)
+    except Exception as e:
+        return render_template(
+            "onsite.html",
+            tasks=crud.get_all_onsitetasks(),
+            technicians=crud.get_all_technicians(),
+            errors=str(e).split(","),
+        )
     return redirect(url_for("onsite"))
+
+
+@app.get("/admin/onsite/<task_id>/update_status")
+def admin_onsite_update_status(task_id):
+    resource = crud.get_resources_by_id(task_id=task_id)
+    message=""
+    if not resource:
+        message="Update resource first"
+    elif resource.received_charge < resource.service_charge:
+        message="Service charge is not received"
+    else:
+        flag = crud.update_onsite_task_status(task_id)
+        if flag:
+            message="Status updated"
+        else:
+            message="Already closed"
+    return render_template(
+        "onsite_task_view.html",
+        tasks=crud.get_onsitetask_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id),
+        message=message,
+    )
 
 
 @app.get("/admin/onsite/viewtask/<task_id>")
@@ -133,6 +163,7 @@ def onsite_task_view(task_id):
         "onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
         resources=crud.get_resources_by_id(task_id),
+        message=None,
     )
 
 
@@ -141,13 +172,20 @@ def onsite_task_update(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
-    data = dict(request.form)
-    data["task_id"] = task_id
-    crud.update_onsitetasks(data)
+    resource = crud.get_resources_by_id(task_id=task_id)
+    message = ""
+    if resource and resource.status == "Completed":
+        message="Task is already completed"
+    else:
+        data = dict(request.form)
+        data["task_id"] = task_id
+        crud.update_onsitetasks(data)
+        message="Successfully updated"
     return render_template(
         "onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
         resources=crud.get_resources_by_id(task_id),
+        message=message,
     )
 
 

@@ -30,7 +30,7 @@ def is_customer_available(phone_no: str) -> bool:
     return False
 
 
-def is_task_available(task_id: int) -> bool:
+def is_task_rsources_available(task_id: int) -> bool:
     task = crud.get_resources_by_id(task_id)
     if task == None:
         return False

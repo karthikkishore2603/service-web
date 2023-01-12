@@ -107,7 +107,7 @@ def get_onsitetask_by_cust_id(customer_id) -> models.OnsiteTask:
 
 
 def update_onsitetasks(data) -> list:
-    if util.is_task_available(data["task_id"]):
+    if util.is_task_rsources_available(data["task_id"]):
         task_id = data.pop("task_id")
         db.session.query(models.Resources).filter(
             models.Resources.task_id == task_id
@@ -119,6 +119,17 @@ def update_onsitetasks(data) -> list:
         db.session.add(update_tasks)
         db.session.commit()
         db.session.flush()
+
+
+def update_onsite_task_status(task_id: int) -> bool:
+    task = get_resources_by_id(task_id)
+    if task and (task.status == "Pending"):
+        task.status = "Completed"
+        db.session.commit()
+        db.session.flush()
+        return True
+    else:
+        return False
 
 
 def get_resources_by_id(task_id: int) -> models.Resources:
@@ -150,7 +161,8 @@ def create_task(data: dict) -> None:
             "address": data.pop("address"),
         }
     )
-
+    if not util.is_phone_valid(customer_data["phone_no"]):
+        raise Exception("Invalid phone number")
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
