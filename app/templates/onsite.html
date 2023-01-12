@@ -26,20 +26,42 @@
             <div class="input-group" style="padding-top: 10px;">
                 <input type="hidden" name="ftype" value="on" />
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Date</label>
                     <input type="date" id="form1" class="form-control" name="fdate" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Customer Phone No</label>
                     <input type="search" placeholder="Phone" id="form1" class="form-control" name="fphone" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Engineer</label>
                     <input type="search" placeholder="Technician" id="form1" class="form-control" name="ftechnician" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>OS.ID</label>
                     <input type="search" placeholder="OS.ID" id="form1" class="form-control" name="fid" />
 
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Customer Name</label>
+                    
+                <select class="form-control" name="service_type" required> 
+                    <option value="">Select an Service Type</option>
+                    <option value="installation" id="installation">Installation</option>
+                    <option value="service" id="service">Service</option>
+                    <option value="warranty" id="warranty">Warranty</option>
+                </select>
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Status</label>
+                    <select class="form-control" name="service_type" required> 
+                    <option value="">Status</option>
+                    <option value="open" id="open">Open</option>
+                    <option value="close" id="close">Close</option>
+                    </select>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-primary">
