@@ -22,6 +22,7 @@ def tech_onsite():
         tasks=crud.get_onsitetasks_by_tech(username=technician.username),
     )
 
+
 @app.get("/tech/onsite/viewtask/<task_id>")
 def tech_onsite_task_view(task_id):
     print((crud.get_resources_by_id(task_id)))
@@ -30,6 +31,7 @@ def tech_onsite_task_view(task_id):
         tasks=crud.get_onsitetask_by_id(task_id),
         resources=crud.get_resources_by_id(task_id),
     )
+
 
 @app.post("/tech/onsite/viewtask/<task_id>")
 def tech_onsite_task_update(task_id):
@@ -42,6 +44,7 @@ def tech_onsite_task_update(task_id):
         resources=crud.get_resources_by_id(task_id),
     )
 
+
 @app.get("/tech/customer")
 def tech_customer():
     technician = util.current_user_info(request)
@@ -49,11 +52,14 @@ def tech_customer():
         return render_template("check.html")
     return render_template("tech_customer.html")
 
+
 @app.get("/tech/customers/work/<customer_id>")
 def tech_customer_works(customer_id):
     return render_template(
-        "tech_customers_works.html",tasks=crud.get_onsitetask_by_cust_id(customer_id),
+        "tech_customers_works.html",
+        tasks=crud.get_onsitetask_by_cust_id(customer_id),
     )
+
 
 @app.get("/tech/instore")
 def tech_instore():
