@@ -287,7 +287,7 @@ def update_instoretasks(data) -> list:
         db.session.commit()
         db.session.flush()
 
-def chiplevel_task(data: dict) -> None:
+def chiplevel_update_task(data: dict) -> None:
     partner_data = {}
     print(data)
     partner_data.update(
@@ -297,6 +297,20 @@ def chiplevel_task(data: dict) -> None:
             }
         )
     user = models.Chiplevel(**data)
+    db.session.add(user)
+    db.session.commit()
+    db.session.flush()
+
+def warranty_update_task(data: dict) -> None:
+    partner_data = {}
+    print(data)
+    partner_data.update(
+            {
+                "name": data.pop("partner_name"),
+                
+            }
+        )
+    user = models.Warranty(**data)
     db.session.add(user)
     db.session.commit()
     db.session.flush()

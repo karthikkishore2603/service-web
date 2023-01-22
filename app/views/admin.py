@@ -297,7 +297,7 @@ def chiplevel_add(in_task_id):
 def chiplevel_update_task(in_task_id):
     data = dict(request.form)
     print(data)
-    crud.chiplevel_task(data)
+    crud.chiplevel_update_task(data)
     return render_template("chiplevel_add_task.html", tasks=crud.get_instoretask_by_id(in_task_id),partners=crud.get_all_partners())
 
 
@@ -309,13 +309,19 @@ def warranty():
     return render_template("warranty.html")
 
 
-@app.get("/admin/warranty/task")
-def warranty_add():
+@app.get("/admin/warranty/task/<in_task_id>")
+def warranty_add(in_task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
-    return render_template("warranty_add_task.html")
+    return render_template("warranty_add_task.html", tasks=crud.get_instoretask_by_id(in_task_id),partners=crud.get_all_partners())
 
+@app.post("/admin/warranty/task/<in_task_id>")
+def warranty_update_task(in_task_id):
+    data = dict(request.form)
+    print(data)
+    crud.warranty_update_task(data)
+    return render_template("chiplevel_add_task.html", tasks=crud.get_instoretask_by_id(in_task_id),partners=crud.get_all_partners())
 
 @app.get("/admin/expenditure")
 def expenditure():

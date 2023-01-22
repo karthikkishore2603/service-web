@@ -119,14 +119,30 @@ class Chiplevel(db.Model):
     inward_date = Column(Date, nullable=False)
     est_days = Column(Integer)
     est_charge = Column(Integer)
-    work = Column(String(20))
     partner_charge = Column(Integer)
     recived_charge = Column(Integer)
     remarks = Column(String(70))
-    items_received = Column(String(70))
+    items_sent = Column(String(70))
     partner_id = Column(Integer, ForeignKey("partners.partner_id"))
 
     Partners = relationship("Partners")
+
+class Warranty(db.Model):
+    __tablename__ = "warranty"
+    warranty_id = Column(Integer, primary_key=True, autoincrement=True)
+    status = Column(String(20))
+    outward_date = Column(Date, nullable=False)
+    inward_date = Column(Date, nullable=False)
+    est_days = Column(Integer)
+   
+    work = Column(String(20))
+    wtype = Column(String(20))
+    remarks = Column(String(70))
+    items_sent = Column(String(70))
+    partner_id = Column(Integer, ForeignKey("partners.partner_id"))
+
+    Partners = relationship("Partners")
+
 class Quotation(db.Model):
     __tablename__ = "quotation"
     quotation_no = Column(Integer, primary_key=True, autoincrement=True)
