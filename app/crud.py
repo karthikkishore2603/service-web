@@ -50,9 +50,32 @@ def get_all_technicians() -> list:
     return technicians
 
 
+
 def get_all_admins() -> list:
     admins = models.Admin.query.all()
     return admins
+
+
+def create_partners(data: dict) -> None:
+    """
+    errors = ""
+    if util.is_username_available(data["username"], "technician"):
+        errors += "Username already exists,"
+
+    if not util.is_phone_valid(data["phone_no"]):
+        errors += "Invalid phone number,"
+
+    if errors:
+        raise Exception(errors[:-1])
+"""
+    user = models.Partners(**data)
+    db.session.add(user)
+    db.session.commit()
+    db.session.flush()
+
+def get_all_partners() -> list:
+    partners = models.Partners.query.all()
+    return partners
 
 
 def get_all_onsitetasks(filter: dict = None) -> list:
@@ -253,6 +276,19 @@ def update_instoretasks(data) -> list:
         db.session.commit()
         db.session.flush()
 
+def chiplevel_task(data: dict) -> None:
+    partner_data = {}
+    print(data)
+    partner_data.update(
+            {
+                "name": data.pop("partner_name"),
+                
+            }
+        )
+    user = models.Chiplevel(**data)
+    db.session.add(user)
+    db.session.commit()
+    db.session.flush()
 
 def get_customer_by_phone(phone_no: str) -> models.Customer:
     return models.Customer.query.filter_by(phone_no=phone_no).first()

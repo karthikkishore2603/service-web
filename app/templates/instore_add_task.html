@@ -23,7 +23,7 @@
     <button class="btn btn-dark" role="submit" data-bs-toggle="modal" data-bs-target="#">Save</button>
 
     {% if flag and tasks.service_type=='Chiplevel' %}
-    <a href="{{ url_for('chiplevel_add') }}">
+    <a href="{{ url_for('chiplevel_add',  in_task_id=tasks.in_task_id) }}">
     <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Chiplevel</button></a>
     {% endif %}
     {% if flag and tasks.service_type=='Warranty' %}
@@ -44,7 +44,7 @@
         <div class="col">
           <label>Status</label>
           <select class="form-control" name="status">
-            {% for status in ["open","pending","closed","Delivered"] %}
+            {% for status in ["open","closed","Delivered"] %}
             <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
             {% endfor %}
         </select>
@@ -55,7 +55,7 @@
       <div class="row">
         <div class="col">
           <label>Customer Name</label>
-          <input type="text" name="customer_name" value="{{tasks.customer.name  if flag}}"  class="form-control">
+          <input type="text" name="customer_name" value="{{ tasks.customer.name  if flag}}"  class="form-control">
         </div>
         <div class="col">
           <label>Phone No</label>
@@ -113,7 +113,12 @@
       <div class="row">
         <div class="col">
           <label>Product Type</label>
-          <input type="text" name="product_name" value='{{ tasks.product.product_name  if flag}}'  class="form-control">
+          <select class="form-control" name="product_name">
+            <option value=" " id="product_name">Select an option</option>
+            {% for product_name in ["Laptop","Desktop CPU","Printer","Monitor","CCTV", "PC Accessories","Other Accessories"] -%}
+            <option value={{product_name}} id="product_name">{{ product_name }}</option>
+            {% endfor -%}
+        </select>
         </div>
         <div class="col">
           <label>Product Model</label>

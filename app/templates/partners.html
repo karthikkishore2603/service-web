@@ -15,7 +15,7 @@
     <div class="container-fluid right-content">
         <!-- Add non-sidebar contents here -->
 
-        <h1 class="h2">Technicians</h1>
+        <h1 class="h2">Partners</h1>
 
         {% for error in errors %}
         <div class="alert alert-danger" style="width: 250px;" role="alert">
@@ -26,7 +26,7 @@
         <!-- How to make this a popup? -->
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitIdea">Add Technician</button>
 
-        <form action="/admin/technician" method="post">
+        <form action="/admin/partners" method="post">
             <div class="input-group" style="padding-top: 10px;">
                 <input type="hidden" name="ftype" value="on" />
 
@@ -50,7 +50,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Technician</h4>
+                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Partners</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -58,20 +58,17 @@
 
                             <div class="mb-3">
 
-                                <input type="text" class="form-control" placeholder="Name" name="name" required>
+                                <input type="text" class="form-control" placeholder="Name" name="partner_name" required>
                             </div>
-                            <div class="mb-3">
-
-                                <input type="text" class="form-control" placeholder="Username"  autocomplete="off" name="username" required />
-                            </div>
-                            <div class="mb-3">
-
-                                <input type="password" class="form-control" placeholder="Password"  autocomplete="off" name="password"
-                                    required />
-                            </div>
+                            
                             <div class="mb-3">
 
                                 <input type="text" class="form-control" placeholder="Phone No" name="phone_no" required>
+                            </div>
+                            
+                            <div class="mb-3">
+
+                                <input type="text" class="form-control" placeholder="Address"  autocomplete="off" name="partner_address" required />
                             </div>
 
                             <button type="submit" class="btn btn-dark">Submit</button>
@@ -89,38 +86,38 @@
           </script>
         <div class="table-responsive">
             <br>
-            <h2 class="h3">Technicians</h2>
+            <h2 class="h3">Partners</h2>
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">T.ID</th>
+                        <th scope="col">P.ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Username</th>
-
+                        
                         <th scope="col">Phone No</th>
+                        <th scope="col">Address</th>
                         <th scope="col">Work</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
 
-                    {% for tech in technicians -%}
+                    {% for partn in partners -%}
                     <tr>
                         <th scope="row">
-                            <p>{{ tech.technician_id }}</p>
+                            <p>{{ partn.partner_id }}</p>
                         </th>
                         <td>
-                            <p>{{ tech.name }}</p>
+                            <p>{{ partn.partner_name }}</p>
                         </td>
                         <td>
-                            <p>{{ tech.username }}</p>
-                        </td>
-
-                        <td>
-                            <p>{{ tech.phone_no }}</p>
+                            <p>{{ partn.phone_no }}</p>
 
                         </td>
                         <td>
-                            <a href="{{ url_for('technician_task_view', technician_id=tech.technician_id) }}"><button
+                            <p>{{ partn.partner_address }}</p>
+
+                        </td>
+                        <td>
+                            <a ><button
                                     role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#viewtask">View</button></a>
                     </tr>

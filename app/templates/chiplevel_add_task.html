@@ -1,0 +1,154 @@
+{% extends "layout.html" %} 
+{% block title %}COM CAR{%endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard-styles.css') }}" />
+<script src="https://kit.fontawesome.com/623b0bceda.js" crossorigin="anonymous"></script>
+{% endblock %} 
+{% block inner_content %}
+
+{% include "sidebar_admin.html" %}
+
+<div class="page-content p-5" id="content">
+    
+    <a href="{{ url_for('instore_task_update', in_task_id=tasks.in_task_id ) }}"><i class="fa fa-chevron-circle-left fa-3x" ></i>
+    </a><br>
+
+    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
+  
+    <div class="container-fluid right-content">
+<form  method="post" >
+      <div class="row">
+        <div class="col"><h1>Update Chiplevel</h1></div>
+        <div class="col">
+    <button class="btn btn-dark" role="submit" data-bs-toggle="modal" data-bs-target="#">Save</button>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col">
+      <label>Customer Name</label>
+      <h1>{{ tasks.customer.name }}</h1>
+    </div>
+    <div class="col">
+        <label>Status</label>
+        <select class="form-control" name="status">
+            <option value=" " id="status">Select an option</option>
+          {% for status in ["Sent","Received"] %}
+          <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
+          {% endfor %}
+        </select>
+    </div>
+      
+  </div>
+
+    <div class="row">
+      <div class="col">
+        <label>Outward Date</label>
+        <input type="Date" name="outward_date" value='{{chiplevel.outward_date if flag }}' class="form-control">
+      </div>
+      <div class="col">
+        <label>Inward Date</label>
+        <input type="Date" name="inward_date" value='{{chiplevel.inward_date if flag }}' class="form-control">
+      </div>    
+    </div>
+
+
+      <div class="row">
+        <div class="col">
+          <label>Partner Name</label>
+          <input type="text" list="partner_name" class="form-control" placeholder="Partner Name"
+              name="partner_name" required>
+          {% for partner in partners -%}
+          <datalist id="partner_name">
+          <option value={{partner.partner_name}} {{"{{ 'selected' if tech == partner.partner_id }}" if flag }}>{{ partner.partner_name }}</option>
+
+          </datalist>
+          {% endfor -%}
+        </div>
+        
+        <div class="col">
+
+        </div>
+
+        
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Est Days</label>
+          <input type="text" name="est_days" value='{{ tasks.est_days  if flag}}' class="form-control">
+        </div>
+        <div class="col">
+          <label>Est Charges</label>
+          <input type="text" name="est_charge" value='{{ tasks.est_charge  if flag}}'  class="form-control">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Partner Charges</label>
+          <input type="text" name="partner_charge" value='{{ tasks.final_charge if flag}}'  class="form-control">
+        </div>
+        <div class="col">
+          <label>Customer Charges</label>
+          <input type="text" name="recived_charge" value='{{ tasks.recived_charge  if flag}}'  class="form-control">
+        </div>
+        
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <label>Remarks</label>
+          <input type="text" name="remarks" value='{{ tasks.remarks if flag}}' class="form-control">
+        </div>
+      </div>
+
+      <h1>Product Details</h1>
+
+      <div class="row">
+        <div class="col">
+          <label>Product Type</label>
+          <h1>{{ tasks.product.product_name }}</h1>
+          
+        </div>
+        <div class="col">
+          <label>Product Model</label>
+          <h1>{{tasks.product.product_company}}</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Problem</label>
+          <h1>{{ tasks.problem  }}</h1>
+        </div>
+        <div class="col">
+          <label>Product Details</label>
+          <h1>{{ tasks.product_details }}</h1>
+        </div>
+      </div>
+   
+      <div class="row">
+        <div class="col">
+          <label>Items Sent</label>
+          <input type="text" name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control">
+        </div>
+        <div class="col">
+          <label>Serial No</label>
+          <h1>{{ tasks.serial_no }}</h1>
+        </div>
+      </div>
+
+      
+        
+        
+      </div>
+    </form>
+
+      
+    </div>
+</div>
+
+{% endblock %}
