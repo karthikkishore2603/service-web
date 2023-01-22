@@ -250,7 +250,7 @@ def instore_add_task_view():
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     data = dict(request.form)
-    crud.instore_task(data)
+    crud.create_instore_task(data)
 
     return render_template(
         "instore_add_task.html",

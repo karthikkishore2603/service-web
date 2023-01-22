@@ -86,11 +86,11 @@
       <div class="row">
         <div class="col">
           <label>Est Days</label>
-          <input type="text" name="est_days" value='{{ tasks.est_days  if flag}}' class="form-control">
+          <input type="number" name="est_days" value='{{ tasks.est_days  if flag and tasks.est_days}}' class="form-control">
         </div>
         <div class="col">
           <label>Est Charges</label>
-          <input type="text" name="est_charge" value='{{ tasks.est_charge  if flag}}'  class="form-control">
+          <input type="number" name="est_charge" value='{{ tasks.est_charge  if flag and tasks.est_charge}}'  class="form-control">
         </div>
         
       </div>
@@ -98,11 +98,11 @@
       <div class="row">
         <div class="col">
           <label>Service Charges</label>
-          <input type="text" name="final_charge" value='{{ tasks.final_charge if flag}}'  class="form-control">
+          <input type="number" name="final_charge" value='{{ tasks.final_charge if flag and tasks.final_charge}}'  class="form-control">
         </div>
         <div class="col">
           <label>Recived Charges</label>
-          <input type="text" name="recived_charge" value='{{ tasks.recived_charge  if flag}}'  class="form-control">
+          <input type="number" name="recived_charge" value='{{ tasks.recived_charge  if flag and tasks.recived_charge}}'  class="form-control">
         </div>
         
       </div>

@@ -195,7 +195,7 @@ def create_task(data: dict) -> None:
     db.session.flush()
 
 
-def instore_task(data: dict) -> None:
+def create_instore_task(data: dict) -> None:
     customer_data = {}
     customer_data.update(
         {
@@ -219,6 +219,11 @@ def instore_task(data: dict) -> None:
     if not util.is_product_available(product_detail["product_name"]):
         create_product(product_detail)
     data["product_id"] = get_product(product_detail["product_name"]).product_id
+
+    data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+    data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
+    data["final_charge"] = int(data["final_charge"]) if data["final_charge"] else None
+    data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
 
     task = models.InstoreTask(**data)
     db.session.add(task)
@@ -265,6 +270,12 @@ def update_instoretasks(data) -> list:
         data["product_id"] = get_product(product_detail["product_name"]).product_id
 
         in_task_id = data.pop("in_task_id")
+
+        data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+        data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
+        data["final_charge"] = int(data["final_charge"]) if data["final_charge"] else None
+        data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+
         db.session.query(models.InstoreTask).filter(
             models.InstoreTask.in_task_id == in_task_id
         ).update(data)
