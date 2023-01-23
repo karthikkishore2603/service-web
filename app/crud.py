@@ -290,14 +290,14 @@ def update_instoretasks(data) -> list:
         db.session.flush()
 
 
-def get_partnerid(name: str) -> int:
-    partner = models.Partner.query.filter_by(name=name).first()
+def get_partnerid(partner_name: str) -> int:
+    partner = models.Partners.query.filter_by(partner_name=partner_name).first()
     if partner:
         return partner.partner_id
     return None
 
 def update_chiplevel_task(data: dict) -> None:
-    data["partner_id"] = get_partnerid(name = data.pop("partner_name"))
+    data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
 
     data["est_days"] = int(data["est_days"]) if data["est_days"] else None
     data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
@@ -308,6 +308,10 @@ def update_chiplevel_task(data: dict) -> None:
     db.session.add(user)
     db.session.commit()
     db.session.flush()
+
+def get_all_chiplevel() -> list:
+    chiplevel = models.Chiplevel.query.all()
+    return chiplevel
 
 def warranty_update_task(data: dict) -> None:
     partner_data = {}

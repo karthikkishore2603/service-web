@@ -36,7 +36,7 @@
         <select class="form-control" name="status">
             <option value=" " id="status">Select an option</option>
           {% for status in ["Sent","Received"] %}
-          <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
+          <option value={{status}} {{  'selected' if flag and status==chiplevel.status  }}>{{status}}</option>
           {% endfor %}
         </select>
     </div>
@@ -58,7 +58,7 @@
       <div class="row">
         <div class="col">
           <label>Partner Name</label>
-          <input type="text" list="partner_name" class="form-control" placeholder="Partner Name"
+          <input type="text" list="partner_name" class="form-control" placeholder="Partner Name" value="chiplevel.partner.partner_name if flag else '"
               name="partner_name" required>
           {% for partner in partners -%}
           <datalist id="partner_name">
@@ -133,7 +133,7 @@
       <div class="row">
         <div class="col">
           <label>Items Sent</label>
-          <input type="text" name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control">
+          <input type="text" name="items_sent" value='{{ tasks.items_received  if flag}}' class="form-control">
         </div>
         <div class="col">
           <label>Serial No</label>

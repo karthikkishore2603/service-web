@@ -116,7 +116,7 @@ class Chiplevel(db.Model):
     chiplevel_id = Column(Integer, primary_key=True, autoincrement=True)
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
-    inward_date = Column(Date, nullable=False)
+    inward_date = Column(Date)
     est_days = Column(Integer)
     est_charge = Column(Integer)
     partner_charge = Column(Integer)
