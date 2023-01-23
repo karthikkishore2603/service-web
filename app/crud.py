@@ -121,7 +121,9 @@ def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
 def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
     return (
         models.OnsiteTask.query.filter_by(technician_id=technician_id).all()
-        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()
+        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()+
+        models.InstoreTask.query.filter_by(technician_id=technician_id).all()
+        
     )
 
 

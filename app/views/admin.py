@@ -51,15 +51,7 @@ def technician_task_view(technician_id):
     )
 
 
-@app.post("/admin/technician")
-def technician_filter():
-    if request.form.get("ftechnician"):
-        return render_template(
-            "technician.html",
-            technicians=crud.get_technicians(username=request.form.get("ftechnician")),
-        )
-    else:
-        return redirect(url_for("technician"))
+
 
 @app.get("/admin/partners")
 def partners():
