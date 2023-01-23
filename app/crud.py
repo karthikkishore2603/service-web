@@ -289,15 +289,21 @@ def update_instoretasks(data) -> list:
         db.session.commit()
         db.session.flush()
 
-def chiplevel_update_task(data: dict) -> None:
-    partner_data = {}
-    print(data)
-    partner_data.update(
-            {
-                "name": data.pop("partner_name"),
-                
-            }
-        )
+
+def get_partnerid(name: str) -> int:
+    partner = models.Partner.query.filter_by(name=name).first()
+    if partner:
+        return partner.partner_id
+    return None
+
+def update_chiplevel_task(data: dict) -> None:
+    data["partner_id"] = get_partnerid(name = data.pop("partner_name"))
+
+    data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+    data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
+    data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
+    data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+
     user = models.Chiplevel(**data)
     db.session.add(user)
     db.session.commit()
