@@ -6,11 +6,11 @@
 {% endblock %} 
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
+{% include "sidebar_technician.html" %}
 
 <div class="page-content p-5" id="content">
     
-    <a href="{{ url_for('instore') }}"><i class="fa fa-chevron-circle-left fa-3x" ></i>
+    <a href="{{ url_for('tech_instore') }}"><i class="fa fa-chevron-circle-left fa-3x" ></i>
     </a><br>
 
     <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
@@ -77,7 +77,7 @@
           <label>Technician</label>
           <select class="form-control" name="technician_id">
             {% for technician in technicians -%}
-            <option value={{technician.technician_id}} {{ 'selected' if flag and technician == technician.technician_id  }}>{{ technician.name }}</option>
+            <option value={{technician.technician_id}} {{"{{ 'selected' if tech == technician.technician_id }}" if flag }}  id="installation">{{ technician.name }}</option>
             {% endfor -%}
         </select>
         </div>

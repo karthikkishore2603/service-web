@@ -121,14 +121,20 @@ def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
 def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
     return (
         models.OnsiteTask.query.filter_by(technician_id=technician_id).all()
-        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()+
+        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()
+        
+    )
+
+def get_instore_by_tech_id(technician_id) -> models.InstoreTask:
+    return (
         models.InstoreTask.query.filter_by(technician_id=technician_id).all()
         
     )
 
 
-def get_onsitetask_by_cust_id(customer_id) -> models.OnsiteTask:
-    return models.OnsiteTask.query.filter_by(customer_id=customer_id).all()
+def get_task_by_cust_id(customer_id) -> models.OnsiteTask:
+    return (models.OnsiteTask.query.filter_by(customer_id=customer_id).all()+
+    models.InstoreTask.query.filter_by(customer_id=customer_id).all())
 
 
 def update_onsitetasks(data) -> list:
@@ -314,14 +320,10 @@ def get_all_chiplevel() -> list:
     return chiplevel
 
 def warranty_update_task(data: dict) -> None:
-    partner_data = {}
-    print(data)
-    partner_data.update(
-            {
-                "name": data.pop("partner_name"),
-                
-            }
-        )
+    data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+
+    data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+    
     user = models.Warranty(**data)
     db.session.add(user)
     db.session.commit()
@@ -397,6 +399,17 @@ def get_onsitetasks_by_tech(username: str, filter: dict = None) -> list:
             models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
             models.Technician.username == username,
         ).all()
+    )
+
+    return tasks
+
+def get_instoretasks_by_tech(username: str, filter: dict = None) -> list:
+    tasks = (
+        models.InstoreTask.query.filter(
+            models.InstoreTask.technician_id == models.Technician.technician_id,
+            models.Technician.username == username,
+        ).all()
+        
     )
 
     return tasks

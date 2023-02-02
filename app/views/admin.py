@@ -44,10 +44,17 @@ def technician_post():
 
 
 @app.get("/admin/technician/work/<technician_id>")
-def technician_task_view(technician_id):
+def technician_onsite_task_view(technician_id):
     return render_template(
-        "technician_task_view.html",
+        "technician_onsite_task_view.html",
         tasks=crud.get_onsitetask_by_tech_id(technician_id),
+    )
+
+@app.get("/admin/technician/work/instore/<technician_id>")
+def technician_instore_task_view(technician_id):
+    return render_template(
+        "technician_instore_task_view.html",
+        tasks=crud.get_instore_by_tech_id(technician_id),
     )
 
 
@@ -81,7 +88,7 @@ def customers():
 def customer_works(customer_id):
     return render_template(
         "customer_works.html",
-        tasks=crud.get_onsitetask_by_cust_id(customer_id),
+        tasks=crud.get_task_by_cust_id(customer_id),
     )
 
 
@@ -283,7 +290,7 @@ def chiplevel_add(in_task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
-    return render_template("chiplevel_add_task.html", tasks=crud.get_instoretask_by_id(in_task_id), chiplevel=crud.get_all_chiplevel(),partners=crud.get_all_partners())
+    return render_template("chiplevel_add_task.html", tasks=crud.get_instoretask_by_id(in_task_id),partners=crud.get_all_partners())
 
 @app.post("/admin/chiplevel/task/<in_task_id>")
 def chiplevel_update_task(in_task_id):
