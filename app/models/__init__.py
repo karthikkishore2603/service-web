@@ -79,7 +79,6 @@ class InstoreTask(db.Model):
 
     product_id = Column(Integer, ForeignKey("product.product_id"))
     technician_id = Column(Integer, ForeignKey("technician"))
-    chiplevel_id = Column(Integer, ForeignKey("chiplevel"))
     problem = Column(String(20), nullable=False)
     product_details = Column(String(20), nullable=False)
 
@@ -114,7 +113,7 @@ class Partners(db.Model):
 class Chiplevel(db.Model):
     __tablename__ = "chiplevel"
     chiplevel_id = Column(Integer, primary_key=True, autoincrement=True)
-    in_task_id = Column(Integer, ForeignKey("instoretask"))
+    in_task_id = Column(Integer, ForeignKey("instore_task.in_task_id"))
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
     inward_date = Column(Date)
