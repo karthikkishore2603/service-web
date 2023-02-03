@@ -114,6 +114,7 @@ class Partners(db.Model):
 class Chiplevel(db.Model):
     __tablename__ = "chiplevel"
     chiplevel_id = Column(Integer, primary_key=True, autoincrement=True)
+    in_task_id = Column(Integer, ForeignKey("instoretask"))
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
     inward_date = Column(Date)
@@ -126,6 +127,7 @@ class Chiplevel(db.Model):
     partner_id = Column(Integer, ForeignKey("partners.partner_id"))
 
     Partners = relationship("Partners")
+    instoretask = relationship("InstoreTask")
 
 class Warranty(db.Model):
     __tablename__ = "warranty"
