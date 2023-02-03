@@ -59,11 +59,12 @@
       <div class="row">
         <div class="col">
           <label>Partner Name</label>
-          <input type="text" list="partner_name" class="form-control" placeholder="Partner Name" value="chiplevel.partner.partner_name if flag else '"
+          <input type="text" list="partner_name" class="form-control" placeholder="Partner Name" value="{{chiplevel.partner_id}}"
               name="partner_name" required>
           {% for partner in partners -%}
           <datalist id="partner_name">
-          <option value={{partner.partner_name}} {{"{{ 'selected' if tech == partner.partner_id }}" if flag }}>{{ partner.partner_name }}</option>
+            
+          <option value={{partner.partner_name}} {{ 'selected' if flag and partner == partner.partner_id  }}>{{ partner.partner_name }}</option>
 
           </datalist>
           {% endfor -%}
@@ -79,22 +80,22 @@
       <div class="row">
         <div class="col">
           <label>Est Days</label>
-          <input type="number" name="est_days" value='{{ tasks.est_days  if flag}}' class="form-control">
+          <input type="number" name="est_days" value='{{ chiplevel.est_days  if flag}}' class="form-control">
         </div>
         <div class="col">
           <label>Est Charges</label>
-          <input type="number" name="est_charge" value='{{ tasks.est_charge  if flag}}'  class="form-control">
+          <input type="number" name="est_charge" value='{{ chiplevel.est_charge  if flag}}'  class="form-control">
         </div>
       </div>
 
       <div class="row">
         <div class="col">
           <label>Partner Charges</label>
-          <input type="number" name="partner_charge" value='{{ tasks.final_charge if flag}}'  class="form-control">
+          <input type="number" name="partner_charge" value='{{ chiplevel.partner_charge if flag}}'  class="form-control">
         </div>
         <div class="col">
           <label>Customer Charges</label>
-          <input type="number" name="recived_charge" value='{{ tasks.recived_charge  if flag}}'  class="form-control">
+          <input type="number" name="recived_charge" value='{{ chiplevel.recived_charge  if flag}}'  class="form-control">
         </div>
         
       </div>
@@ -102,7 +103,7 @@
       <div class="row">
         <div class="col">
           <label>Remarks</label>
-          <input type="text" name="remarks" value='{{ tasks.remarks if flag}}' class="form-control">
+          <input type="text" name="remarks" value='{{ chiplevel.remarks if flag}}' class="form-control">
         </div>
       </div>
 
@@ -134,7 +135,7 @@
       <div class="row">
         <div class="col">
           <label>Items Sent</label>
-          <input type="text" name="items_sent" value='{{ tasks.items_received  if flag}}' class="form-control">
+          <input type="text" name="items_sent" value='{{ chiplevel.items_sent  if flag}}' class="form-control">
         </div>
         <div class="col">
           <label>Serial No</label>

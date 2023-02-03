@@ -52,6 +52,19 @@ def is_instore_task_available(in_task_id: int) -> bool:
     else:
         return True
 
+def is_chiplevel_task_available(in_task_id: int) -> bool:
+    task = crud.get_chiplevel_by_id(in_task_id)
+    if task == None:
+        return False
+    else:
+        return True
+
+def is_warranty_task_available(in_task_id: int) -> bool:
+    task = crud.get_warranty_by_id(in_task_id)
+    if task == None:
+        return False
+    else:
+        return True
 
 def is_quotation_available(username: str, role: str) -> bool:
     if role == "admin":

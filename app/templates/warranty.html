@@ -38,26 +38,26 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    {% for task in tasks -%}
+                    {% for warranty in warranty -%}
                     <tr>
                         <td>
-                            {{ task.in_task_id }}
+                            {{ warranty.in_task_id }}
                         </td>
                         <td>
-                            <p>{{ task.date }}</p>
+                            <p>{{ warranty.date }}</p>
                         </td>
                         <td>
-                            <p>{{ task.customer.name }}</p>
+                            <p></p>
                         </td>
                         <td>
-                            <p>{{ task.technician.name }}</p>
+                            <p>{}</p>
                         </td>
                         
                         
                         
                         <td>
         
-                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=task.in_task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
+                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=warranty.in_task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
                         </td>
                     </tr>
 

@@ -303,31 +303,74 @@ def get_partnerid(partner_name: str) -> int:
     return None
 
 def update_chiplevel_task(data: dict) -> None:
-    data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+    
 
-    data["est_days"] = int(data["est_days"]) if data["est_days"] else None
-    data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
-    data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
-    data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+    if util.is_chiplevel_task_available(data["in_task_id"]):
+        
+        data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+        data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+        data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
+        data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
+        data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
 
-    user = models.Chiplevel(**data)
-    db.session.add(user)
-    db.session.commit()
-    db.session.flush()
+        in_task_id = data.pop("in_task_id")
+
+        db.session.query(models.Chiplevel).filter(
+            models.Chiplevel.in_task_id == in_task_id
+        ).update(data)
+        db.session.commit()
+        db.session.flush()
+    else:        
+        data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+        data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+        data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
+        data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
+        data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+
+        user = models.Chiplevel(**data)
+        db.session.add(user)
+        db.session.commit()
+        db.session.flush()
 
 def get_all_chiplevel() -> list:
     chiplevel = models.Chiplevel.query.all()
     return chiplevel
 
-def warranty_update_task(data: dict) -> None:
-    data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+def get_chiplevel_by_id(in_task_id) -> models.Chiplevel:
+    return models.Chiplevel.query.filter_by(in_task_id=in_task_id).first()
 
-    data["est_days"] = int(data["est_days"]) if data["est_days"] else None
-    
-    user = models.Warranty(**data)
-    db.session.add(user)
-    db.session.commit()
-    db.session.flush()
+def get_all_warranty() -> list:
+    warranty = models.Warranty.query.all()
+    return warranty
+
+def get_warranty_by_id(in_task_id) -> models.Warranty  :
+    return models.Warranty.query.filter_by(in_task_id=in_task_id).first()
+
+
+def warranty_update_task(data: dict) -> None:
+    if util.is_warranty_task_available(data["in_task_id"]):
+        
+        data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+
+        data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+
+        in_task_id = data.pop("in_task_id")
+        
+        db.session.query(models.Warranty).filter(
+            models.Warranty.in_task_id == in_task_id
+        ).update(data)
+        db.session.commit()
+        db.session.flush()
+    else:        
+            
+        data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
+
+        data["est_days"] = int(data["est_days"]) if data["est_days"] else None
+        
+        user = models.Warranty(**data)
+        db.session.add(user)
+        db.session.commit()
+        db.session.flush()
 
 def get_customer_by_phone(phone_no: str) -> models.Customer:
     return models.Customer.query.filter_by(phone_no=phone_no).first()

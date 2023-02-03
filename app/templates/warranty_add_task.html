@@ -17,6 +17,7 @@
   
     <div class="container-fluid right-content">
 <form  method="post" >
+  <input type="hidden" name="in_task_id" value="{{ tasks.in_task_id }}">
       <div class="row">
         <div class="col"><h1>Update Warranty</h1></div>
         <div class="col">
@@ -36,7 +37,7 @@
         <select class="form-control" name="status">
             <option value=" " id="status">Select an option</option>
           {% for status in ["Sent","Received"] %}
-          <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
+          <option value={{status}} {{  'selected' if flag and status==warranty.status  }}>{{status}}</option>
           {% endfor %}
         </select>
     </div>
@@ -46,11 +47,11 @@
     <div class="row">
       <div class="col">
         <label>Outward Date</label>
-        <input type="Date" name="outward_date" value='{{chiplevel.outward_date if flag }}' class="form-control">
+        <input type="Date" name="outward_date" value='{{warranty.outward_date if flag }}' class="form-control">
       </div>
       <div class="col">
         <label>Inward Date</label>
-        <input type="Date" name="inward_date" value='{{chiplevel.inward_date if flag }}' class="form-control">
+        <input type="Date" name="inward_date" value='{{warranty.inward_date if flag }}' class="form-control">
       </div>    
     </div>
 
@@ -73,7 +74,7 @@
         <select class="form-control" name="wtype">
             <option value=" " id="wtype">Select an option</option>
           {% for wtype in ["Sent","Received"] %}
-          <option value={{wtype}} {{  'selected' if flag and wtype==tasks.wtype  }}>{{wtype}}</option>
+          <option value={{wtype}} {{  'selected' if flag and wtype==warranty.wtype  }}>{{wtype}}</option>
           {% endfor %}
         </select>
         </div>
@@ -84,7 +85,7 @@
       <div class="row">
         <div class="col">
           <label>Est Days</label>
-          <input type="text" name="est_days" value='{{ tasks.est_days  if flag}}' class="form-control">
+          <input type="text" name="est_days" value='{{ warranty.est_days  if flag}}' class="form-control">
         </div>
         <div class="col">
         
@@ -94,7 +95,7 @@
       <div class="row">
         <div class="col">
           <label>Work</label>
-          <input type="text" name="work" value='{{ tasks.final_charge if flag}}'  class="form-control">
+          <input type="text" name="work" value='{{ warranty.work if flag}}'  class="form-control">
         </div>
         <div class="col">
           
@@ -105,7 +106,7 @@
       <div class="row">
         <div class="col">
           <label>Remarks</label>
-          <input type="text" name="remarks" value='{{ tasks.remarks if flag}}' class="form-control">
+          <input type="text" name="remarks" value='{{ warranty.remarks if flag}}' class="form-control">
         </div>
       </div>
 
@@ -137,7 +138,7 @@
       <div class="row">
         <div class="col">
           <label>Items Sent</label>
-          <input type="text" name="items_sent" value='{{ tasks.items_sent  if flag}}' class="form-control">
+          <input type="text" name="items_sent" value='{{ warranty.items_sent  if flag}}' class="form-control">
         </div>
         <div class="col">
           <label>Serial No</label>

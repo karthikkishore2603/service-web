@@ -131,6 +131,8 @@ class Chiplevel(db.Model):
 class Warranty(db.Model):
     __tablename__ = "warranty"
     warranty_id = Column(Integer, primary_key=True, autoincrement=True)
+    in_task_id = Column(Integer, ForeignKey("instore_task.in_task_id"))
+
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
     inward_date = Column(Date, nullable=False)
@@ -143,6 +145,7 @@ class Warranty(db.Model):
     partner_id = Column(Integer, ForeignKey("partners.partner_id"))
 
     Partners = relationship("Partners")
+    instoretask = relationship("InstoreTask")
 
 class Quotation(db.Model):
     __tablename__ = "quotation"
