@@ -125,7 +125,7 @@ class Chiplevel(db.Model):
     items_sent = Column(String(70))
     partner_id = Column(Integer, ForeignKey("partners.partner_id"))
 
-    Partners = relationship("Partners")
+    partners = relationship("Partners")
     instoretask = relationship("InstoreTask")
 
 class Warranty(db.Model):
@@ -144,7 +144,7 @@ class Warranty(db.Model):
     items_sent = Column(String(70))
     partner_id = Column(Integer, ForeignKey("partners.partner_id"))
 
-    Partners = relationship("Partners")
+    partners = relationship("Partners")
     instoretask = relationship("InstoreTask")
 
 class Quotation(db.Model):
