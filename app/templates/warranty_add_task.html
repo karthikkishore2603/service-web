@@ -74,7 +74,7 @@
             <label>Type</label>
         <select class="form-control" name="wtype">
             <option value=" " id="wtype">Select an option</option>
-          {% for wtype in ["Sent","Received"] %}
+          {% for wtype in ["Warranty","Service","Returnable","Non-Returnable"] %}
           <option value={{wtype}} {{  'selected' if flag and wtype==warranty.wtype  }}>{{wtype}}</option>
           {% endfor %}
         </select>

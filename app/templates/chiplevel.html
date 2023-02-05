@@ -31,33 +31,33 @@
                 <thead>
                     <tr>
                         <th scope="col">CH.ID</th>
-                        <th scope="col">Date</th>
+                        <th scope="col">Partner Name</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Status</th>
                         <th scope="col">View</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    {% for task in tasks -%}
+                    {% for chip in chiplevel -%}
                     <tr>
                         <td>
-                            {{ task.in_task_id }}
+                            {{ chip.chiplevel_id }}
                         </td>
                         <td>
-                            <p>{{ task.date }}</p>
+                            <p>{{ chip.partners.partner_name }}</p>
                         </td>
                         <td>
-                            <p>{{ task.customer.name }}</p>
+                            <p>{{ chip.instoretask.customer.name }}</p>
                         </td>
                         <td>
-                            <p>{{ task.technician.name }}</p>
+                            <p>{{ chip.status }}</p>
                         </td>
                         
                         
                         
                         <td>
         
-                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=task.in_task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
+                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=chip.in_task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
                         </td>
                     </tr>
 
