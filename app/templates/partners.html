@@ -117,9 +117,10 @@
 
                         </td>
                         <td>
-                            <a ><button
-                                    role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#viewtask">View</button></a>
+                            
+                            <a href="{{ url_for('partner_work_view',partner_id=partn.partner_id) }}"><button role="button"
+                                class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#viewtask">View</button></a>
                     </tr>
                     {% endfor %}
 

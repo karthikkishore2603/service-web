@@ -233,20 +233,18 @@ LAYOUT1 = """
 def create_html(tasks : models.OnsiteTask , resources: models.Resources) -> str:
     template = env.from_string(LAYOUT)
     html = template.render(tasks=tasks ,resources=resources)
-    print (html)
     return html
 
 
 def create_pdf(tasks : models.OnsiteTask, resources: models.Resources) -> io.BytesIO:
     html = create_html(tasks=tasks,resources=resources)
-    return io.BytesIO(HTML(string=html).write_pdf())
+    return io.BytesIO(HTML(string=html).write_pdf()) 
 
 
 def create_customer_report_html(tasks : models.OnsiteTask ) -> str:
     template = env.from_string(LAYOUT)
     html = template.render(tasks=tasks ,resources=resources)
-    print (html)
-    return html
+    return render_template('order.html', tasks=tasks)
 
 def create_customer_work_pdf(tasks : models.OnsiteTask) -> io.BytesIO:
     html = create_customer_report_html(tasks=tasks)

@@ -79,7 +79,7 @@ def get_all_partners() -> list:
 
 
 def get_all_onsitetasks(filter: dict = None) -> list:
-    tasks = models.OnsiteTask.query
+    tasks = models.OnsiteTask.query.order_by(models.OnsiteTask.date.desc())
     if filter:
         customer = get_customer_by_phone(filter["fphone"])
         if customer:
@@ -89,14 +89,20 @@ def get_all_onsitetasks(filter: dict = None) -> list:
             tasks = tasks.filter_by(task_id=filter["fid"])
         if filter["fdate"]:
             tasks = tasks.filter_by(date=filter["fdate"])
+        if filter["fstype"]:
+            tasks = tasks.filter_by(service_type=filter["fstype"])
         if get_technician_id_by_name(filter["ftechnician"]):
             tasks = tasks.filter_by(
                 technician_id=get_technician_id_by_name(filter["ftechnician"])
             )
     tasks = tasks.all()
     return tasks
-
-
+def get_resources(filter: dict = None) -> list:
+    resources = models.Resources.query
+    if filter:
+        if filter["fstatus"]:
+            resources = resources.filter_by(status=filter["fstatus"])
+        
 def get_technicians(username: str) -> list:
     technicians = models.Technician.query.filter_by(username=username).all()
     return technicians
@@ -132,10 +138,18 @@ def get_instore_by_tech_id(technician_id) -> models.InstoreTask:
     )
 
 
-def get_task_by_cust_id(customer_id) -> models.OnsiteTask:
-    return (models.OnsiteTask.query.filter_by(customer_id=customer_id).all()+
-    models.InstoreTask.query.filter_by(customer_id=customer_id).all())
+def get_partner_by_id(partner_id) -> models.Chiplevel:
+    return (
+        models.Chiplevel.query.filter_by(partner_id=partner_id).all()+
+        models.Warranty.query.filter_by(partner_id=partner_id).all()
+        
+    )
 
+def get_onsitetask_by_cust_id(customer_id) -> models.OnsiteTask:
+    return (models.OnsiteTask.query.filter_by(customer_id=customer_id).all())
+
+def get_instoretask_by_cust_id(customer_id) -> models.InstoreTask:
+    return (models.InstoreTask.query.filter_by(customer_id=customer_id).all())
 
 def update_onsitetasks(data) -> list:
     if util.is_task_rsources_available(data["task_id"]):

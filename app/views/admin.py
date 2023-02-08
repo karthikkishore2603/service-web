@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, make_response
+from flask import render_template, request, redirect, url_for, make_response,json
 
 from .. import app, crud, util, models, pdf
 
@@ -46,14 +46,14 @@ def technician_post():
 @app.get("/admin/technician/work/<technician_id>")
 def technician_onsite_task_view(technician_id):
     return render_template(
-        "technician_onsite_task_view.html",
+        "onsite_work_view.html",
         tasks=crud.get_onsitetask_by_tech_id(technician_id),
     )
 
 @app.get("/admin/technician/work/instore/<technician_id>")
 def technician_instore_task_view(technician_id):
     return render_template(
-        "technician_instore_task_view.html",
+        "instore_work_view.html",
         tasks=crud.get_instore_by_tech_id(technician_id),
     )
 
@@ -76,6 +76,14 @@ def partners_add():
         )
     return redirect(url_for("partners"))
 
+
+@app.get("/admin/partners/work/<partner_id>")
+def partner_work_view(partner_id):
+    return render_template(
+        "partner_work_view.html",
+        tasks=crud.get_partner_by_id(partner_id),
+    )
+
 @app.get("/admin/customers")
 def customers():
     admin = util.current_user_info(request)
@@ -83,14 +91,16 @@ def customers():
         return render_template("check.html")
     return render_template("customers.html", customers=crud.get_all_customer())
 
-
-@app.get("/admin/customers/work/<customer_id>")
-def customer_works(customer_id):
+@app.get("/admin/customers/onsite/work/<customer_id>")
+def customer_onsite_task_view(customer_id):
     return render_template(
-        "customer_works.html",
-        tasks=crud.get_task_by_cust_id(customer_id),
-    )
+        "onsite_work_view.html",tasks=crud.get_onsitetask_by_cust_id(customer_id))
 
+@app.get("/admin/customers/instore/work/<customer_id>")
+def customer_instore_task_view(customer_id):
+    return render_template(
+        "instore_work_view.html",tasks=crud.get_instoretask_by_cust_id(customer_id))
+        
 
 @app.get("/admin/customers/work/<customer_id>")
 def customer_work_download(customer_id):
@@ -123,21 +133,16 @@ def onsite_add_task():
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     data = dict(request.form)
+    print(data)
     if data.get("ftype"):
         return render_template(
             "onsite.html",
             tasks=crud.get_all_onsitetasks(filter=data),
             technicians=crud.get_all_technicians(),
+            resources=crud.get_resources(filter=data),
         )
-    try:
-        crud.create_task(data)
-    except Exception as e:
-        return render_template(
-            "onsite.html",
-            tasks=crud.get_all_onsitetasks(),
-            technicians=crud.get_all_technicians(),
-            errors=str(e).split(","),
-        )
+    crud.create_task(data)
+
     return redirect(url_for("onsite"))
 
 
@@ -331,9 +336,11 @@ def expenditure():
 @app.get("/admin/order")
 def order():
     admin = util.current_user_info(request)
+    test = ['arrived','pending','completed','cancelled','all']
+    test = json.dumps(test)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
-    return render_template("order.html")
+    return render_template("order.html",customers=crud.get_all_customer(),test=test)
 
 
 @app.get("/admin/followup")
