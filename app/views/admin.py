@@ -29,7 +29,13 @@ def technician_post():
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     data = dict(request.form)
-
+    if data.get("ftype"):
+        return render_template(
+            "technician.html",
+            technicians=crud.get_all_technicians(filter=data)
+            
+        )
+    
     try:
         crud.create_technician(data)
     except Exception as e:
@@ -67,12 +73,18 @@ def partners():
 @app.post("/admin/partners")
 def partners_add():
     data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "partners.html",
+            partners=crud.get_all_partners(filter=data)
+        )
     try:
         crud.create_partners(data)
     except Exception as e:
         return render_template(
             "partners.html",
-            partners=crud.get_all_partners()
+            partners=crud.get_all_partners(),
+            errors=str(e).split(",")
         )
     return redirect(url_for("partners"))
 
@@ -90,6 +102,21 @@ def customers():
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     return render_template("customers.html", customers=crud.get_all_customer())
+
+@app.post("/admin/customers")
+def customers_filter():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not admin:
+        return render_template("check.html")
+    data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "customers.html",
+            customers=crud.get_all_customer(filter=data)
+            
+        )
+    return redirect(url_for("customers"))
+
 
 @app.get("/admin/customers/onsite/work/<customer_id>")
 def customer_onsite_task_view(customer_id):
@@ -133,13 +160,12 @@ def onsite_add_task():
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     data = dict(request.form)
-    print(data)
     if data.get("ftype"):
         return render_template(
             "onsite.html",
             tasks=crud.get_all_onsitetasks(filter=data),
             technicians=crud.get_all_technicians(),
-            resources=crud.get_resources(filter=data),
+            
         )
     crud.create_task(data)
 
@@ -173,7 +199,6 @@ def onsite_task_view(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
-    print((crud.get_resources_by_id(task_id)))
     return render_template(
         "onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
@@ -224,6 +249,22 @@ def instore():
         return render_template("check.html")
     return render_template("instore.html", tasks=crud.get_all_instoretasks())
 
+@app.post("/admin/instore")
+def instore_filter_task():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not admin:
+        return render_template("check.html")
+    data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "instore.html",
+            tasks=crud.get_all_instoretasks(filter=data),
+            technicians=crud.get_all_technicians(),
+            
+        )
+    crud.create_task(data)
+
+    return redirect(url_for("onsite"))
 
 @app.get("/admin/instore/add")
 def instore_add_task():
@@ -287,6 +328,17 @@ def chiplevel():
         return render_template("check.html")
     return render_template("chiplevel.html",chiplevel=crud.get_all_chiplevel())
 
+@app.post("/admin/chiplevel")
+def chiplevel_filter():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not admin:
+        return render_template("check.html")
+    data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "chiplevel.html",chiplevel=crud.get_all_chiplevel(filter=data))
+    
+    return redirect(url_for("chiplevel"))
 
 @app.get("/admin/chiplevel/task/<in_task_id>")
 def chiplevel_add(in_task_id):
@@ -310,6 +362,17 @@ def warranty():
         return render_template("check.html")
     return render_template("warranty.html",warranty=crud.get_all_warranty())
 
+@app.post("/admin/warranty")
+def warranty_filter():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not admin:
+        return render_template("check.html")
+    data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "warranty.html",warranty=crud.get_all_warranty(filter=data))
+    
+    return redirect(url_for("warranty"))
 
 @app.get("/admin/warranty/task/<in_task_id>")
 def warranty_add(in_task_id):
@@ -330,6 +393,7 @@ def expenditure():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
+   
     return render_template("expenditure.html")
 
 

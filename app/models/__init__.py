@@ -45,7 +45,7 @@ class OnsiteTask(db.Model):
     technician_id_2 = Column(Integer, ForeignKey("technician.technician_id"))
     service_type = Column(String(20), nullable=False)
     problem = Column(String(20), nullable=False)
-
+    status = Column(String(20), default="Pending")
     technician = relationship("Technician", foreign_keys=[technician_id])
     technician2 = relationship("Technician", foreign_keys=[technician_id_2])
     customer = relationship("Customer")
@@ -57,7 +57,7 @@ class Resources(db.Model):
     material = Column(String(20), nullable=False)
     service_charge = Column(Integer, nullable=True)
     received_charge = Column(Integer, nullable=True)
-    status = Column(String(20), default="Pending")
+    
     review = Column(String(70))
 
 
@@ -105,7 +105,7 @@ class Products(db.Model):
 class Partners(db.Model):
     __tablename__ = "partners"
     partner_id = Column(Integer, primary_key=True, autoincrement=True)
-    partner_name = Column(String(20), nullable=False)
+    partner_name = Column(String(20), nullable=False,primary_key=True)
     phone_no = Column(String(10), nullable=False)
     partner_address = Column(String(20))
 

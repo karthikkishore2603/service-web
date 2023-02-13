@@ -45,8 +45,12 @@ def create_technician(data: dict) -> None:
     db.session.flush()
 
 
-def get_all_technicians() -> list:
-    technicians = models.Technician.query.all()
+def get_all_technicians(filter: dict = None) -> list:
+    technicians = models.Technician.query
+    if filter:
+        if filter["ftechnician"]:
+            technicians = technicians.filter_by(name=filter["ftechnician"])    
+    technicians = technicians.all()
     return technicians
 
 
@@ -57,52 +61,55 @@ def get_all_admins() -> list:
 
 
 def create_partners(data: dict) -> None:
-    """
+    
     errors = ""
-    if util.is_username_available(data["username"], "technician"):
-        errors += "Username already exists,"
-
-    if not util.is_phone_valid(data["phone_no"]):
-        errors += "Invalid phone number,"
+    if util.is_partner_available(data["partner_name"]):
+        errors = "Username already exists,"
 
     if errors:
         raise Exception(errors[:-1])
-"""
+
     user = models.Partners(**data)
     db.session.add(user)
     db.session.commit()
     db.session.flush()
 
-def get_all_partners() -> list:
-    partners = models.Partners.query.all()
+def get_all_partners(filter: dict = None) -> list:
+    partners = models.Partners.query
+    if filter:
+        if filter["fpartner"]:
+            partners = partners.filter_by(partner_name=filter["fpartner"])
     return partners
 
 
 def get_all_onsitetasks(filter: dict = None) -> list:
     tasks = models.OnsiteTask.query.order_by(models.OnsiteTask.date.desc())
     if filter:
-        customer = get_customer_by_phone(filter["fphone"])
-        if customer:
-            customer_id = customer.customer_id
-            tasks = tasks.filter_by(customer_id=customer_id)
+        if filter["fphone"]:
+            customer = get_customer_by_phone(filter["fphone"])
+            if customer:
+                customer_id = customer.customer_id
+                tasks = tasks.filter_by(customer_id=customer_id)
+            else:
+                tasks = tasks.filter_by(customer_id=None)
         if filter["fid"]:
             tasks = tasks.filter_by(task_id=filter["fid"])
         if filter["fdate"]:
             tasks = tasks.filter_by(date=filter["fdate"])
         if filter["fstype"]:
             tasks = tasks.filter_by(service_type=filter["fstype"])
-        if get_technician_id_by_name(filter["ftechnician"]):
-            tasks = tasks.filter_by(
-                technician_id=get_technician_id_by_name(filter["ftechnician"])
-            )
+        if filter["fstatus"]:
+            tasks = tasks.filter_by(status=filter["fstatus"])
+        
+        if filter["ftechnician"]:
+            tech_id=get_technician_id_by_name(filter["ftechnician"])
+            if tech_id:
+                tasks = tasks.filter_by(technician_id=tech_id[0])
+            else:
+                tasks = tasks.filter_by(technician_id=None)
     tasks = tasks.all()
     return tasks
-def get_resources(filter: dict = None) -> list:
-    resources = models.Resources.query
-    if filter:
-        if filter["fstatus"]:
-            resources = resources.filter_by(status=filter["fstatus"])
-        
+    
 def get_technicians(username: str) -> list:
     technicians = models.Technician.query.filter_by(username=username).all()
     return technicians
@@ -167,7 +174,7 @@ def update_onsitetasks(data) -> list:
 
 
 def update_onsite_task_status(task_id: int) -> bool:
-    task = get_resources_by_id(task_id)
+    task = get_onsitetask_by_id(task_id)
     if task and (task.status == "Pending"):
         task.status = "Completed"
         db.session.commit()
@@ -188,6 +195,10 @@ def get_resources_by_tech_id(tech: int) -> models.Resources:
 def get_admin(username: str) -> models.Admin:
     return models.Admin.query.filter_by(username=username).first()
 
+def get_partner(partner_name: str) -> models.Partners:
+    partners = models.Partners.query.filter_by(partner_name=partner_name).first()
+    if partners:
+        return partners.partner_id
 
 def get_admin_by_id(admin_id: int) -> models.Admin:
     return models.Admin.query.filter_by(admin_id=admin_id).first()
@@ -253,8 +264,33 @@ def create_instore_task(data: dict) -> None:
     db.session.flush()
 
 
-def get_all_instoretasks() -> list:
-    tasks = models.InstoreTask.query.all()
+def get_all_instoretasks(filter: dict = None) -> list:
+    tasks = models.InstoreTask.query.order_by(models.InstoreTask.date.desc())
+    if filter:
+        if filter["fphone"]:
+            customer = get_customer_by_phone(filter["fphone"])
+            if customer:
+                customer_id = customer.customer_id
+                tasks = tasks.filter_by(customer_id=customer_id)
+            else:
+                tasks = tasks.filter_by(customer_id=None)
+        if filter["fid"]:
+            tasks = tasks.filter_by(in_task_id=filter["fid"])
+        if filter["fdate"]:
+            tasks = tasks.filter_by(date=filter["fdate"])
+        if filter["fstype"]:
+            tasks = tasks.filter_by(service_type=filter["fstype"])
+        if filter["fstatus"]:
+            tasks = tasks.filter_by(status=filter["fstatus"])
+        
+        if filter["ftechnician"]:
+            tech_id=get_technician_id_by_name(filter["ftechnician"])
+            if tech_id:
+                tasks = tasks.filter_by(technician_id=tech_id[0])
+            else:
+                tasks = tasks.filter_by(technician_id=None)
+                
+    tasks = tasks.all()
     return tasks
 
 
@@ -346,15 +382,38 @@ def update_chiplevel_task(data: dict) -> None:
         db.session.commit()
         db.session.flush()
 
-def get_all_chiplevel() -> list:
-    chiplevel = models.Chiplevel.query.all()
+def get_all_chiplevel(filter: dict = None) -> list:
+    chiplevel = models.Chiplevel.query
+    if filter:
+        if filter["fid"]:
+            chiplevel = chiplevel.filter_by(chiplevel_id=filter["fid"])
+        if filter["fpartnername"]:
+            partner_id = get_partner(filter["fpartnername"])
+            if partner_id:
+                chiplevel = chiplevel.filter_by(partner_id=partner_id)
+            else:
+                chiplevel = chiplevel.filter_by(partner_id=None)
+        
+    chiplevel = chiplevel.all()
+    
     return chiplevel
 
 def get_chiplevel_by_id(in_task_id) -> models.Chiplevel:
     return models.Chiplevel.query.filter_by(in_task_id=in_task_id).first()
 
-def get_all_warranty() -> list:
-    warranty = models.Warranty.query.all()
+def get_all_warranty(filter: dict = None) -> list:
+    warranty = models.Warranty.query
+    if filter:
+        if filter["fid"]:
+            warranty = warranty.filter_by(warranty_id=filter["fid"])
+        if filter["fpartnername"]:
+            partner_id = get_partner(filter["fpartnername"])
+            if partner_id:
+                warranty = warranty.filter_by(partner_id=partner_id)
+            else:
+                warranty = warranty.filter_by(partner_id=None)
+        
+    warranty = warranty.all()
     return warranty
 
 def get_warranty_by_id(in_task_id) -> models.Warranty  :
@@ -400,8 +459,15 @@ def create_customer(data: dict) -> None:
     db.session.flush()
 
 
-def get_all_customer() -> list:
-    customers = models.Customer.query.all()
+def get_all_customer(filter: dict = None) -> list:
+    customers = models.Customer.query
+    if filter:
+        if filter["fphone"]:
+            customers = customers.filter_by(phone_no=filter["fphone"])
+        
+        if filter["fname"]:
+            customers = customers.filter_by(name=filter["fname"])
+    customers = customers.all()
     return customers
 
 

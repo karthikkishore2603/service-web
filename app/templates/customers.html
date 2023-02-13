@@ -14,25 +14,28 @@
     <h1>Customers</h1>
     <div class="input-group" style="padding-top: 10px;">
       
-      
-      <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-        <label>Customer Name</label>
-          <input type="search" placeholder="Customer Name" id="form1" class="form-control" />
+      <form action="/admin/customers" method="post">
+        <div class="input-group" style="padding-top: 10px;">
+            <input type="hidden" name="ftype" value="on" />
+            
+            <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                <label>Customer Phone No</label>
+                <input type="search"  placeholder="Phone" id="form1" class="form-control" name="fphone" />
 
-        </div>
-        <button type="button" class="btn btn-primary">
-          <i class="fas fa-search"></i>
-        </button>
-        <div class="form-outline"  style="padding-left: 10px;padding-bottom: 5px;">
-          <label>Customer Phone No</label>
-          <input type="search" id="form1" placeholder="phone no"  class="form-control" />
-          
-        </div>
-        <button type="button" class="btn btn-primary">
-          <i class="fas fa-search"></i>
-        </button>
-    </div>        
+            </div>
+            <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+              <label>Customer Name</label>
+              <input type="search"  placeholder="Name" id="form1" class="form-control" name="fname" />
 
+          </div>
+            <div class="form-outline" style="padding-left: 10px; padding-top: 31px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+    
 
     <div class="table-responsive">
       <br>

@@ -21,12 +21,60 @@
 
         <a href="{{ url_for('instore_add_task') }}">
         <button class="btn btn-dark"  data-bs-toggle="modal" data-bs-target="#add_task">Add Task</button>
-              </button></a>      
-
-              
-        
+              </button></a>             
           </div>
         
+          <form action="/admin/instore" method="post">
+            <div class="input-group" style="padding-top: 10px;">
+                <input type="hidden" name="ftype" value="on" />
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Date</label>
+                    <input type="date" id="form1" class="form-control" name="fdate" />
+
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Customer Phone No</label>
+                    <input type="search" size="5" placeholder="Phone" id="form1" class="form-control" name="fphone" />
+
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Engineer</label>
+                    <input type="search" size="7" placeholder="Technician" id="form1" class="form-control" name="ftechnician" />
+
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>OS.ID</label>
+                    <input type="search" size="5" placeholder="OS.ID" id="form1" class="form-control" name="fid" />
+
+                </div>
+                
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Type</label>
+                    
+                <select class="form-control" name="fstype" > 
+                    <option value="">Select an Service Type</option>
+                    <option value="service" id="service">Service</option>                    
+                    <option value="chiplevel" id="chiplevel">ChipLevel</option>
+                    <option value="warranty" id="warranty">Warranty</option>
+                </select>
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Status</label>
+                    <select class="form-control" name="fstatus" > 
+                    <option value="">Status</option>
+                    <option value="open" id="open">Open</option>
+                    <option value="closed" id="closed">Closed</option>
+                    <option value="delivered" id="delivered">Delivered</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
 
     
         <div class="table-responsive"> 

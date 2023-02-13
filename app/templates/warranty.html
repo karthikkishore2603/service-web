@@ -17,11 +17,30 @@
     <div class="container-fluid right-content">
         
         <h1 class="h2">Warranty</h1>
-    
-        
           </div>        
           
-        
+          <form action="/admin/warranty" method="post">
+            <div class="input-group" style="padding-top: 10px;">
+                <input type="hidden" name="ftype" value="on" />
+                
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>WR.ID</label>
+                    <input type="search"  placeholder="WR.ID" id="form1" class="form-control" name="fid" />
+                </div>
+
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Partner Name</label>
+                    <input type="search"  placeholder="Partner Name" id="form1" class="form-control" name="fpartnername" />
+
+                </div>
+                
+            <div class="form-outline" style="padding-left: 10px; padding-top: 31px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            </div>
+        </form>
 
     
         <div class="table-responsive"> 
@@ -30,7 +49,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">IS.ID</th>
+                        <th scope="col">WR.ID</th>
                         <th scope="col">Partner Name</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Status</th>
