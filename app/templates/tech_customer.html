@@ -11,26 +11,31 @@
     <!-- Toggle button -->
     <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
   
-    <h1>Customers</h1>
+    <h1>Customer</h1>
     <div class="input-group" style="padding-top: 10px;">
       
-      
-      <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-          <input type="search" placeholder="hello" id="form1" class="form-control" />
+      <form action="/tech/customers" method="post">
+        <div class="input-group" style="padding-top: 10px;">
+            <input type="hidden" name="ftype" value="on" />
+            
+            <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                <label>Customer Phone No</label>
+                <input type="search"  placeholder="Phone" id="form1" class="form-control" name="fphone" />
 
-        </div>
-        <button type="button" class="btn btn-primary">
-          <i class="fas fa-search"></i>
-        </button>
-        <div class="form-outline"  style="padding-left: 10px;padding-bottom: 5px;">
-          <input type="search" id="form1"  class="form-control" />
-          
-        </div>
-        <button type="button" class="btn btn-primary">
-          <i class="fas fa-search"></i>
-        </button>
-    </div>        
+            </div>
+            <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+              <label>Customer Name</label>
+              <input type="search"  placeholder="Name" id="form1" class="form-control" name="fname" />
 
+          </div>
+            <div class="form-outline" style="padding-left: 10px; padding-top: 31px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+    
 
     <div class="table-responsive">
       <br>

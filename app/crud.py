@@ -84,8 +84,9 @@ def get_all_partners(filter: dict = None) -> list:
 
 def get_all_onsitetasks(filter: dict = None) -> list:
     tasks = models.OnsiteTask.query.order_by(models.OnsiteTask.date.desc())
+    print(filter)
     if filter:
-        if filter["fphone"]:
+        if filter.get("fphone"):
             customer = get_customer_by_phone(filter["fphone"])
             if customer:
                 customer_id = customer.customer_id
@@ -159,6 +160,17 @@ def get_instoretask_by_cust_id(customer_id) -> models.InstoreTask:
     return (models.InstoreTask.query.filter_by(customer_id=customer_id).all())
 
 def update_onsitetasks(data) -> list:
+    errors = ""
+
+    if not util.is_service_charge_valid(data["service_charge"]):
+        errors += "Invalid Charges,"
+
+    if not util.is_received_charge_valid(data["received_charge"]):
+        errors += "Invalid Received Charges,"
+
+    if errors:
+        raise Exception(errors[:-1])
+
     if util.is_task_rsources_available(data["task_id"]):
         task_id = data.pop("task_id")
         db.session.query(models.Resources).filter(
@@ -209,6 +221,14 @@ def get_technician(username: str) -> models.Technician:
 
 
 def create_task(data: dict) -> None:
+    errors = ""
+    
+    if not util.is_phone_valid(data["phone_no"]):
+        errors += "Invalid phone number,"
+
+    if errors:
+        raise Exception(errors[:-1])
+
     customer_data = {}
     customer_data.update(
         {
@@ -217,8 +237,7 @@ def create_task(data: dict) -> None:
             "address": data.pop("address"),
         }
     )
-    if not util.is_phone_valid(customer_data["phone_no"]):
-        raise Exception("Invalid phone number")
+    
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
@@ -419,6 +438,20 @@ def get_all_warranty(filter: dict = None) -> list:
 def get_warranty_by_id(in_task_id) -> models.Warranty  :
     return models.Warranty.query.filter_by(in_task_id=in_task_id).first()
 
+def get_onsite_count(status="Pending") -> int:
+    return models.OnsiteTask.query.filter_by(status=status).count()
+
+def get_instore_count_open(status="Open") -> int:
+    return models.InstoreTask.query.filter_by(status=status).count()
+
+def get_instore_count_pending(status="Closed") -> int:
+    return models.InstoreTask.query.filter_by(status=status).count()
+
+def get_chiplevel_count_sent(status="Sent") -> int:
+    return models.Chiplevel.query.filter_by(status=status).count()
+
+def get_warranty_count_sent(status="Sent") -> int:
+    return models.Warranty.query.filter_by(status=status).count()
 
 def warranty_update_task(data: dict) -> None:
     if util.is_warranty_task_available(data["in_task_id"]):

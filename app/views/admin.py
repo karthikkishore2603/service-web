@@ -8,7 +8,9 @@ def admin_dashboard():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
-    return render_template("admin_dashboard.html")
+    return render_template("admin_dashboard.html", onsite_task_count=crud.get_onsite_count(), instore_task_count_open=crud.get_instore_count_open()
+    ,instore_task_count_pending=crud.get_instore_count_pending(), get_chiplevel_count_sent=crud.get_chiplevel_count_sent(),
+    get_warranty_count_sent=crud.get_warranty_count_sent(),)
 
 
 @app.get("/admin/technician")
@@ -160,6 +162,7 @@ def onsite_add_task():
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     data = dict(request.form)
+    
     if data.get("ftype"):
         return render_template(
             "onsite.html",
@@ -167,8 +170,17 @@ def onsite_add_task():
             technicians=crud.get_all_technicians(),
             
         )
-    crud.create_task(data)
-
+    
+    try:
+        crud.create_task(data)
+    except Exception as e:
+        return render_template(
+            "onsite.html",
+            tasks=crud.get_all_onsitetasks(),
+            technicians=crud.get_all_technicians(),
+            errors=str(e).split(","),
+        )
+    
     return redirect(url_for("onsite"))
 
 
@@ -213,14 +225,27 @@ def onsite_task_update(task_id):
     if not util.is_user_authenticated(request) or not admin:
         return render_template("check.html")
     resource = crud.get_resources_by_id(task_id=task_id)
+    tasks=crud.get_onsitetask_by_id(task_id=task_id)
+
     message = ""
-    if resource and resource.status == "Completed":
+    if resource and tasks.status == "Completed":
         message="Task is already completed"
     else:
         data = dict(request.form)
         data["task_id"] = task_id
-        crud.update_onsitetasks(data)
-        message="Successfully updated"
+        try:
+            crud.update_onsitetasks(data)
+            message="Successfully updated"
+        except Exception as e:
+            return render_template(
+                "onsite_task_view.html",
+                tasks=crud.get_onsitetask_by_id(task_id),
+                resources=crud.get_resources_by_id(task_id),
+                message=message,
+                errors=str(e).split(","),
+        )
+    
+        
     return render_template(
         "onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),

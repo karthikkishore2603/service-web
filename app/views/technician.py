@@ -19,7 +19,7 @@ def tech_onsite():
     return render_template(
         "tech_onsite.html",
         customers=crud.get_all_customer(),
-        tasks=crud.get_onsitetasks_by_tech(username=technician.username),
+        tasks=crud.get_onsitetasks_by_tech(username=technician.username), technicians=crud.get_all_technicians(),
     )
 
 
@@ -29,7 +29,7 @@ def tech_onsite_task_view(task_id):
     return render_template(
         "tech_onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
-        resources=crud.get_resources_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id), technicians=crud.get_all_technicians(),
     )
 
 
@@ -53,6 +53,19 @@ def tech_customer():
     return render_template("tech_customer.html", customers=crud.get_all_customer())
 
 
+@app.post("/tech/customers")
+def tech_customers_filter():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "tech_customer.html",
+            customers=crud.get_all_customer(filter=data)
+            
+        )
+    return redirect(url_for("customers"))
 @app.get("/tech/customers/work/<customer_id>")
 def tech_customer_works(customer_id):
     return render_template(

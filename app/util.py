@@ -88,6 +88,16 @@ def is_phone_valid(phone_no: str) -> bool:
         return True
     return False
 
+def is_service_charge_valid(service_charge: str) -> bool:
+    if  service_charge.isnumeric():
+        return True
+    return False
+
+def is_received_charge_valid(received_charge: str) -> bool:
+    if  received_charge.isnumeric():
+        return True
+    return False
+    
 
 def create_access_token(
     data: schemas.TokenData, expires_delta: timedelta | None = None

@@ -24,6 +24,14 @@
     </div>
     {% endif -%}
 
+    
+    {% for error in errors %}
+    <div class="alert alert-danger" style="width: 250px;" role="alert">
+        {{error}}
+    </div>
+    {% endfor -%}
+
+
     <form method="post" action="{{ url_for('onsite_task_update', task_id=tasks.task_id) }}">
       <div class="row">
         <div class="col">

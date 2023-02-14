@@ -18,7 +18,7 @@ def login():
         token = request.cookies.get(constants.AUTH_TOKEN_COOKIE_NAME)
         user = util.get_current_user_login(token)
         if user.user_type == "admin":
-            return render_template("admin_dashboard.html")
+            return redirect(url_for("admin_dashboard"))
         elif user.user_type == "technician":
             return render_template("tech_dashboard.html")
         else:
@@ -38,7 +38,7 @@ def login_verify():
     if role == "admin":
         admin_login = crud.get_admin(username=username)
 
-        response = make_response(render_template("admin_dashboard.html"))
+        response = make_response(redirect(url_for("admin_dashboard")))
 
         jwt_token = util.create_access_token(
             schemas.TokenData(
