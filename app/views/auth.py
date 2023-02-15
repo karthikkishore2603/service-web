@@ -59,7 +59,7 @@ def login_verify():
     elif role == "technician":
         technician_login = crud.get_technician(username=username)
 
-        response = make_response(render_template("tech_dashboard.html"))
+        response = make_response(redirect(url_for("tech_dashboard")))
 
         jwt_token = util.create_access_token(
             schemas.TokenData(

@@ -6,7 +6,7 @@ from .. import app, crud, util, models, pdf
 @app.get("/admin/dashboard")
 def admin_dashboard():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("admin_dashboard.html", onsite_task_count=crud.get_onsite_count(), instore_task_count_open=crud.get_instore_count_open()
     ,instore_task_count_pending=crud.get_instore_count_pending(), get_chiplevel_count_sent=crud.get_chiplevel_count_sent(),
@@ -16,7 +16,7 @@ def admin_dashboard():
 @app.get("/admin/technician")
 def technician():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
         "technician.html",
@@ -28,7 +28,7 @@ def technician():
 @app.post("/admin/technician")
 def technician_post():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     if data.get("ftype"):
@@ -101,14 +101,14 @@ def partner_work_view(partner_id):
 @app.get("/admin/customers")
 def customers():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("customers.html", customers=crud.get_all_customer())
 
 @app.post("/admin/customers")
 def customers_filter():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     if data.get("ftype"):
@@ -146,7 +146,7 @@ def customer_work_download(customer_id):
 @app.get("/admin/onsite")
 def onsite():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
         "onsite.html",
@@ -159,7 +159,7 @@ def onsite():
 @app.post("/admin/onsite")
 def onsite_add_task():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if (not util.is_user_authenticated(request,type="admin") or not admin) :
         return render_template("check.html")
     data = dict(request.form)
     
@@ -209,7 +209,7 @@ def admin_onsite_update_status(task_id):
 @app.get("/admin/onsite/viewtask/<task_id>")
 def onsite_task_view(task_id):
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
         "onsite_task_view.html",
@@ -222,7 +222,7 @@ def onsite_task_view(task_id):
 @app.post("/admin/onsite/viewtask/<task_id>")
 def onsite_task_update(task_id):
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     resource = crud.get_resources_by_id(task_id=task_id)
     tasks=crud.get_onsitetask_by_id(task_id=task_id)
@@ -270,14 +270,14 @@ def onsite_task_download(task_id):
 @app.get("/admin/instore")
 def instore():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("instore.html", tasks=crud.get_all_instoretasks())
 
 @app.post("/admin/instore")
 def instore_filter_task():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     if data.get("ftype"):
@@ -289,12 +289,12 @@ def instore_filter_task():
         )
     crud.create_task(data)
 
-    return redirect(url_for("onsite"))
+    return redirect(url_for("instore"))
 
 @app.get("/admin/instore/add")
 def instore_add_task():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
         "instore_add_task.html", technicians=crud.get_all_technicians(), flag=False
@@ -304,7 +304,7 @@ def instore_add_task():
 @app.get("/admin/instore/task/<in_task_id>")
 def instore_task_view_by_id(in_task_id):
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
         "instore_add_task.html",
@@ -317,7 +317,7 @@ def instore_task_view_by_id(in_task_id):
 @app.post("/admin/instore/add")
 def instore_add_task_view():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     crud.create_instore_task(data)
@@ -333,7 +333,7 @@ def instore_add_task_view():
 @app.post("/admin/instore/task/<in_task_id>")
 def instore_task_update(in_task_id):
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     data["in_task_id"] = in_task_id
@@ -349,14 +349,14 @@ def instore_task_update(in_task_id):
 @app.get("/admin/chiplevel")
 def chiplevel():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("chiplevel.html",chiplevel=crud.get_all_chiplevel())
 
 @app.post("/admin/chiplevel")
 def chiplevel_filter():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     if data.get("ftype"):
@@ -369,7 +369,7 @@ def chiplevel_filter():
 def chiplevel_add(in_task_id):
     data = dict(request.form)
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("chiplevel_add_task.html", flag=True, tasks=crud.get_instoretask_by_id(in_task_id),chiplevel=crud.get_chiplevel_by_id(in_task_id),partners=crud.get_all_partners())
 
@@ -383,14 +383,14 @@ def chiplevel_add_task(in_task_id):
 @app.get("/admin/warranty")
 def warranty():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("warranty.html",warranty=crud.get_all_warranty())
 
 @app.post("/admin/warranty")
 def warranty_filter():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     if data.get("ftype"):
@@ -402,21 +402,20 @@ def warranty_filter():
 @app.get("/admin/warranty/task/<in_task_id>")
 def warranty_add(in_task_id):
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("warranty_add_task.html",flag=True, tasks=crud.get_instoretask_by_id(in_task_id),warranty=crud.get_warranty_by_id(in_task_id),partners=crud.get_all_partners())
 
 @app.post("/admin/warranty/task/<in_task_id>")
 def warranty_update_task(in_task_id):
     data = dict(request.form)
-    print(data)
     crud.warranty_update_task(data)
     return redirect("/admin/warranty/task/"+in_task_id)
 
 @app.get("/admin/expenditure")
 def expenditure():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
    
     return render_template("expenditure.html")
@@ -427,7 +426,7 @@ def order():
     admin = util.current_user_info(request)
     test = ['arrived','pending','completed','cancelled','all']
     test = json.dumps(test)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("order.html",customers=crud.get_all_customer(),test=test)
 
@@ -435,7 +434,7 @@ def order():
 @app.get("/admin/followup")
 def follow_up():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("follow_up.html")
 
@@ -443,7 +442,7 @@ def follow_up():
 @app.get("/admin/quotation")
 def quotation():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("quotation.html", quotation=crud.get_all_quotation())
 
@@ -451,7 +450,7 @@ def quotation():
 @app.post("/admin/quotation")
 def quotation_create():
     admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
     try:

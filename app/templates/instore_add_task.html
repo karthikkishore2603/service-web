@@ -39,7 +39,7 @@
     <div class="row">
         <div class="col">
           <label>Date</label>
-          <input type="Date" name="date" value='{{tasks.date if flag }}' class="form-control">
+          <input type="Date" name="date" value='{{tasks.date if flag }}' class="form-control" required>
         </div>
         <div class="col">
           <label>Status</label>
@@ -55,18 +55,19 @@
       <div class="row">
         <div class="col">
           <label>Customer Name</label>
-          <input type="text" name="customer_name" value="{{ tasks.customer.name  if flag}}"  class="form-control">
+          <input type="text" name="customer_name" value="{{ tasks.customer.name  if flag}}"  class="form-control" required>
         </div>
         <div class="col">
           <label>Phone No</label>
-          <input type="text" name="phone_no" value='{{ tasks.customer.phone_no  if flag }}' class="form-control">
+          <input type="number" name="phone_no" value='{{ tasks.customer.phone_no  if flag }}' class="form-control" required>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
           <label>Type</label>
-          <select class="form-control" name="service_type">
+          <select class="form-control" name="service_type" required>
+            <option value="" id="service_type">Select an option</option>
             {% for work in ["Service","Chiplevel","Warranty"] %}
             <option value={{work}} {{  'selected' if  flag and work == tasks.service_type   }}>{{work}}</option>
             {% endfor %}
@@ -75,7 +76,8 @@
         </div>
         <div class="col">
           <label>Technician</label>
-          <select class="form-control" name="technician_id">
+          <select class="form-control" name="technician_id" required>
+            <option value="" id="service_type">Select an Engineer</option>
             {% for technician in technicians -%}
             <option value={{technician.technician_id}} {{ 'selected' if flag and technician == technician.technician_id  }}>{{ technician.name }}</option>
             {% endfor -%}
@@ -86,11 +88,11 @@
       <div class="row">
         <div class="col">
           <label>Est Days</label>
-          <input type="number" name="est_days" value='{{ tasks.est_days  if flag and tasks.est_days}}' class="form-control">
+          <input type="number" name="est_days" value='{{ tasks.est_days  if flag and tasks.est_days}}' class="form-control" required>
         </div>
         <div class="col">
           <label>Est Charges</label>
-          <input type="number" name="est_charge" value='{{ tasks.est_charge  if flag and tasks.est_charge}}'  class="form-control">
+          <input type="number" name="est_charge" value='{{ tasks.est_charge  if flag and tasks.est_charge}}'  class="form-control" required>
         </div>
         
       </div>
@@ -113,8 +115,8 @@
       <div class="row">
         <div class="col">
           <label>Product Type</label>
-          <select class="form-control" name="product_name">
-            <option value=" " id="product_name">Select an option</option>
+          <select class="form-control" name="product_name" required>
+            <option value="" id="product_name">Select an option</option>
             {% for product_name in ["Laptop","Desktop CPU","Printer","Monitor","CCTV", "PC Accessories","Other Accessories"] -%}
             <option value={{product_name}} id="product_name">{{ product_name }}</option>
             {% endfor -%}
@@ -122,29 +124,29 @@
         </div>
         <div class="col">
           <label>Product Model</label>
-          <input type="text" name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control">
+          <input type="text" name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control" required>
         </div>
       </div>
  
       <div class="row">
         <div class="col">
           <label>Problem</label>
-          <input type="text" name="problem" value='{{ tasks.problem  if flag}}'  class="form-control">
+          <input type="text" name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required>
         </div>
         <div class="col">
           <label>Product Details</label>
-          <input type="text" name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control">
+          <input type="text" name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" required>
         </div>
       </div>
    
       <div class="row">
         <div class="col">
           <label>Items Received</label>
-          <input type="text" name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control">
+          <input type="text" name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required>
         </div>
         <div class="col">
           <label>Serial No</label>
-          <input type="text" name="serial_no" value='{{ tasks.serial_no  if flag}}'  class="form-control">
+          <input type="text" name="serial_no" value='{{ tasks.serial_no  if flag}}'  class="form-control" required>
         </div>
       </div>
 

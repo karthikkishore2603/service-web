@@ -144,13 +144,15 @@ def current_user_info(request: Request):
     raise NotImplementedError
 
 
-def is_user_authenticated(request: Request) -> bool:
+def is_user_authenticated(request: Request,type: str='technician') -> bool:
     token = request.cookies.get(constants.AUTH_TOKEN_COOKIE_NAME)
     if not token:
         return False
     login = get_current_user_login(token)
     if login is None:
         return False
+    if login.user_type != type:
+            return False
     if login.user_type == "admin":
         if not crud.get_admin_by_id(login.id):
             return False

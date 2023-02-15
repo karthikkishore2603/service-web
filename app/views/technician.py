@@ -8,7 +8,7 @@ def tech_dashboard():
     technician = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
-    return render_template("tech_dashboard.html")
+    return render_template("tech_dashboard.html",technician=technician)
 
 
 @app.get("/tech/onsite")
@@ -20,8 +20,40 @@ def tech_onsite():
         "tech_onsite.html",
         customers=crud.get_all_customer(),
         tasks=crud.get_onsitetasks_by_tech(username=technician.username), technicians=crud.get_all_technicians(),
+        technician=technician
     )
 
+@app.post("/tech/onsite")
+def tech_onsite_add_task():
+    technician = util.current_user_info(request)
+    data = dict(request.form)
+
+    if data.get("ftype"):
+        return render_template(
+            "tech_onsite.html",
+            customers=crud.get_all_customer(),
+            tasks=crud.get_onsitetasks_by_tech(username=technician.username,filter=data), technicians=crud.get_all_technicians(),
+            technician=technician,
+        )
+
+    try:
+        crud.create_task(data)
+    except Exception as e:
+        return render_template(
+            "tech_onsite.html",
+            customers=crud.get_all_customer(),
+            tasks=crud.get_onsitetasks_by_tech(username=technician.username), technicians=crud.get_all_technicians(),
+            technician=technician,
+            errors=str(e).split(",")
+        )
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    return render_template(
+        "tech_onsite.html",
+        customers=crud.get_all_customer(),
+        tasks=crud.get_onsitetasks_by_tech(username=technician.username), technicians=crud.get_all_technicians(),
+        technician=technician
+    )
 
 @app.get("/tech/onsite/viewtask/<task_id>")
 def tech_onsite_task_view(task_id):
@@ -80,6 +112,18 @@ def tech_instore():
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
     return render_template("tech_instore.html",tasks=crud.get_instoretasks_by_tech(username=technician.username))
+
+@app.post("/tech/instore")
+def tech_instore_filter_task():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    data = dict(request.form)
+    if data.get("ftype"):
+        return render_template(
+            "tech_instore.html",tasks=crud.get_instoretasks_by_tech(username=technician.username,filter=data)
+        )
+    return redirect(url_for("tech_instore"))
 
 @app.get("/tech/instore/add")
 def tech_instore_add_task():

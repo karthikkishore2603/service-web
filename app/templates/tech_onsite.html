@@ -19,28 +19,58 @@
 
         <h1 class="h2">Onsite</h1>
 
+        {% for error in errors %}
+        <div class="alert alert-danger" style="width: 250px;" role="alert">
+            {{error}}
+        </div>
+        {% endfor -%}
 
         <!-- How to make this a popup? -->
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#add_task">Add Task</button>
+
         <form action="/tech/onsite" method="post">
             <div class="input-group" style="padding-top: 10px;">
                 <input type="hidden" name="ftype" value="on" />
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Date</label>
                     <input type="date" id="form1" class="form-control" name="fdate" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-                    <input type="search" placeholder="Phone" id="form1" class="form-control" name="fphone" />
+                    <label>Customer Phone No</label>
+                    <input type="search" size="5" placeholder="Phone" id="form1" class="form-control" name="fphone" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-                    <input type="search" placeholder="Technician" id="form1" class="form-control" name="ftechnician" />
+                    <label>Engineer</label>
+                    <input type="search" size="7" placeholder="Technician" id="form1" class="form-control" name="ftechnician" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-                    <input type="search" placeholder="OS.ID" id="form1" class="form-control" name="fid" />
+                    <label>OS.ID</label>
+                    <input type="search" size="5" placeholder="OS.ID" id="form1" class="form-control" name="fid" />
 
                 </div>
+                
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Type</label>
+                    
+                <select class="form-control" name="fstype" > 
+                    <option value="">Select an Service Type</option>
+                    <option value="installation" id="installation">Installation</option>
+                    <option value="service" id="service">Service</option>
+                    <option value="warranty" id="warranty">Warranty</option>
+                </select>
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Status</label>
+                    <select class="form-control" name="fstatus" > 
+                    <option value="">Status</option>
+                    <option value="pending" id="pending">pending</option>
+                    <option value="completed" id="completed">completed</option>
+                    </select>
+                </div>
+                
                 <div>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-search"></i>
@@ -78,7 +108,7 @@
                             </div>
                             <div >
                                 <label>Customer PhNo.</label>
-                                <input type="text" list="phone_no" class="form-control" placeholder="Phone No"
+                                <input type="number" list="phone_no" class="form-control" placeholder="Phone No"
                                     name="phone_no" required>
                                 {% for cus in customers -%}
                                 <datalist id="phone_no">
@@ -95,11 +125,8 @@
                             <div >
                                 <label>Engineer 1</label>
                                 <select class="form-control" name="technician_id" required>
-                                    <option value="">Select Engineer</option>
-                                    {% for technician in technicians -%}
-                                    <option value="{{ technician.technician_id }}" id="installation">{{ technician.name
-                                        }}</option>
-                                    {% endfor -%}
+                                    <option value="{{technician.technician_id}}">{{technician.name}}</option>
+                                    
                                 </select>
                             </div>
                             <div >

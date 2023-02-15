@@ -84,7 +84,6 @@ def get_all_partners(filter: dict = None) -> list:
 
 def get_all_onsitetasks(filter: dict = None) -> list:
     tasks = models.OnsiteTask.query.order_by(models.OnsiteTask.date.desc())
-    print(filter)
     if filter:
         if filter.get("fphone"):
             customer = get_customer_by_phone(filter["fphone"])
@@ -546,17 +545,42 @@ def get_all_quotation() -> list:
 
 # TECHNICIAN PAGE--------------------------------
 def get_onsitetasks_by_tech(username: str, filter: dict = None) -> list:
-    tasks = (
+    
+    tasks = [
         models.OnsiteTask.query.filter(
             models.OnsiteTask.technician_id == models.Technician.technician_id,
             models.Technician.username == username,
-        ).all()
-        + models.OnsiteTask.query.filter(
+        )
+        , models.OnsiteTask.query.filter(
             models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
             models.Technician.username == username,
-        ).all()
-    )
+        )
+    ]
 
+    if filter:
+        if filter.get("fphone"):
+            customer = get_customer_by_phone(filter["fphone"])
+            if customer:
+                customer_id = customer.customer_id
+                tasks[0], tasks[1] = tasks[0].filter_by(customer_id=customer_id), tasks[1].filter_by(customer_id=customer_id)
+            else:
+                tasks[0], tasks[1] = tasks[0].filter_by(customer_id=None), tasks[1].filter_by(customer_id=None)
+        if filter["fid"]:
+            tasks[0], tasks[1] = tasks[0].filter_by(task_id=filter["fid"]), tasks[1].filter_by(task_id=filter["fid"])
+        if filter["fdate"]:
+            tasks[0], tasks[1] = tasks[0].filter_by(date=filter["fdate"]), tasks[1].filter_by(date=filter["fdate"])
+        if filter["fstype"]:
+            tasks[0], tasks[1] = tasks[0].filter_by(service_type=filter["fstype"]), tasks[1].filter_by(service_type=filter["fstype"])
+        if filter["fstatus"]:
+            tasks[0], tasks[1] = tasks[0].filter_by(status=filter["fstatus"]), tasks[1].filter_by(status=filter["fstatus"])
+        
+        if filter["ftechnician"]:
+            tech_id=get_technician_id_by_name(filter["ftechnician"])
+            if tech_id:
+                tasks[0], tasks[1] = tasks[0].filter_by(technician_id=tech_id[0]), tasks[1].filter_by(technician_id_2=tech_id[0])
+            else:
+                tasks[0], tasks[1] = tasks[0].filter_by(technician_id=None), tasks[1].filter_by(technician_id_2=None)
+    tasks = tasks[0].union(tasks[1]).all()
     return tasks
 
 def get_instoretasks_by_tech(username: str, filter: dict = None) -> list:
