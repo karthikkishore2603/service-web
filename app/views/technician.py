@@ -6,9 +6,13 @@ from .. import app, crud, util, models
 @app.get("/tech/dashboard")
 def tech_dashboard():
     technician = util.current_user_info(request)
+    print(technician)
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
-    return render_template("tech_dashboard.html",technician=technician)
+    return render_template("tech_dashboard.html", technician=technician , 
+                           get_onsitetask_tech_count=crud.get_onsitetask_tech_count(username=technician.username),
+                           get_instore_task_tech_count=crud.get_instore_task_tech_count(username=technician.username)
+                           ,get_instore_task_tech_closed_count=crud.get_instore_task_tech_closed_count(username=technician.username))
 
 
 @app.get("/tech/onsite")
@@ -33,7 +37,7 @@ def tech_onsite_add_task():
             "tech_onsite.html",
             customers=crud.get_all_customer(),
             tasks=crud.get_onsitetasks_by_tech(username=technician.username,filter=data), technicians=crud.get_all_technicians(),
-            technician=technician,
+            technician=technician, 
         )
 
     try:
@@ -69,13 +73,47 @@ def tech_onsite_task_view(task_id):
 def tech_onsite_task_update(task_id):
     data = dict(request.form)
     data["task_id"] = task_id
-    crud.update_onsitetasks(data)
+    message = ""
+    task = crud.get_onsitetask_by_id(task_id)
+    if task and (task.status == "Pending"):
+        try:
+            crud.update_onsitetasks(data)
+            message = "Task Updated Successfully"
+        except Exception as e:
+            message = str(e).split(",")
+    else:
+        message="Already closed"
+    
     return render_template(
         "tech_onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
         resources=crud.get_resources_by_id(task_id),
+        message=message,
     )
 
+@app.get("/tech/onsite/<task_id>/update_status")
+def tech_onsite_update_status(task_id):
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not admin:
+        return render_template("check.html")
+    resource = crud.get_resources_by_id(task_id=task_id)
+    message=""
+    if not resource:
+        message="Update resource first"
+    elif resource.received_charge < resource.service_charge:
+        message="Service charge is not received"
+    else:
+        flag = crud.update_onsite_task_status(task_id)
+        if flag:
+            message="Status updated"
+        else:
+            message="Already closed"
+    return render_template(
+        "tech_onsite_task_view.html",
+        tasks=crud.get_onsitetask_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id),
+        message=message,
+    )
 
 @app.get("/tech/customer")
 def tech_customer():
@@ -134,6 +172,21 @@ def tech_instore_add_task():
         "tech_instore_add_task.html", technicians=crud.get_all_technicians(), flag=False
     )
 
+@app.post("/tech/instore/add")
+def tech_instore_add_task_view():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not admin:
+        return render_template("check.html")
+    data = dict(request.form)
+    crud.create_instore_task(data)
+
+    return render_template(
+        "tech_instore_add_task.html",
+        technicians=crud.get_all_technicians(),
+        tasks={},
+        flag=False,
+    )
+
 @app.get("/tech/instore/task/<in_task_id>")
 def tech_instore_task_view_by_id(in_task_id):
     admin = util.current_user_info(request)
@@ -145,3 +198,4 @@ def tech_instore_task_view_by_id(in_task_id):
         tasks=crud.get_instoretask_by_id(in_task_id),
         technicians=crud.get_all_technicians(),
     )
+

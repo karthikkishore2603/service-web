@@ -437,6 +437,42 @@ def get_all_warranty(filter: dict = None) -> list:
 def get_warranty_by_id(in_task_id) -> models.Warranty  :
     return models.Warranty.query.filter_by(in_task_id=in_task_id).first()
 
+def get_onsitetask_tech_count(username: str,status="Pending") -> int:
+    tasks = (
+        models.OnsiteTask.query.filter(
+            models.OnsiteTask.technician_id == models.Technician.technician_id,
+            models.Technician.username == username, models.OnsiteTask.status==status,
+        )
+        , models.OnsiteTask.query.filter(
+            models.OnsiteTask.technician_id_2 == models.Technician.technician_id,
+            models.Technician.username == username, models.OnsiteTask.status==status,
+        )
+    )
+    tasks=tasks[0].union(tasks[1]).count()
+    return tasks
+
+def get_instore_task_tech_count(username: str,status="Open") -> int:
+    tasks = (
+        models.InstoreTask.query.filter(
+            models.InstoreTask.technician_id == models.Technician.technician_id,
+            models.Technician.username == username, models.InstoreTask.status==status,
+        )
+        
+    )
+    tasks=tasks.count()
+    return tasks
+
+def get_instore_task_tech_closed_count(username: str,status="Closed") -> int:
+    tasks = (
+        models.InstoreTask.query.filter(
+            models.InstoreTask.technician_id == models.Technician.technician_id,
+            models.Technician.username == username, models.InstoreTask.status==status,
+        )
+        
+    )
+    tasks=tasks.count()
+    return tasks
+
 def get_onsite_count(status="Pending") -> int:
     return models.OnsiteTask.query.filter_by(status=status).count()
 
@@ -588,8 +624,33 @@ def get_instoretasks_by_tech(username: str, filter: dict = None) -> list:
         models.InstoreTask.query.filter(
             models.InstoreTask.technician_id == models.Technician.technician_id,
             models.Technician.username == username,
-        ).all()
+        )
         
     )
+    if filter:
+        if filter["fphone"]:
+            customer = get_customer_by_phone(filter["fphone"])
+            if customer:
+                customer_id = customer.customer_id
+                tasks = tasks.filter_by(customer_id=customer_id)
+            else:
+                tasks = tasks.filter_by(customer_id=None)
+        if filter["fid"]:
+            tasks = tasks.filter_by(in_task_id=filter["fid"])
+        if filter["fdate"]:
+            tasks = tasks.filter_by(date=filter["fdate"])
+        if filter["fstype"]:
+            tasks = tasks.filter_by(service_type=filter["fstype"])
+        if filter["fstatus"]:
+            tasks = tasks.filter_by(status=filter["fstatus"])
+        
+        if filter["ftechnician"]:
+            tech_id=get_technician_id_by_name(filter["ftechnician"])
+            if tech_id:
+                tasks = tasks.filter_by(technician_id=tech_id[0])
+            else:
+                tasks = tasks.filter_by(technician_id=None)
+                
+    tasks = tasks.all()
 
     return tasks

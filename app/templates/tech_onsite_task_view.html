@@ -16,10 +16,21 @@
     <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
   
     <div class="container-fluid right-content">
+      {% if message %}
+    <div class="alert alert-danger" style="width: 250px;" role="alert">
+      {{message}}
+    </div>
+    {% endif -%}
+
+    {% for error in errors %}
+    <div class="alert alert-danger" style="width: 250px;" role="alert">
+        {{error}}
+    </div>
+    {% endfor -%}
 
     
 
-<form method="post">
+<form method="post" action="{{ url_for('tech_onsite_task_update', task_id=tasks.task_id) }}">
   <div class="row" >
     <div class="col" >
       <h1>View Task</h1>

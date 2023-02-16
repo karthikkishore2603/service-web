@@ -20,7 +20,7 @@ def login():
         if user.user_type == "admin":
             return redirect(url_for("admin_dashboard"))
         elif user.user_type == "technician":
-            return render_template("tech_dashboard.html")
+            return redirect(url_for("tech_dashboard"))
         else:
             return render_template("check.html", error_message="Invalid user type")
     return render_template("login.html")
