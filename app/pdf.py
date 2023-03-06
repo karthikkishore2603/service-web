@@ -1,6 +1,5 @@
 from . import models
 from jinja2 import Environment
-from weasyprint import HTML
 import io
 import os
 
@@ -248,4 +247,4 @@ def create_customer_report_html(tasks : models.OnsiteTask ) -> str:
 
 def create_customer_work_pdf(tasks : models.OnsiteTask) -> io.BytesIO:
     html = create_customer_report_html(tasks=tasks)
-    return io.BytesIO(HTML(string=html).write_pdf())
+    return io.StringIO(html)

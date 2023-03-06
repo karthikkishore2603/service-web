@@ -180,6 +180,7 @@ def update_onsitetasks(data) -> list:
     else:
         update_tasks = models.Resources(**data)
         db.session.add(update_tasks)
+        db.session.rollback()
         db.session.commit()
         db.session.flush()
 

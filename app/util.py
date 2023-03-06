@@ -1,7 +1,7 @@
-from app.views.admin import technician
 from jose import jwt, JWTError
 from flask import request, url_for, Request
 from datetime import datetime, timedelta
+from typing import Union
 
 from . import crud, schemas, constants
 
@@ -100,7 +100,7 @@ def is_received_charge_valid(received_charge: str) -> bool:
     
 
 def create_access_token(
-    data: schemas.TokenData, expires_delta: timedelta | None = None
+    data: schemas.TokenData, expires_delta: Union[timedelta, None] = None
 ):
     to_encode = dict(data).copy()
     if expires_delta:
@@ -114,7 +114,7 @@ def create_access_token(
     return encoded_jwt
 
 
-def get_current_user_login(token: str) -> schemas.TokenData | None:
+def get_current_user_login(token: str) -> Union[schemas.TokenData, None]:
     try:
         payload = jwt.decode(
             token, constants.SECRET_KEY, algorithms=[constants.ALGORITHM]

@@ -152,7 +152,9 @@ class Quotation(db.Model):
     quotation_no = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
     customer_id = Column(Integer, ForeignKey("customer.customer_id"))
+    customer_ph = Column(Integer)
     customer = relationship("Customer")
+    
 
 
 db.create_all()
