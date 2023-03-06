@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from typing import Union
+from typing import Optional, List, Union
 from . import models
 
 __all__ = ["TokenData", "User"]
