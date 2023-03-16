@@ -1,16 +1,27 @@
 {% extends "layout.html" %} 
 {% block title %}COM CAR{%endblock %}
-{% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='dashboard-styles.css') }}" />
-<script src="https://kit.fontawesome.com/623b0bceda.js" crossorigin="anonymous"></script>
+{% block extra_head %}<script src="https://kit.fontawesome.com/623b0bceda.js" crossorigin="anonymous"></script>
 {% endblock %} 
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
-<div class="page-content p-5" id="content">
-    <!-- Toggle button -->
-    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
-  
+
+{% include "sidebar_new_admin.html" %}
+<div class="main-container">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                        <div class="title">
+                            <h4><i class="micon dw dw-settings2 mtext"></i></h4>
+                        </div>
+                        <nav aria-label="breadcrumb" role="navigation">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                            </ol>
+                        </nav>
+                    
+
+    
     <h1>Customers</h1>
     <div class="input-group" style="padding-top: 10px;">
       
@@ -88,6 +99,12 @@
 
    
   
-  </div>
+  </div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
 
 {% endblock %}

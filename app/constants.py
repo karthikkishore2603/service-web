@@ -14,7 +14,7 @@ AUTH_TOKEN_COOKIE_NAME = "_AUTH"
 # SQL database constants
 DATABASE_NAME = "service"
 MYSQL_USER = "karthik"
-MYSQL_PASSWORD = "karthi123"
+MYSQL_PASSWORD = "password"
 MYSQL_PORT = "localhost:3306"
 SQLALCHEMY_DATABASE_URL = (
     f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_PORT}/{DATABASE_NAME}"

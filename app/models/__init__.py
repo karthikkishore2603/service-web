@@ -158,3 +158,4 @@ class Quotation(db.Model):
 
 
 db.create_all()
+

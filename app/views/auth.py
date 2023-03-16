@@ -14,7 +14,7 @@ from datetime import timedelta, datetime
 @app.get("/")
 def login():
     # Check if it's already authenticate
-    if util.is_user_authenticated(request):
+    if util.is_user_authenticated(request) or util.is_user_authenticated(request, type="admin"):
         token = request.cookies.get(constants.AUTH_TOKEN_COOKIE_NAME)
         user = util.get_current_user_login(token)
         if user.user_type == "admin":

@@ -6,15 +6,16 @@
 {% endblock %} 
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
 
-<div class="page-content p-5" id="content">
-    
-    <a href="{{ url_for('instore') }}"><i class="fa fa-chevron-circle-left fa-3x" ></i>
-    </a><br>
-
-    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
-  
+{% include "sidebar_new_admin.html" %}
+<div class="main-container">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                        <div class="title">
+                            <h4><i class="micon dw dw-settings2 mtext"></i></h4>
+                        </div>
+                          
     <div class="container-fluid right-content">
 <form  method="post">
       <div class="row">
@@ -79,7 +80,7 @@
           <select class="form-control" name="technician_id" required>
             <option value="" id="service_type">Select an Engineer</option>
             {% for technician in technicians -%}
-            <option value={{technician.technician_id}} {{ 'selected' if flag and technician == technician.technician_id  }}>{{ technician.name }}</option>
+            <option value={{technician.technician_id}} {{ 'selected' if flag and technician.technician_id == tasks.technician.technician_id  }}>{{ technician.name }}</option>
             {% endfor -%}
         </select>
         </div>
@@ -118,7 +119,7 @@
           <select class="form-control" name="product_name" required>
             <option value="" id="product_name">Select an option</option>
             {% for product_name in ["Laptop","Desktop CPU","Printer","Monitor","CCTV", "PC Accessories","Other Accessories"] -%}
-            <option value={{product_name}} id="product_name">{{ product_name }}</option>
+            <option value={{product_name}} {{ 'selected' if flag and product_name == tasks.product.product_name  }} id="product_name">{{ product_name }}</option>
             {% endfor -%}
         </select>
         </div>

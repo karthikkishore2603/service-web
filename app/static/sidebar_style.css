@@ -28,7 +28,6 @@ body {
   margin: 0;
 }
 
-
 .separator {
   margin: 3rem 0;
   border-bottom: 1px dashed #fff;
@@ -38,7 +37,7 @@ body {
   letter-spacing: 0.1em;
 }
 .text-gray {
-  color: #aaa;
+  color: #ff0808;
 }
 .nav-link{
     text-transform: capitalize;

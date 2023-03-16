@@ -5,12 +5,17 @@
 {% endblock %}
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
+
+{% include "sidebar_new_admin.html" %}
 
 <div class="page-content p-5" id="content">
-    <!-- Toggle button -->
-    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i
-            class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
+<div class="main-container">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                        <div class="title">
+                            <h4><i class="micon dw dw-settings2 mtext"></i></h4>
+                        </div>
 
     <div class="container-fluid right-content">
         <!-- Add non-sidebar contents here -->

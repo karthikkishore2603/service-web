@@ -70,6 +70,10 @@ def technician_instore_task_view(technician_id):
 
 @app.get("/admin/partners")
 def partners():
+    
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
     return render_template("partners.html", partners=crud.get_all_partners())
 
 @app.post("/admin/partners")
@@ -235,6 +239,7 @@ def onsite_task_update(task_id):
         data["task_id"] = task_id
         try:
             crud.update_onsitetasks(data)
+            print(data)
             message="Successfully updated"
         except Exception as e:
             return render_template(

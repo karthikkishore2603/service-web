@@ -6,15 +6,20 @@
 {% endblock %}
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
+{% include "sidebar_new_admin.html" %}
 
-<div class="page-content p-5" id="content">
+<div class="page-content p-4" id="content">
+<div class="main-container">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                        <div class="title">
+                            <h4><i class="micon dw dw-settings2 mtext"></i></h4>
+                        </div>
 
   <a href="{{ url_for('onsite') }}"><i class="fa fa-chevron-circle-left fa-3x"></i>
   </a><br>
 
-  <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i
-      class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
 
   <div class="container-fluid right-content">
 
@@ -145,11 +150,13 @@
 
   </div>
 
-  <button type="submit" class="btn btn-dark">Update</button>
+  <button type="submit" style="max-width: 100px;" class="btn btn-dark">Update</button>
   </form>
 
-  <button type="button" data-toggle="modal" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
-
+  <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
+<br>
+<br>
+<h1></h1>
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -174,5 +181,5 @@
     </div>
   </div>
 </div>
-
+</div></div></div>
 {% endblock %}
