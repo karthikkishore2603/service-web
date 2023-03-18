@@ -152,32 +152,44 @@ def customer_work_download(customer_id):
 @app.route('/download/report/pdf/<task_id>')
 def download_report(task_id):
     try:
- 
+        task = crud.get_onsitetask_by_id(task_id)
         pdf = FPDF()
         pdf.add_page()
          
         page_width = pdf.w - 2 * pdf.l_margin
-         
-        pdf.set_font('Times','B',14.0) 
-        pdf.cell(page_width, 0.0, 'Employee Data', align='C')
+        
+        pdf.set_font('Times','B',48.0) 
+        pdf.cell(page_width, 0.0, 'TASK REPORT', align='C')
         pdf.ln(10)
  
-        pdf.set_font('Courier', '', 12)
-         
-        col_width = page_width/4
-        
-        pdf.ln(1)
-        pdf.set_font('Times','B',14.0) 
-        pdf.cell(page_width, 0.0, 'empl', align='C')
-        
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task ID: '+str(task.task_id), align='L')
         pdf.ln(10)
-        th = pdf.font_size
-         
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task Type: '+str(task.service_type), align='L')
         pdf.ln(10)
-         
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task Status: '+str(task.status), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task Description: '+str(task.problem), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task Creation Date: '+str(task.creation_date), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task Date: '+str(task.date), align='L')
+        pdf.ln(10)
+ 
+        pdf.ln(10)
         pdf.set_font('Times','',10.0) 
         pdf.cell(page_width, 0.0, '- end of report -', align='C')
-         
+        print('pdf created')
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
     except Exception as e:
         print(e)
