@@ -43,7 +43,7 @@
           <h1>View Task</h1>
         </div>
         <div class="col">
-          <a href="{{ url_for('onsite_task_download',task_id=tasks.task_id) }}"><button type="button"
+          <a href="{{ url_for('download_report',task_id=tasks.task_id) }}" target="_blank"><button type="button"
               class="btn btn-dark">Download</button></a>
         </div>
       </div>

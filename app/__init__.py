@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from . import constants
 import pymysql
+from fpdf import FPDF
 
 pymysql.install_as_MySQLdb()
 

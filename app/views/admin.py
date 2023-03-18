@@ -1,8 +1,10 @@
-from flask import render_template, request, redirect, url_for, make_response,json
+from flask import render_template, request, redirect, url_for, make_response,json,Response
+import pymysql
 
 from .. import app, crud, util, models, pdf
-
-
+ #pip install flask-mysql
+from fpdf import FPDF
+ 
 @app.get("/admin/dashboard")
 def admin_dashboard():
     admin = util.current_user_info(request)
@@ -147,6 +149,40 @@ def customer_work_download(customer_id):
     return pdf_data
 
 
+@app.route('/download/report/pdf/<task_id>')
+def download_report(task_id):
+    try:
+ 
+        pdf = FPDF()
+        pdf.add_page()
+         
+        page_width = pdf.w - 2 * pdf.l_margin
+         
+        pdf.set_font('Times','B',14.0) 
+        pdf.cell(page_width, 0.0, 'Employee Data', align='C')
+        pdf.ln(10)
+ 
+        pdf.set_font('Courier', '', 12)
+         
+        col_width = page_width/4
+        
+        pdf.ln(1)
+        pdf.set_font('Times','B',14.0) 
+        pdf.cell(page_width, 0.0, 'empl', align='C')
+        
+        pdf.ln(10)
+        th = pdf.font_size
+         
+        pdf.ln(10)
+         
+        pdf.set_font('Times','',10.0) 
+        pdf.cell(page_width, 0.0, '- end of report -', align='C')
+         
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
+    except Exception as e:
+        print(e)
+   
+
 @app.get("/admin/onsite")
 def onsite():
     admin = util.current_user_info(request)
@@ -258,7 +294,7 @@ def onsite_task_update(task_id):
         message=message,
     )
 
-
+"""
 @app.get("/admin/onsite/download/<task_id>")
 def onsite_task_download(task_id):
     pdf_data = make_response(
@@ -270,7 +306,7 @@ def onsite_task_download(task_id):
     pdf_data.headers["Content-Disposition"] = "attachment;"
     pdf_data.headers["Content-Type"] = "application/pdf"
     return pdf_data
-
+"""
 
 @app.get("/admin/instore")
 def instore():
