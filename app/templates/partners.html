@@ -5,12 +5,18 @@
 {% endblock %}
 {% block inner_content %}
 
-{% include "sidebar_admin.html" %}
 
-<div class="page-content p-5" id="content">
-    <!-- Toggle button -->
-    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i
-            class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold"></small></button>
+{% include "sidebar_new_admin.html" %}
+
+<div class="page-content p-4" id="content">
+<div class="main-container">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                        <div class="title">
+                            <h4><i class="micon dw dw-settings2 mtext"></i></h4>
+                        </div>
+
 
     <div class="container-fluid right-content">
         <!-- Add non-sidebar contents here -->
@@ -25,7 +31,7 @@
 
         
         <!-- How to make this a popup? -->
-        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitIdea">Add Technician</button>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitIdea">Add Partners</button>
 
         <form action="/admin/partners" method="post">
             <div class="input-group" style="padding-top: 10px;">

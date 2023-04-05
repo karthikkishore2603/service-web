@@ -136,13 +136,25 @@ def tech_customers_filter():
             
         )
     return redirect(url_for("customers"))
-@app.get("/tech/customers/work/<customer_id>")
-def tech_customer_works(customer_id):
+@app.get("/tech/customers/work/onsite/<customer_id>")
+def tech_customer_onsite_task_view(customer_id):
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    
     return render_template(
-        "tech_customers_works.html",
-        tasks=crud.get_task_by_cust_id(customer_id),
+        "tech_onsite_work_view.html",
+        tasks=crud.get_onsitetask_by_cust_id(customer_id)
     )
 
+@app.get("/tech/customers/work/instore/<customer_id>")
+def tech_customer_instore_task_view(customer_id):
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    
+    return render_template(
+        "tech_instore_work_view.html",tasks=crud.get_instoretask_by_cust_id(customer_id))
 
 @app.get("/tech/instore")
 def tech_instore():
@@ -165,37 +177,52 @@ def tech_instore_filter_task():
 
 @app.get("/tech/instore/add")
 def tech_instore_add_task():
-    admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
     return render_template(
-        "tech_instore_add_task.html", technicians=crud.get_all_technicians(), flag=False
+        "tech_instore_add_task.html", tasks=crud.get_instoretasks_by_tech(username=technician.username), 
+        technicians=crud.get_all_technicians(),flag=False,technician=technician, 
     )
 
 @app.post("/tech/instore/add")
 def tech_instore_add_task_view():
-    admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
     data = dict(request.form)
     crud.create_instore_task(data)
 
     return render_template(
         "tech_instore_add_task.html",
-        technicians=crud.get_all_technicians(),
-        tasks={},
+        
+        tasks=crud.get_instoretasks_by_tech(username=technician.username),technicians=crud.get_all_technicians(),technician=technician, 
         flag=False,
     )
 
 @app.get("/tech/instore/task/<in_task_id>")
 def tech_instore_task_view_by_id(in_task_id):
-    admin = util.current_user_info(request)
-    if not util.is_user_authenticated(request) or not admin:
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
+    return render_template(
+        "tech_instore_add_task.html",
+        flag=True,
+        tasks=crud.get_instoretask_by_id(in_task_id),
+        technicians=crud.get_all_technicians(),technician=technician, 
+    )
+
+@app.post("/tech/instore/task/<in_task_id>")
+def tech_instore_task_update(in_task_id):
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    data = dict(request.form)
+    data["in_task_id"] = in_task_id
+    crud.update_instoretasks(data)
     return render_template(
         "tech_instore_add_task.html",
         flag=True,
         tasks=crud.get_instoretask_by_id(in_task_id),
         technicians=crud.get_all_technicians(),
     )
-

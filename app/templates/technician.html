@@ -20,7 +20,7 @@
     <div class="container-fluid right-content">
         <!-- Add non-sidebar contents here -->
 
-        <h1 class="h2">Technicians</h1>
+        <h1 class="h2">Engineers</h1>
 
         {% for error in errors %}
         <div class="alert alert-danger" style="width: 250px;" role="alert">
@@ -29,7 +29,7 @@
         {% endfor -%}
 
         <!-- How to make this a popup? -->
-        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitIdea">Add Technician</button>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitIdea">Add Engineer</button>
 
         <form action="/admin/technician" method="post">
             <div class="input-group" style="padding-top: 10px;">
@@ -37,7 +37,7 @@
 
 
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
-                    <input type="search" placeholder="Technician" id="form1" class="form-control" name="ftechnician" />
+                    <input type="search" placeholder="Engineer" id="form1" class="form-control" name="ftechnician" />
 
                 </div>
 
@@ -55,7 +55,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Technician</h4>
+                            <h4 class="modal-title" id="submitIdeaBackdropLabel">Add Engineer</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -94,7 +94,7 @@
           </script>
         <div class="table-responsive">
             <br>
-            <h2 class="h3">Technicians</h2>
+            <h2 class="h3">Engineer</h2>
             <table id="myTable"class="table">
                 <thead>
                     <tr>

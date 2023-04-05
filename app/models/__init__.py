@@ -116,7 +116,7 @@ class Chiplevel(db.Model):
     in_task_id = Column(Integer, ForeignKey("instore_task.in_task_id"))
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
-    inward_date = Column(Date)
+    inward_date = Column(Date, nullable=True, default="1111-11-11")
     est_days = Column(Integer)
     est_charge = Column(Integer)
     partner_charge = Column(Integer)

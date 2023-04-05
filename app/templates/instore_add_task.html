@@ -8,6 +8,8 @@
 
 
 {% include "sidebar_new_admin.html" %}
+
+<div class="page-content p-4" id="content">
 <div class="main-container">
         <div class="min-height-200px">
             <div class="page-header">
@@ -15,6 +17,8 @@
                         <div class="title">
                             <h4><i class="micon dw dw-settings2 mtext"></i></h4>
                         </div>
+
+
                           
     <div class="container-fluid right-content">
 <form  method="post">
@@ -31,6 +35,9 @@
     <a href="{{ url_for('warranty_add' , in_task_id=tasks.in_task_id) }}">
     <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Warranty</button></a>
     {% endif %}
+    <a href="{{ url_for('instore_download_report',task_id=tasks.in_task_id) }}" target="_blank"><button type="button"
+      class="btn btn-dark">Download</button></a>
+
     </div>
   </div>
   
@@ -76,7 +83,7 @@
           
         </div>
         <div class="col">
-          <label>Technician</label>
+          <label>Engineer</label>
           <select class="form-control" name="technician_id" required>
             <option value="" id="service_type">Select an Engineer</option>
             {% for technician in technicians -%}
@@ -118,7 +125,7 @@
           <label>Product Type</label>
           <select class="form-control" name="product_name" required>
             <option value="" id="product_name">Select an option</option>
-            {% for product_name in ["Laptop","Desktop CPU","Printer","Monitor","CCTV", "PC Accessories","Other Accessories"] -%}
+            {% for product_name in ["Laptop","Desktop_CPU","Printer","Monitor","CCTV", "PC_Accessories","Other_Accessories"] -%}
             <option value={{product_name}} {{ 'selected' if flag and product_name == tasks.product.product_name  }} id="product_name">{{ product_name }}</option>
             {% endfor -%}
         </select>

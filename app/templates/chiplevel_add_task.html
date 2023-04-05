@@ -8,6 +8,8 @@
 
 
 {% include "sidebar_new_admin.html" %}
+
+<div class="page-content p-4" id="content">
 <div class="main-container">
         <div class="min-height-200px">
             <div class="page-header">
@@ -15,7 +17,9 @@
                         <div class="title">
                             <h4><i class="micon dw dw-settings2 mtext"></i></h4>
                         </div>
-    <div class="container-fluid right-content">
+
+
+<div class="container-fluid right-content">
 <form  method="post" >
   <input type="hidden" name="in_task_id" value="{{ tasks.in_task_id }}">
       <div class="row">
@@ -47,11 +51,11 @@
     <div class="row">
       <div class="col">
         <label>Outward Date</label>
-        <input type="Date" name="outward_date" value='{{chiplevel.outward_date if flag }}' class="form-control">
+        <input type="Date" name="outward_date" value='{{chiplevel.outward_date if flag }}' class="form-control" required>
       </div>
       <div class="col">
         <label>Inward Date</label>
-        <input type="Date" name="inward_date" value='{{chiplevel.inward_date if flag }}' class="form-control">
+        <input type="Date" name="inward_date" value='{{chiplevel.inward_date if flag }}' class="form-control" required>
       </div>    
     </div>
 
@@ -80,11 +84,11 @@
       <div class="row">
         <div class="col">
           <label>Est Days</label>
-          <input type="number" name="est_days" value='{{ chiplevel.est_days  if flag}}' class="form-control">
+          <input type="number" name="est_days" value='{{ chiplevel.est_days  if flag}}' class="form-control" required >
         </div>
         <div class="col">
           <label>Est Charges</label>
-          <input type="number" name="est_charge" value='{{ chiplevel.est_charge  if flag}}'  class="form-control">
+          <input type="number" name="est_charge" value='{{ chiplevel.est_charge  if flag}}'  class="form-control" required>
         </div>
       </div>
 

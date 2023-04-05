@@ -38,9 +38,9 @@
 
 	<div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="index.html">
-				<img src="src/images/logo.png" width="50px">
-				<h4 style="color: #f3f3f4;font-size: 20px;padding: 15px"> Repair Shop</h4>
+			<a href="{{ url_for('admin_dashboard') }}">
+				<img src="{{ url_for('static', filename='logo.png') }}" width="50px">
+				<h4 style="color: #f3f3f4;font-size: 20px;padding: 15px"> SERVICE WEB</h4>
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="fa fa-cubes mr-3 text-primary fa-fw"></i>
@@ -57,7 +57,7 @@
 	  
 	  <li class="nav-item">
 		<a href="{{ url_for('technician') }}" class="nav-link text-white" style="font-size:20px">
-				  <i class="fa fa-address-card mr-3 text-primary fa-fw"></i>Technician</a>
+				  <i class="fa fa-address-card mr-3 text-primary fa-fw"></i>Engineer</a>
 	  </li>
 	  <li class="nav-item">
 		<a href="{{ url_for('customers') }}" class="nav-link text-white"style="font-size:20px">
