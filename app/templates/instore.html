@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
                     <label>Engineer</label>
-                    <input type="search" size="7" placeholder="Engineer" id="form1" class="form-control" name="ftechnician" />
+                    <input type="search" style="text-transform: capitalize;" size="7" placeholder="Engineer" id="form1" class="form-control" name="ftechnician" />
 
                 </div>
                 <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
@@ -99,23 +99,23 @@
                     {% for task in tasks -%}
                     <tr>
                         <td>
-                            {{ task.in_task_id }}
+                            {{ task.task_id }}
                         </td>
                         <td>
-                            <p>{{ task.date }}</p>
+                            <p style="text-transform: capitalize;">{{ task.date }}</p>
                         </td>
                         <td>
-                            <p>{{ task.customer.name }}</p>
+                            <p style="text-transform: capitalize;">{{ task.customer.name }}</p>
                         </td>
                         <td>
-                            <p>{{ task.status }}</p>
+                            <p style="text-transform: capitalize;">{{ task.status }}</p>
                         </td>
                         
                         
                         
                         <td>
         
-                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=task.in_task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
+                            <a href="{{ url_for('instore_task_view_by_id', task_id=task.task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
                         </td>
                     </tr>
 

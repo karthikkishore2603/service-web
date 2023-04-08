@@ -200,29 +200,29 @@ def tech_instore_add_task_view():
         flag=False,
     )
 
-@app.get("/tech/instore/task/<in_task_id>")
-def tech_instore_task_view_by_id(in_task_id):
+@app.get("/tech/instore/task/<task_id>")
+def tech_instore_task_view_by_id(task_id):
     technician = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
     return render_template(
         "tech_instore_add_task.html",
         flag=True,
-        tasks=crud.get_instoretask_by_id(in_task_id),
+        tasks=crud.get_instoretask_by_id(task_id),
         technicians=crud.get_all_technicians(),technician=technician, 
     )
 
-@app.post("/tech/instore/task/<in_task_id>")
-def tech_instore_task_update(in_task_id):
+@app.post("/tech/instore/task/<task_id>")
+def tech_instore_task_update(task_id):
     technician = util.current_user_info(request)
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
     data = dict(request.form)
-    data["in_task_id"] = in_task_id
+    data["task_id"] = task_id
     crud.update_instoretasks(data)
     return render_template(
         "tech_instore_add_task.html",
         flag=True,
-        tasks=crud.get_instoretask_by_id(in_task_id),
+        tasks=crud.get_instoretask_by_id(task_id),
         technicians=crud.get_all_technicians(),
     )

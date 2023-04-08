@@ -28,11 +28,11 @@
     <button class="btn btn-dark" role="submit" data-bs-toggle="modal" data-bs-target="#">Save</button>
 <!----
     {% if flag and tasks.service_type=='Chiplevel' %}
-    <a href="{{ url_for('chiplevel_add',  in_task_id=tasks.in_task_id) }}">
+    <a href="{{ url_for('chiplevel_add',  task_id=tasks.task_id) }}">
     <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Chiplevel</button></a>
     {% endif %}
     {% if flag and tasks.service_type=='Warranty' %}
-    <a href="{{ url_for('warranty_add' , in_task_id=tasks.in_task_id) }}">
+    <a href="{{ url_for('warranty_add' , task_id=tasks.task_id) }}">
     <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#">Warranty</button></a>
     {% endif %}
     </div>
@@ -61,7 +61,8 @@
       <div class="row">
         <div class="col">
           <label>Customer Name</label>
-          <input type="text" name="customer_name" value="{{ tasks.customer.name  if flag}}"  class="form-control" required>
+          <input type="text" 
+ style="text-transform: capitalize;"name="customer_name" value="{{ tasks.customer.name  if flag}}"  class="form-control" required>
         </div>
         <div class="col">
           <label>Phone No</label>
@@ -131,36 +132,42 @@
         </div>
         <div class="col">
           <label>Product Model</label>
-          <input type="text" name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control" required>
+          <input type="text" 
+ style="text-transform: capitalize;"name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control" required>
         </div>
       </div>
  
       <div class="row">
         <div class="col">
           <label>Problem</label>
-          <input type="text" name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required >
+          <input type="text" 
+ style="text-transform: capitalize;"name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required >
         </div>
         <div class="col">
           <label>Product Details</label>
-          <input type="text" name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" required>
+          <input type="text" 
+ style="text-transform: capitalize;"name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" required>
         </div>
       </div>
    
       <div class="row">
         <div class="col">
           <label>Items Received</label>
-          <input type="text" name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required> 
+          <input type="text" 
+ style="text-transform: capitalize;"name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required> 
         </div>
         <div class="col">
           <label>Serial No</label>
-          <input type="text" name="serial_no" value='{{ tasks.serial_no  if flag}}'  class="form-control" required>
+          <input type="text" 
+ style="text-transform: capitalize;"name="serial_no" value='{{ tasks.serial_no  if flag}}'  class="form-control" required>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
           <label>Remarks</label>
-          <input type="text" name="remarks" value='{{ tasks.remarks if flag}}' class="form-control">
+          <input type="text" 
+ style="text-transform: capitalize;"name="remarks" value='{{ tasks.remarks if flag}}' class="form-control">
         </div>
         
         

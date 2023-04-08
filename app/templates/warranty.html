@@ -65,23 +65,23 @@
                     {% for warranty in warranty -%}
                     <tr>
                         <td>
-                            {{ warranty.in_task_id }}
+                            {{ warranty.task_id }}
                         </td>
                         <td>
-                            <p>{{ warranty.partners.partner_name }}</p>
+                            <p style="text-transform: capitalize;">{{ warranty.partners.partner_name }}</p>
                         </td>
                         <td>
-                            <p>{{ warranty.instoretask.customer.name }}</p>
+                            <p style="text-transform: capitalize;">{{ warranty.instoretask.customer.name }}</p>
                         </td>
                         <td>
-                            <p>{{ warranty.status }}</p>
+                            <p style="text-transform: capitalize;">{{ warranty.status }}</p>
                         </td>
                         
                         
                         
                         <td>
         
-                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=warranty.in_task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
+                            <a href="{{ url_for('instore_task_view_by_id', task_id=warranty.task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
                         </td>
                     </tr>
 

@@ -48,23 +48,23 @@
                             {{ task.task_id }}
                         </td>
                         <td>
-                            <p>{{ task.outward_date }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;" style="text-transform: capitalize;">{{ task.outward_date }}</p>
                         </td>
                         <td>
-                            <p>{{ task.instoretask.customer.name }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;" style="text-transform: capitalize;">{{ task.instoretask.customer.name }}</p>
                         </td>
                         <td>
-                            <p>{{ task.instoretask.service_type }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;" style="text-transform: capitalize;">{{ task.instoretask.service_type }}</p>
                         </td>
                         <td>
-                            <p>{{ task.instoretask.technician.technician_id }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;" style="text-transform: capitalize;">{{ task.instoretask.technician.technician_id }}</p>
                         </td>
 
 
 
                         <td>
 
-                            <a href="{{ url_for('instore_task_view_by_id', in_task_id=task.in_task_id) }}"><button role="button"
+                            <a href="{{ url_for('instore_task_view_by_id', task_id=task.task_id) }}"><button role="button"
                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#viewtask">View</button></a>
                         </td>

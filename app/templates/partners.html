@@ -65,17 +65,20 @@
 
                             <div class="mb-3">
 
-                                <input type="text" class="form-control" placeholder="Name" name="partner_name" required>
+                                <input type="text" 
+ style="text-transform: capitalize;"class="form-control" placeholder="Name" name="partner_name" required>
                             </div>
                             
                             <div class="mb-3">
 
-                                <input type="text" class="form-control" placeholder="Phone No" name="phone_no" required>
+                                <input type="text" 
+ style="text-transform: capitalize;"class="form-control" placeholder="Phone No" name="phone_no" required>
                             </div>
                             
                             <div class="mb-3">
 
-                                <input type="text" class="form-control" placeholder="Address"  autocomplete="off" name="partner_address" required />
+                                <input type="text" 
+ style="text-transform: capitalize;"class="form-control" placeholder="Address"  autocomplete="off" name="partner_address" required />
                             </div>
 
                             <button type="submit" class="btn btn-dark">Submit</button>
@@ -110,17 +113,17 @@
                     {% for partn in partners -%}
                     <tr>
                         <th scope="row">
-                            <p>{{ partn.partner_id }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;">{{ partn.partner_id }}</p>
                         </th>
                         <td>
-                            <p>{{ partn.partner_name }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;" style="text-transform: capitalize;">{{ partn.partner_name }}</p>
                         </td>
                         <td>
-                            <p>{{ partn.phone_no }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;">{{ partn.phone_no }}</p>
 
                         </td>
                         <td>
-                            <p>{{ partn.partner_address }}</p>
+                            <p style="text-transform: capitalize;" style="text-transform: capitalize;">{{ partn.partner_address }}</p>
 
                         </td>
                         <td>

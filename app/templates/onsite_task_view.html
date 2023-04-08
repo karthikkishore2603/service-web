@@ -129,22 +129,24 @@
   <div class="modal-body">
     <div class="mb-3">
       <label>Materials</label>
-      <input type="textarea" class="form-control" value="{{ resources.material }}"  placeholder="Materials" name="material"
+      <input type="textarea" style="text-transform: capitalize;" class="form-control" value="{{ resources.material }}"  placeholder="Materials" name="material"
         required>
     </div>
     <div class="mb-3">
       <label>Service Charges</label>
-      <input type="text" class="form-control" value="{{ resources.service_charge }}" placeholder="Service Charge"
+      <input type="text" 
+ style="text-transform: capitalize;"class="form-control" value="{{ resources.service_charge }}" placeholder="Service Charge"
         name="service_charge" required>
     </div>
     <div class="mb-3">
       <label>Received Charges</label>
-      <input type="text" class="form-control" value="{{ resources.received_charge }}" placeholder="Received Charge"
+      <input type="text" 
+ style="text-transform: capitalize;"class="form-control" value="{{ resources.received_charge }}" placeholder="Received Charge"
         name="received_charge" required>
     </div>
     <div class="mb-3">
       <label>Review</label>
-      <input type="text" class="form-control" value="{{ resources.review }}" placeholder="Customer Feedback"
+      <input type="text"  style="text-transform: capitalize;"class="form-control" value="{{ resources.review }}" placeholder="Customer Feedback"
         name="review" required>
     </div>
 

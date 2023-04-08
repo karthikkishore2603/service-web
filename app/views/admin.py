@@ -54,9 +54,9 @@ def technician_post():
 
 
 @app.get("/admin/technician/work/<technician_id>")
-def technician_onsite_task_view(technician_id):
+def technician_task_view(technician_id):
     return render_template(
-        "onsite_work_view.html",
+        "work_view.html",
         tasks=crud.get_onsitetask_by_tech_id(technician_id),
     )
 
@@ -66,8 +66,6 @@ def technician_instore_task_view(technician_id):
         "instore_work_view.html",
         tasks=crud.get_instore_by_tech_id(technician_id),
     )
-
-
 
 
 @app.get("/admin/partners")
@@ -126,16 +124,12 @@ def customers_filter():
     return redirect(url_for("customers"))
 
 
-@app.get("/admin/customers/onsite/work/<customer_id>")
-def customer_onsite_task_view(customer_id):
+@app.get("/admin/customers/work/<customer_id>")
+def customer_task_view(customer_id):
     return render_template(
-        "onsite_work_view.html",tasks=crud.get_onsitetask_by_cust_id(customer_id))
+        "work_view.html",tasks=crud.get_task_by_cust_id(customer_id))
 
-@app.get("/admin/customers/instore/work/<customer_id>")
-def customer_instore_task_view(customer_id):
-    return render_template(
-        "instore_work_view.html",tasks=crud.get_instoretask_by_cust_id(customer_id))
-        
+  
 
 @app.get("/admin/customers/work/<customer_id>")
 def customer_work_download(customer_id):
@@ -376,6 +370,20 @@ def onsite_task_view(task_id):
         message=None,
     )
 
+@app.get("/admin/viewtask/<task_id>/<t_name>")
+def task_view(task_id,t_name):
+    admin = util.current_user_info(request)
+    print(t_name)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    tasks=crud.task_by_id(task_id)
+    if t_name=="ON":
+        return redirect(url_for("onsite_task_view",task_id=task_id))
+    
+    else:
+        return redirect(url_for("instore_task_view_by_id",task_id=task_id))
+    
+
 
 @app.post("/admin/onsite/viewtask/<task_id>")
 def onsite_task_update(task_id):
@@ -460,15 +468,15 @@ def instore_add_task():
     )
 
 
-@app.get("/admin/instore/task/<in_task_id>")
-def instore_task_view_by_id(in_task_id):
+@app.get("/admin/instore/task/<task_id>")
+def instore_task_view_by_id(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
         "instore_add_task.html",
         flag=True,
-        tasks=crud.get_instoretask_by_id(in_task_id),
+        tasks=crud.get_instoretask_by_id(task_id),
         technicians=crud.get_all_technicians(),
     )
 
@@ -484,18 +492,18 @@ def instore_add_task_view():
     return redirect(url_for("instore"))
 
 
-@app.post("/admin/instore/task/<in_task_id>")
-def instore_task_update(in_task_id):
+@app.post("/admin/instore/task/<task_id>")
+def instore_task_update(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
-    data["in_task_id"] = in_task_id
+    data["task_id"] = task_id
     crud.update_instoretasks(data)
     return render_template(
         "instore_add_task.html",
         flag=True,
-        tasks=crud.get_instoretask_by_id(in_task_id),
+        tasks=crud.get_instoretask_by_id(task_id),
         technicians=crud.get_all_technicians(),
     )
 
@@ -519,19 +527,24 @@ def chiplevel_filter():
     
     return redirect(url_for("chiplevel"))
 
-@app.get("/admin/chiplevel/task/<in_task_id>")
-def chiplevel_add(in_task_id):
+@app.get("/admin/chiplevel/task/<task_id>")
+def chiplevel_add(task_id):
     data = dict(request.form)
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("chiplevel_add_task.html", flag=True, tasks=crud.get_instoretask_by_id(in_task_id),chiplevel=crud.get_chiplevel_by_id(in_task_id),partners=crud.get_all_partners())
+    return render_template("chiplevel_add_task.html", flag=True, tasks=crud.get_instoretask_by_id(task_id),chiplevel=crud.get_chiplevel_by_id(task_id),partners=crud.get_all_partners())
 
-@app.post("/admin/chiplevel/task/<in_task_id>")
-def chiplevel_add_task(in_task_id):
+@app.post("/admin/chiplevel/task/<task_id>")
+def chiplevel_add_task(task_id):
     data = dict(request.form)
-    crud.update_chiplevel_task(data)
-    return redirect("/admin/chiplevel/task/"+in_task_id)
+    try:
+        crud.update_chiplevel_task(data)
+    except Exception as e:
+        print(e)
+        return render_template("chiplevel_add_task.html",errors=str(e).split(","), flag=True, tasks=crud.get_instoretask_by_id(task_id),chiplevel=crud.get_chiplevel_by_id(task_id),partners=crud.get_all_partners())
+
+    return redirect("/admin/chiplevel/task/"+task_id)
 
 
 @app.get("/admin/warranty")
@@ -553,18 +566,18 @@ def warranty_filter():
     
     return redirect(url_for("warranty"))
 
-@app.get("/admin/warranty/task/<in_task_id>")
-def warranty_add(in_task_id):
+@app.get("/admin/warranty/task/<task_id>")
+def warranty_add(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("warranty_add_task.html",flag=True, tasks=crud.get_instoretask_by_id(in_task_id),warranty=crud.get_warranty_by_id(in_task_id),partners=crud.get_all_partners())
+    return render_template("warranty_add_task.html",flag=True, tasks=crud.get_instoretask_by_id(task_id),warranty=crud.get_warranty_by_id(task_id),partners=crud.get_all_partners())
 
-@app.post("/admin/warranty/task/<in_task_id>")
-def warranty_update_task(in_task_id):
+@app.post("/admin/warranty/task/<task_id>")
+def warranty_update_task(task_id):
     data = dict(request.form)
     crud.warranty_update_task(data)
-    return redirect("/admin/warranty/task/"+in_task_id)
+    return redirect("/admin/warranty/task/"+task_id)
 
 @app.get("/admin/expenditure")
 def expenditure():

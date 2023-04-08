@@ -52,22 +52,22 @@ def is_product_available(product_name: str) -> bool:
     return False
 
 
-def is_instore_task_available(in_task_id: int) -> bool:
-    task = crud.get_instoretask_by_id(in_task_id)
+def is_instore_task_available(task_id: int) -> bool:
+    task = crud.get_instoretask_by_id(task_id)
     if task == None:
         return False
     else:
         return True
 
-def is_chiplevel_task_available(in_task_id: int) -> bool:
-    task = crud.get_chiplevel_by_id(in_task_id)
+def is_chiplevel_task_available(task_id: int) -> bool:
+    task = crud.get_chiplevel_by_id(task_id)
     if task == None:
         return False
     else:
         return True
 
-def is_warranty_task_available(in_task_id: int) -> bool:
-    task = crud.get_warranty_by_id(in_task_id)
+def is_warranty_task_available(task_id: int) -> bool:
+    task = crud.get_warranty_by_id(task_id)
     if task == None:
         return False
     else:

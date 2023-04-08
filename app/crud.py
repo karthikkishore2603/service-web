@@ -131,16 +131,29 @@ def get_onsitetask_by_id(task_id) -> models.OnsiteTask:
     return models.OnsiteTask.query.filter_by(task_id=task_id).first()
 
 
+def task_by_id(task_id) -> models.OnsiteTask:
+    return (models.OnsiteTask.query.filter_by(task_id=task_id).all()+
+            models.InstoreTask.query.filter_by(task_id=task_id).all()
+            )
+
+
+def get_task_by_cust_id(customer_id) -> models.OnsiteTask:
+    return (models.OnsiteTask.query.filter_by(customer_id=customer_id).all()+
+            models.InstoreTask.query.filter_by(customer_id=customer_id).all())
+
 def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
     return (
         models.OnsiteTask.query.filter_by(technician_id=technician_id).all()
-        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all()
+        + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all() +
+        models.InstoreTask.query.filter_by(technician_id=technician_id).all()
+        
         
     )
 
 def get_instore_by_tech_id(technician_id) -> models.InstoreTask:
     return (
         models.InstoreTask.query.filter_by(technician_id=technician_id).all()
+
         
     )
 
@@ -293,7 +306,7 @@ def get_all_instoretasks(filter: dict = None) -> list:
             else:
                 tasks = tasks.filter_by(customer_id=None)
         if filter["fid"]:
-            tasks = tasks.filter_by(in_task_id=filter["fid"])
+            tasks = tasks.filter_by(task_id=filter["fid"])
         if filter["fdate"]:
             tasks = tasks.filter_by(date=filter["fdate"])
         if filter["fstype"]:
@@ -312,12 +325,12 @@ def get_all_instoretasks(filter: dict = None) -> list:
     return tasks
 
 
-def get_instoretask_by_id(in_task_id) -> models.InstoreTask:
-    return models.InstoreTask.query.filter_by(in_task_id=in_task_id).first()
+def get_instoretask_by_id(task_id) -> models.InstoreTask:
+    return models.InstoreTask.query.filter_by(task_id=task_id).first()
 
 
 def update_instoretasks(data) -> list:
-    if util.is_instore_task_available(data["in_task_id"]):
+    if util.is_instore_task_available(data["task_id"]):
 
         customer_data = {}
         customer_data.update(
@@ -345,7 +358,7 @@ def update_instoretasks(data) -> list:
             create_product(product_detail)
         data["product_id"] = get_product(product_detail["product_name"]).product_id
 
-        in_task_id = data.pop("in_task_id")
+        task_id = data.pop("task_id")
 
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
@@ -353,7 +366,7 @@ def update_instoretasks(data) -> list:
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
 
         db.session.query(models.InstoreTask).filter(
-            models.InstoreTask.in_task_id == in_task_id
+            models.InstoreTask.task_id == task_id
         ).update(data)
         db.session.commit()
         db.session.flush()
@@ -373,28 +386,45 @@ def get_partnerid(partner_name: str) -> int:
 def update_chiplevel_task(data: dict) -> None:
     
 
-    if util.is_chiplevel_task_available(data["in_task_id"]):
-        
+    if util.is_chiplevel_task_available(data["task_id"]):
+        data["partner_name"] = data.pop("partner_name")
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
         data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
 
-        in_task_id = data.pop("in_task_id")
+        task_id = data.pop("task_id")
+
+            
+        errors = ""
+        if util.is_partner_available(data["partner_name"]):
+            errors = "Username already exists,"
+
+        if errors:
+            raise Exception(errors[:-1])
 
         db.session.query(models.Chiplevel).filter(
-            models.Chiplevel.in_task_id == in_task_id
+            models.Chiplevel.task_id == task_id
         ).update(data)
         db.session.commit()
         db.session.flush()
     else:        
+        data["partner_name"] = data.pop("partner_name")
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
         data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
 
+        
+        errors = ""
+        if util.is_partner_available(data["partner_name"]):
+            errors = "Username already exists,"
+
+        if errors:
+            raise Exception(errors[:-1])
+        
         user = models.Chiplevel(**data)
         db.session.add(user)
         db.session.commit()
@@ -416,8 +446,8 @@ def get_all_chiplevel(filter: dict = None) -> list:
     
     return chiplevel
 
-def get_chiplevel_by_id(in_task_id) -> models.Chiplevel:
-    return models.Chiplevel.query.filter_by(in_task_id=in_task_id).first()
+def get_chiplevel_by_id(task_id) -> models.Chiplevel:
+    return models.Chiplevel.query.filter_by(task_id=task_id).first()
 
 def get_all_warranty(filter: dict = None) -> list:
     warranty = models.Warranty.query
@@ -434,8 +464,8 @@ def get_all_warranty(filter: dict = None) -> list:
     warranty = warranty.all()
     return warranty
 
-def get_warranty_by_id(in_task_id) -> models.Warranty  :
-    return models.Warranty.query.filter_by(in_task_id=in_task_id).first()
+def get_warranty_by_id(task_id) -> models.Warranty  :
+    return models.Warranty.query.filter_by(task_id=task_id).first()
 
 def get_onsitetask_tech_count(username: str,status="Pending") -> int:
     tasks = (
@@ -489,16 +519,16 @@ def get_warranty_count_sent(status="Sent") -> int:
     return models.Warranty.query.filter_by(status=status).count()
 
 def warranty_update_task(data: dict) -> None:
-    if util.is_warranty_task_available(data["in_task_id"]):
+    if util.is_warranty_task_available(data["task_id"]):
         
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
 
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
 
-        in_task_id = data.pop("in_task_id")
+        task_id = data.pop("task_id")
         
         db.session.query(models.Warranty).filter(
-            models.Warranty.in_task_id == in_task_id
+            models.Warranty.task_id == task_id
         ).update(data)
         db.session.commit()
         db.session.flush()
@@ -636,7 +666,7 @@ def get_instoretasks_by_tech(username: str, filter: dict = None) -> list:
             else:
                 tasks = tasks.filter_by(customer_id=None)
         if filter["fid"]:
-            tasks = tasks.filter_by(in_task_id=filter["fid"])
+            tasks = tasks.filter_by(task_id=filter["fid"])
         if filter["fdate"]:
             tasks = tasks.filter_by(date=filter["fdate"])
         if filter["fstype"]:

@@ -1,0 +1,12 @@
+1. autosuggestion 
+
+2. display table edit
+
+3. add table items for storing ons4ite materail
+
+4. edit instore report download
+
+5. display no rows when table is empty
+
+6. partner not available
+

@@ -30,7 +30,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">OS.ID</th>
+                        <th scope="col">Task.ID</th>
                         <th scope="col">Date</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Status</th>
@@ -41,23 +41,33 @@
                     {% for task in tasks -%}
                     <tr>
                         <td>
-                            {{ task.task_id }}
+                            {% if task.t_name=='ON' %}
+                    
+                    <p style="text-transform: capitalize;">ON{{ task.task_id }}</p>
+                    
+                    {% endif %}
+                    {% if task.t_name=='IN' %}
+                    
+                    <p style="text-transform: capitalize;">IN{{ task.task_id }}</p>
+                    
+                    {% endif %}
+                            
                         </td>
                         <td>
-                            <p>{{ task.date }}</p>
+                            <p style="text-transform: capitalize;">{{ task.date }}</p>
                         </td>
                         <td>
-                            <p>{{ task.customer.name }}</p>
+                            <p style="text-transform: capitalize;">{{ task.customer.name }}</p>
                         </td>
                         <td>
-                            <p>{{ task.technician.technician_id }}</p>
+                            <p style="text-transform: capitalize;">{{ task.technician.technician_id }}</p>
                         </td>
 
 
 
                         <td>
 
-                            <a href="{{ url_for('onsite_task_view', task_id=task.task_id) }}"><button role="button"
+                            <a href="{{ url_for('task_view', task_id=task.task_id,t_name=task.t_name) }}"><button role="button"
                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#viewtask">View</button></a>
                         </td>

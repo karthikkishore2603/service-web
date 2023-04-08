@@ -32,12 +32,13 @@ class Technician(db.Model):
     username = Column(String(20), primary_key=True)
     password = Column(String(20), nullable=False)
     phone_no = Column(String(20), nullable=False)
-    status = Column(Boolean)
+    status = Column(String(20),default="Active")
 
 
 class OnsiteTask(db.Model):
     __tablename__ = "onsite_task"
     task_id = Column(Integer, primary_key=True, autoincrement=True)
+    t_name = Column(String(2),default="ON")
     date = Column(Date, nullable=False)
     creation_date = Column(Date)
     customer_id = Column(Integer, ForeignKey("customer.customer_id"))
@@ -71,7 +72,8 @@ class Customer(db.Model):
 
 class InstoreTask(db.Model):
     __tablename__ = "instore_task"
-    in_task_id = Column(Integer, primary_key=True, autoincrement=True)
+    task_id = Column(Integer, primary_key=True, autoincrement=True)
+    t_name = Column(String(2),default="IN")
     date = Column(Date, nullable=False)
     service_type = Column(String(20), nullable=False)
     status = Column(String(20))
@@ -113,7 +115,7 @@ class Partners(db.Model):
 class Chiplevel(db.Model):
     __tablename__ = "chiplevel"
     chiplevel_id = Column(Integer, primary_key=True, autoincrement=True)
-    in_task_id = Column(Integer, ForeignKey("instore_task.in_task_id"))
+    task_id = Column(Integer, ForeignKey("instore_task.task_id"))
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
     inward_date = Column(Date, nullable=True, default="1111-11-11")
@@ -131,7 +133,7 @@ class Chiplevel(db.Model):
 class Warranty(db.Model):
     __tablename__ = "warranty"
     warranty_id = Column(Integer, primary_key=True, autoincrement=True)
-    in_task_id = Column(Integer, ForeignKey("instore_task.in_task_id"))
+    task_id = Column(Integer, ForeignKey("instore_task.task_id"))
 
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
@@ -155,7 +157,11 @@ class Quotation(db.Model):
     customer_ph = Column(Integer)
     customer = relationship("Customer")
     
-
+class OnsiteItems(db.Model):
+    __tablename__="onsite_items"
+    task_id = Column(Integer, ForeignKey("onsite_task"), primary_key=True)
+    sn_no = Column(Integer)
+    item_name = Column(String(20))
+    item_serial = Column(String(20))
 
 db.create_all()
-
