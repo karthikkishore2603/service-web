@@ -143,7 +143,7 @@ def customer_work_download(customer_id):
     return pdf_data
 
 
-@app.route('/download/report/pdf/<task_id>')
+@app.route('/download/onsite/report/pdf/<task_id>')
 def onsite_download_report(task_id):
     try:
         task = crud.get_onsitetask_by_id(task_id)
@@ -219,16 +219,16 @@ def onsite_download_report(task_id):
     except Exception as e:
         print(e)
    
-@app.route('/download/report/pdf/<task_id>')
+@app.route('/download/instore/report/pdf/<task_id>')
 def instore_download_report(task_id):
+    
     try:
-        task = crud.get_onsitetask_by_id(task_id)
-        resources=crud.get_resources_by_id(task_id)
+        task = crud.get_instoretask_by_id(task_id)
         
-        pdf = FPDF()
+        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
         pdf.add_page()
          
-        page_width = pdf.w - 2 * pdf.l_margin
+        page_width = 210
         #pdf.image(name, x = None, y = None, w = 0, h = 0, type = '', link = '')
 
         pdf.set_font('Times','B',30) 
@@ -236,11 +236,11 @@ def instore_download_report(task_id):
         pdf.ln(10)
         
         pdf.set_font('Times','B',20) 
-        pdf.cell(page_width, 0.0, 'COM CARE SERVICES', align='C')
+        pdf.cell(page_width, 10, 'COM CARE SERVICES', align='C')
         pdf.ln(10)
 
         pdf.set_font('Times','B',18) 
-        pdf.cell(page_width, 0.0, 'SERVICE REPORT', align='C')
+        pdf.cell(page_width, 10, 'SERVICE REPORT', align='C')
         pdf.ln(20)
         
         pdf.set_font('Arial', '', 14)
@@ -248,43 +248,42 @@ def instore_download_report(task_id):
         pdf.ln(10)
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer.name)+'                                                          Phone no:'+str(task.customer.phone_no), align='L')
+        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer.name)+'                                                       Phone no:'+str(task.customer.phone_no), align='L')
         pdf.ln(10)
 
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Engineer: '+str(task.technician.name), align='L')
+        pdf.cell(page_width, 0.0, 'Est Days: '+str(task.est_days), align='L')
         pdf.ln(10)
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Type: '+str(task.service_type), align='L')
+        pdf.cell(page_width, 0.0, 'Est Charges: '+str(task.est_charge), align='L')
         pdf.ln(10)
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Status: '+str(task.status), align='L')
+        pdf.cell(page_width, 0.0, 'Product Type: '+str(task.product.product_name), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Product Details: '+str(task.product.product_company), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Problem: '+str(task.problem), align='L')
+        pdf.ln(10)
+        
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Items Recived: '+str(task.items_received), align='L')
         pdf.ln(10)
 
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Problem: '+str(task.problem), align='L')
+        pdf.cell(page_width, 0.0, 'Service Charges: '+str(task.final_charge), align='L')
         pdf.ln(10)
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Materials Changed: '+str(resources.material), align='L')
+        pdf.cell(page_width, 0.0, 'Recived Charges: '+str(task.recived_charge), align='L')
         pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Changes: '+str(resources.service_charge), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Recived Amount: '+str(resources.received_charge), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Remarks: '+str(resources.review), align='L')
-        pdf.ln(20)
-
 
         pdf.ln(10)
         pdf.set_font('Arial','',14) 
@@ -538,12 +537,7 @@ def chiplevel_add(task_id):
 @app.post("/admin/chiplevel/task/<task_id>")
 def chiplevel_add_task(task_id):
     data = dict(request.form)
-    try:
-        crud.update_chiplevel_task(data)
-    except Exception as e:
-        print(e)
-        return render_template("chiplevel_add_task.html",errors=str(e).split(","), flag=True, tasks=crud.get_instoretask_by_id(task_id),chiplevel=crud.get_chiplevel_by_id(task_id),partners=crud.get_all_partners())
-
+    crud.update_chiplevel_task(data)
     return redirect("/admin/chiplevel/task/"+task_id)
 
 

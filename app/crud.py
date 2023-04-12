@@ -387,7 +387,7 @@ def update_chiplevel_task(data: dict) -> None:
     
 
     if util.is_chiplevel_task_available(data["task_id"]):
-        data["partner_name"] = data.pop("partner_name")
+        
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
@@ -397,12 +397,6 @@ def update_chiplevel_task(data: dict) -> None:
         task_id = data.pop("task_id")
 
             
-        errors = ""
-        if util.is_partner_available(data["partner_name"]):
-            errors = "Username already exists,"
-
-        if errors:
-            raise Exception(errors[:-1])
 
         db.session.query(models.Chiplevel).filter(
             models.Chiplevel.task_id == task_id
@@ -410,7 +404,6 @@ def update_chiplevel_task(data: dict) -> None:
         db.session.commit()
         db.session.flush()
     else:        
-        data["partner_name"] = data.pop("partner_name")
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
@@ -418,12 +411,6 @@ def update_chiplevel_task(data: dict) -> None:
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
 
         
-        errors = ""
-        if util.is_partner_available(data["partner_name"]):
-            errors = "Username already exists,"
-
-        if errors:
-            raise Exception(errors[:-1])
         
         user = models.Chiplevel(**data)
         db.session.add(user)

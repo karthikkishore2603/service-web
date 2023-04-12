@@ -46,7 +46,7 @@
 
     <div class="row">
         <div class="col">
-          <label>Date</label>
+          <label>Date<span style="color: red;">*</span></label>
           <input type="Date" name="date" value='{{tasks.date if flag }}' class="form-control" required>
         </div>
         <div class="col">
@@ -62,19 +62,19 @@
 
       <div class="row">
         <div class="col">
-          <label>Customer Name</label>
+          <label>Customer Name<span style="color: red;">*</span></label>
           <input type="text" 
  style="text-transform: capitalize;"name="customer_name" value="{{ tasks.customer.name  if flag}}"  class="form-control" required>
         </div>
         <div class="col">
-          <label>Phone No</label>
+          <label>Phone No<span style="color: red;">*</span></label>
           <input type="number" name="phone_no" value='{{ tasks.customer.phone_no  if flag }}' class="form-control" required>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-          <label>Type</label>
+          <label>Type<span style="color: red;">*</span></label>
           <select class="form-control" name="service_type" required>
             <option value="" id="service_type">Select an option</option>
             {% for work in ["Service","Chiplevel","Warranty"] %}
@@ -84,7 +84,7 @@
           
         </div>
         <div class="col">
-          <label>Engineer</label>
+          <label>Engineer<span style="color: red;">*</span></label>
           <select class="form-control" name="technician_id" required>
             <option value="" id="service_type">Select an Engineer</option>
             {% for technician in technicians -%}
@@ -96,11 +96,11 @@
 
       <div class="row">
         <div class="col">
-          <label>Est Days</label>
+          <label>Est Days<span style="color: red;">*</span></label>
           <input type="number" name="est_days" value='{{ tasks.est_days  if flag and tasks.est_days}}' class="form-control" required>
         </div>
         <div class="col">
-          <label>Est Charges</label>
+          <label>Est Charges<span style="color: red;">*</span></label>
           <input type="number" name="est_charge" value='{{ tasks.est_charge  if flag and tasks.est_charge}}'  class="form-control" required>
         </div>
         
@@ -123,7 +123,7 @@
 
       <div class="row">
         <div class="col">
-          <label>Product Type</label>
+          <label>Product Type<span style="color: red;">*</span></label>
           <select class="form-control" name="product_name" required>
             <option value="" id="product_name">Select an option</option>
             {% for product_name in ["Laptop","Desktop_CPU","Printer","Monitor","CCTV", "PC_Accessories","Other_Accessories"] -%}
@@ -132,7 +132,7 @@
         </select>
         </div>
         <div class="col">
-          <label>Product Model</label>
+          <label>Product Model<span style="color: red;">*</span></label>
           <input type="text" 
  style="text-transform: capitalize;"name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control" required>
         </div>
@@ -140,27 +140,28 @@
  
       <div class="row">
         <div class="col">
-          <label>Problem</label>
+          <label>Problem<span style="color: red;">*</span></label>
           <input type="text" 
  style="text-transform: capitalize;"name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required>
         </div>
         <div class="col">
-          <label>Product Details</label>
+          <label>Items Received<span style="color: red;">*</span></label>
           <input type="text" 
- style="text-transform: capitalize;"name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" required>
+ style="text-transform: capitalize;"name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required>
         </div>
       </div>
    
       <div class="row">
+        
         <div class="col">
-          <label>Items Received</label>
+          <label>Product Details</label>
           <input type="text" 
- style="text-transform: capitalize;"name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required>
+ style="text-transform: capitalize;"name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" >
         </div>
         <div class="col">
           <label>Serial No</label>
           <input type="text" 
- style="text-transform: capitalize;"name="serial_no" value='{{ tasks.serial_no  if flag}}'  class="form-control" required>
+ style="text-transform: capitalize;"name="serial_no" value='{{ tasks.serial_no  if flag}}'  class="form-control" >
         </div>
       </div>
 
