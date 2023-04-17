@@ -140,23 +140,23 @@
  
       <div class="row">
         <div class="col">
-          <label>Problem<span style="color: red;">*</span></label>
-          <input type="text" 
- style="text-transform: capitalize;"name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required>
+            <label>Problem<span style="color: red;">*</span></label>
+          <input type="text"  style="text-transform: capitalize;"name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required>
         </div>
-        <div class="col">
-          <label>Items Received<span style="color: red;">*</span></label>
-          <input type="text" 
- style="text-transform: capitalize;"name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required>
-        </div>
+        <div class="col" style="padding-bottom: 50px;">
+          
+          <a style="position: relative;top: 34px;">
+          <input type="checkbox" style="height: 35px;width: 35px;" name="items_received"  value="Yes" {{ 'checked' if flag and tasks.items_received == "Yes" }} ><label style="position: absolute;bottom: 10px;">Charger/Cable Received<span style="color: red;">*</span></label>
+          </a>
+          </div>
+        
       </div>
    
       <div class="row">
         
         <div class="col">
           <label>Product Details</label>
-          <input type="text" 
- style="text-transform: capitalize;"name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" >
+          <input type="text"  style="text-transform: capitalize;"name="product_details" value='{{ tasks.product_details  if flag}}'  class="form-control" >
         </div>
         <div class="col">
           <label>Serial No</label>
@@ -171,9 +171,13 @@
           <input type="text" 
  style="text-transform: capitalize;"name="remarks" value='{{ tasks.remarks if flag}}' class="form-control">
         </div>
-        
-        
-      </div>
+        </div>
+        <div class="col">
+          <label>Items Received<span style="color: red;">*</span></label>
+          <input type="text" 
+ style="text-transform: capitalize;"name="items_received" value='{{ tasks.items_received  if flag}}' class="form-control" required>
+        </div>
+      
     </form>
 
       
