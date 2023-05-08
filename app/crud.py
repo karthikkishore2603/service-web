@@ -288,6 +288,8 @@ def create_instore_task(data: dict) -> None:
     data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
     data["final_charge"] = int(data["final_charge"]) if data["final_charge"] else None
     data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+    data["discount"] = int(data["discount"]) if data["discount"] else None
+    data["delivery_date"] = datetime.date(data["delivery_date"]) if data["delivery_date"] else None
 
     task = models.InstoreTask(**data)
     db.session.add(task)
@@ -363,7 +365,9 @@ def update_instoretasks(data) -> list:
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
         data["final_charge"] = int(data["final_charge"]) if data["final_charge"] else None
-        data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+        data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None       
+        data["discount"] = int(data["discount"]) if data["discount"] else None
+        data["delivery_date"] = (data["delivery_date"]) if data["delivery_date"] else None
 
         db.session.query(models.InstoreTask).filter(
             models.InstoreTask.task_id == task_id
@@ -393,6 +397,7 @@ def update_chiplevel_task(data: dict) -> None:
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
         data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+        data["inward_date"] = (data["inward_date"]) if data["inward_date"] else None
 
         task_id = data.pop("task_id")
 
@@ -409,6 +414,7 @@ def update_chiplevel_task(data: dict) -> None:
         data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
         data["partner_charge"] = int(data["partner_charge"]) if data["partner_charge"] else None
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
+        data["inward_date"] = (data["inward_date"]) if data["inward_date"] else None
 
         
         
@@ -548,13 +554,24 @@ def get_all_customer(filter: dict = None) -> list:
     customers = models.Customer.query
     if filter:
         if filter["fphone"]:
+
             customers = customers.filter_by(phone_no=filter["fphone"])
         
         if filter["fname"]:
+            
             customers = customers.filter_by(name=filter["fname"])
     customers = customers.all()
     return customers
 
+def get_all_customer_name() -> list:
+    customers_name = models.Customer.query.with_entities(models.Customer.name)
+    customers_name = customers_name.all()
+    return customers_name
+
+def get_all_customer_phone() -> list:
+    customers_phone = models.Customer.query.with_entities(models.Customer.phone_no)
+    customers_phone = customers_phone.all()
+    return customers_phone
 
 def get_product(product_name: str) -> models.Products:
     return models.Products.query.filter_by(product_name=product_name).first()

@@ -1,6 +1,6 @@
 1. autosuggestion 
 
-2. display table edit
+2. display table edit (add filter buttons)
 
 3. add table items for storing ons4ite materail
 
@@ -10,3 +10,6 @@
 
 6. partner not available
 
+7. if product Delivered recieve delivery date
+
+8. Chage table for instore

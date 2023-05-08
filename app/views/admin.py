@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, make_response,json,Response
+from flask import render_template, request, redirect, url_for, make_response,json,Response, jsonify
 import pymysql
 
 from .. import app, crud, util, models, pdf
@@ -107,7 +107,18 @@ def customers():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("customers.html", customers=crud.get_all_customer())
+    names = crud.get_all_customer_name()
+    
+    phone = crud.get_all_customer_phone()
+    name_lit =[]
+    phone_lit = []
+    for i in names:
+        name_lit.append(i[0])
+
+    for i in phone:
+        phone_lit.append(i[0])
+    
+    return render_template("customers.html", customers=crud.get_all_customer(),name=(name_lit),phone=(phone_lit),flag=0)
 
 @app.post("/admin/customers")
 def customers_filter():
@@ -115,10 +126,21 @@ def customers_filter():
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
+    names = crud.get_all_customer_name()
+    
+    phone = crud.get_all_customer_phone()
+    name_lit =[]
+    phone_lit = []
+    for i in names:
+        name_lit.append(i[0])
+
+    for i in phone:
+        phone_lit.append(i[0])
+    
     if data.get("ftype"):
         return render_template(
             "customers.html",
-            customers=crud.get_all_customer(filter=data)
+            customers=crud.get_all_customer(filter=data),name=(name_lit),phone=(phone_lit),flag=0
             
         )
     return redirect(url_for("customers"))
@@ -143,156 +165,6 @@ def customer_work_download(customer_id):
     return pdf_data
 
 
-@app.route('/download/onsite/report/pdf/<task_id>')
-def onsite_download_report(task_id):
-    try:
-        task = crud.get_onsitetask_by_id(task_id)
-        resources=crud.get_resources_by_id(task_id)
-        
-        pdf = FPDF()
-        pdf.add_page()
-         
-        page_width = pdf.w - 2 * pdf.l_margin
-        #pdf.image(name, x = None, y = None, w = 0, h = 0, type = '', link = '')
-
-        pdf.set_font('Times','B',30) 
-        pdf.cell(page_width, 0.0, '', align='C')
-        pdf.ln(10)
-        
-        pdf.set_font('Times','B',20) 
-        pdf.cell(page_width, 0.0, 'COM CARE SERVICES', align='C')
-        pdf.ln(10)
-
-        pdf.set_font('Times','B',18) 
-        pdf.cell(page_width, 0.0, 'SERVICE REPORT', align='C')
-        pdf.ln(20)
-        
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Task ID: '+str(task.task_id)+'                                                                             Date: '+str(task.date), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer.name)+'                                                          Phone no:'+str(task.customer.phone_no), align='L')
-        pdf.ln(10)
-
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Engineer: '+str(task.technician.name), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Type: '+str(task.service_type), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Status: '+str(task.status), align='L')
-        pdf.ln(10)
-
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Problem: '+str(task.problem), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Materials Changed: '+str(resources.material), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Changes: '+str(resources.service_charge), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Recived Amount: '+str(resources.received_charge), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Remarks: '+str(resources.review), align='L')
-        pdf.ln(20)
-
-
-        pdf.ln(10)
-        pdf.set_font('Arial','',14) 
-        pdf.cell(page_width, 0.0, '                                                                               For com care', align='C')
-
-        print('pdf created')
-        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
-    except Exception as e:
-        print(e)
-   
-@app.route('/download/instore/report/pdf/<task_id>')
-def instore_download_report(task_id):
-    
-    try:
-        task = crud.get_instoretask_by_id(task_id)
-        
-        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
-        pdf.add_page()
-         
-        page_width = 210
-        #pdf.image(name, x = None, y = None, w = 0, h = 0, type = '', link = '')
-
-        pdf.set_font('Times','B',30) 
-        pdf.cell(page_width, 0.0, '', align='C')
-        pdf.ln(10)
-        
-        pdf.set_font('Times','B',20) 
-        pdf.cell(page_width, 10, 'COM CARE SERVICES', align='C')
-        pdf.ln(10)
-
-        pdf.set_font('Times','B',18) 
-        pdf.cell(page_width, 10, 'SERVICE REPORT', align='C')
-        pdf.ln(20)
-        
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Task ID: '+str(task.task_id)+'                                                                             Date: '+str(task.date), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer.name)+'                                                       Phone no:'+str(task.customer.phone_no), align='L')
-        pdf.ln(10)
-
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Est Days: '+str(task.est_days), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Est Charges: '+str(task.est_charge), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Product Type: '+str(task.product.product_name), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Product Details: '+str(task.product.product_company), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Problem: '+str(task.problem), align='L')
-        pdf.ln(10)
-        
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Items Recived: '+str(task.items_received), align='L')
-        pdf.ln(10)
-
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Service Charges: '+str(task.final_charge), align='L')
-        pdf.ln(10)
-
-        pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Recived Charges: '+str(task.recived_charge), align='L')
-        pdf.ln(10)
-
-        pdf.ln(10)
-        pdf.set_font('Arial','',14) 
-        pdf.cell(page_width, 0.0, '                                                                               For com care', align='C')
-
-        print('pdf created')
-        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
-    except Exception as e:
-        print(e)
 
 @app.get("/admin/onsite")
 def onsite():
@@ -456,7 +328,7 @@ def instore_filter_task():
     crud.create_task(data)
 
     return redirect(url_for("instore"))
-
+"""
 @app.get("/admin/instore/add")
 def instore_add_task():
     admin = util.current_user_info(request)
@@ -465,7 +337,7 @@ def instore_add_task():
     return render_template(
         "instore_add_task.html", technicians=crud.get_all_technicians(),tasks={}, flag=False
     )
-
+"""
 
 @app.get("/admin/instore/task/<task_id>")
 def instore_task_view_by_id(task_id):
@@ -480,15 +352,22 @@ def instore_task_view_by_id(task_id):
     )
 
 
-@app.post("/admin/instore/add")
+@app.route("/admin/instore/add", methods=["POST","get"])
 def instore_add_task_view():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    data = dict(request.form)
-    crud.create_instore_task(data)
+    if request.method == "POST":
+        print('heloo')
+        data =dict(request.form)
+        print(data)
 
-    return redirect(url_for("instore"))
+        crud.create_instore_task(data)
+        return redirect(url_for("instore"))
+    else:
+        return render_template(
+        "instore_add_task.html", technicians=crud.get_all_technicians(),tasks={}, flag=False
+    )
 
 
 @app.post("/admin/instore/task/<task_id>")
@@ -496,6 +375,7 @@ def instore_task_update(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
+    
     data = dict(request.form)
     data["task_id"] = task_id
     crud.update_instoretasks(data)
@@ -624,3 +504,195 @@ def quotation_create():
         )
 
     return render_template("quotation.html", quotation=crud.get_all_quotation())
+
+
+############# PDF GENERATION #####################
+
+@app.route('/download/onsite/report/pdf/<task_id>')
+def onsite_download_report(task_id):
+    try:
+        task = crud.get_onsitetask_by_id(task_id)
+        resources=crud.get_resources_by_id(task_id)
+        
+        pdf = FPDF()
+        pdf.add_page()
+         
+        page_width = pdf.w - 2 * pdf.l_margin
+        #pdf.image(name, x = None, y = None, w = 0, h = 0, type = '', link = '')
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(10)
+        
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 0.0, 'COM CARE SERVICES', align='C')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',18) 
+        pdf.cell(page_width, 0.0, 'SERVICE REPORT', align='C')
+        pdf.ln(20)
+        
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Task ID: '+str(task.task_id)+'                                                                             Date: '+str(task.date), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer.name)+'                                                          Phone no:'+str(task.customer.phone_no), align='L')
+        pdf.ln(10)
+
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Service Engineer: '+str(task.technician.name), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Service Type: '+str(task.service_type), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Service Status: '+str(task.status), align='L')
+        pdf.ln(10)
+
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Service Problem: '+str(task.problem), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Materials Changed: '+str(resources.material), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Service Changes: '+str(resources.service_charge), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Recived Amount: '+str(resources.received_charge), align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Arial', '', 14)
+        pdf.cell(page_width, 0.0, 'Remarks: '+str(resources.review), align='L')
+        pdf.ln(20)
+
+
+        pdf.ln(10)
+        pdf.set_font('Arial','',14) 
+        pdf.cell(page_width, 0.0, '                                                                               For com care', align='C')
+
+        print('pdf created')
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
+    except Exception as e:
+        print(e)
+   
+@app.route('/download/instore/report/pdf/<task_id>')
+def instore_download_report(task_id):
+    
+    try:
+        task = crud.get_instoretask_by_id(task_id)
+        
+        pdf = FPDF(orientation = 'l', unit = 'mm', format = 'A5')
+        pdf.add_page()
+         
+        page_width = 180
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(0)
+
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 5, 'COM CARE SERVICES', align='C')
+        pdf.ln(5)
+
+        pdf.set_font('Times','',16) 
+        pdf.cell(page_width, 10, 'SERVICE REPORT',  align='C')
+        pdf.ln(20)
+        
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Task ID: '+str(task.task_id), ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(82)
+        pdf.cell(page_width, 0.0, 'Date: '+str(task.date),ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Status: '+str(task.status),ln=3)
+        pdf.ln(10)
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Customer Name: '+(str(task.customer.name)).capitalize(), align='L',ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0,'Phone no:'+str(task.customer.phone_no),ln=3)
+        pdf.ln(10)
+    
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Est Days: '+str(task.est_days), align='L',ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Est Charges: '+str(task.est_charge), align='L',ln=3)
+        pdf.ln(10)
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Product Type: '+str(task.product.product_name), align='L',ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Product Details: '+str(task.product.product_company), ln=3)
+        pdf.ln(10)
+
+        
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Power Cable: '+str(task.power_cable).capitalize(), align='L', ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(82)
+        pdf.cell(page_width, 0.0, 'Charger: '+str(task.charger).capitalize(), ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Bag: '+str(task.bag).capitalize(), align='L', ln=3)
+        pdf.ln(10)
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Problem: '+str(task.problem).capitalize(), align='L', ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Other Items: '+str(task.items_received), ln=3)
+        pdf.ln(10)
+
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Service Charges: '+str(task.final_charge), align='L', ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Advance/Recived Amt: '+str(task.recived_charge), ln=3)
+        pdf.ln(10)
+
+        if task.status=="Delivered":
+            pdf.set_font('Times','',15) 
+            pdf.cell(page_width, 0.0, 'Deliverd on:'+str(task.delivery_date), align='L',ln=3)
+
+        pdf.ln(20)
+        pdf.set_font('Times','',15) 
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'For Com Care')
+
+        print('pdf created')
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
+    except Exception as e:
+        print(e)

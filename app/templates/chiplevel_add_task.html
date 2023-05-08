@@ -34,10 +34,10 @@
   <div class="row">
     <div class="col">
       <label>Customer Name</label>
-      <h1>{{ tasks.customer.name }}</h1>
+      <h1  style="text-transform: capitalize;">{{ tasks.customer.name }}</h1>
     </div>
     <div class="col">
-        <label>Status</label>
+        <label>Status</label><span style="color: red;">*</span>
         <select class="form-control" name="status">
             <option value=" " id="status">Select an option</option>
           {% for status in ["Sent","Received"] %}
@@ -50,7 +50,7 @@
 
     <div class="row">
       <div class="col">
-        <label>Outward Date</label>
+        <label>Outward Date</label><span style="color: red;">*</span>
         <input type="Date" name="outward_date" value='{{chiplevel.outward_date if flag }}' class="form-control" required>
       </div>
       <div class="col">
@@ -62,7 +62,7 @@
 
       <div class="row">
         <div class="col">
-          <label>Partner Name</label>
+          <label>Partner Name</label><span style="color: red;">*</span>
           <input type="text" 
  style="text-transform: capitalize;"list="partner_name" class="form-control" placeholder="Partner Name" value="{{chiplevel.partners.partner_name if flag and chiplevel.partners}}"
               name="partner_name" required autocomplete="off">
@@ -84,11 +84,11 @@
 
       <div class="row">
         <div class="col">
-          <label>Est Days</label>
+          <label>Est Days</label><span style="color: red;">*</span>
           <input type="number" name="est_days" value='{{ chiplevel.est_days  if flag}}' class="form-control" required >
         </div>
         <div class="col">
-          <label>Est Charges</label>
+          <label>Est Charges</label><span style="color: red;">*</span>
           <input type="number" name="est_charge" value='{{ chiplevel.est_charge  if flag}}'  class="form-control" required>
         </div>
       </div>

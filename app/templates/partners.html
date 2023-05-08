@@ -65,20 +65,17 @@
 
                             <div class="mb-3">
 
-                                <input type="text" 
- style="text-transform: capitalize;"class="form-control" placeholder="Name" name="partner_name" required>
+                                <input type="text"  style="text-transform: capitalize;"class="form-control" placeholder="Name" name="partner_name" required>
                             </div>
                             
                             <div class="mb-3">
 
-                                <input type="text" 
- style="text-transform: capitalize;"class="form-control" placeholder="Phone No" name="phone_no" required>
+                                <input type="text"  style="text-transform: capitalize;"class="form-control" placeholder="Phone No" name="phone_no" required>
                             </div>
                             
                             <div class="mb-3">
 
-                                <input type="text" 
- style="text-transform: capitalize;"class="form-control" placeholder="Address"  autocomplete="off" name="partner_address" required />
+                                <input type="text"  style="text-transform: capitalize;"class="form-control" placeholder="Address"  autocomplete="off" name="partner_address" required />
                             </div>
 
                             <button type="submit" class="btn btn-dark">Submit</button>
@@ -144,6 +141,42 @@
     </main>
 
 
+<script type="">
+var phone = {{ phone | tojson  }};
+var sortedphone = phone.sort();
+var phone_input = document.getElementById("phone_lit");
+phone_input.addEventListener("keyup", (e) => {
+    removephone();
+    for (var k of sortedphone) {
+
+    if (
+        k.toLowerCase().startsWith(phone_input.value.toLowerCase()) &&
+        phone_input.value != ""
+    ) {
+        var listItem1 = document.createElement("li");
+        listItem1.classList.add("list1-items");
+        listItem1.style.cursor = "pointer";
+        listItem1.setAttribute("onclick", "displayNames('" + k + "')");
+        var word = "<b>" + k.substr(0, phone_input.value.length) + "</b>";
+        word += k.substr(phone_input.value.length)
+        listItem1.innerHTML = word;
+        document.querySelector(".list1").appendChild(listItem1);
+    }
+    }
+});
+function displayNames(value) {
+    phone_input.value = value;
+    removephone();
+}
+function removephone() {
+    var item = document.querySelectorAll(".list1-items");
+    item.forEach((item) => {
+    item.remove();
+    });
+}
+
+
+</script>
 
 
     {% endblock %}

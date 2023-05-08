@@ -23,7 +23,7 @@
         <h1 class="h2" style="padding-left: 20px;">Instore</h1>
 
 
-        <a href="{{ url_for('instore_add_task') }}">
+        <a href="{{ url_for('instore_add_task_view') }}">
         <button class="btn btn-dark"  data-bs-toggle="modal" data-bs-target="#add_task">Add Task</button>
               </button></a>             
           </div>
@@ -87,7 +87,7 @@
             <table id="myTable" class="table">
                 <thead>
                     <tr>
-                        <th scope="col">IN.ID</th>
+                        <th scope="col">IN.ID<a type="button" href="{{ url_for('instore_add_task_view') }}"> AA</a></th>
                         <th scope="col">Date</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Status</th>
