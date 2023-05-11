@@ -68,7 +68,7 @@ def create_partners(data: dict) -> None:
 
     if errors:
         raise Exception(errors[:-1])
-
+    
     user = models.Partners(**data)
     db.session.add(user)
     db.session.commit()
@@ -417,7 +417,6 @@ def update_chiplevel_task(data: dict) -> None:
         data["inward_date"] = (data["inward_date"]) if data["inward_date"] else None
 
         
-        
         user = models.Chiplevel(**data)
         db.session.add(user)
         db.session.commit()
@@ -517,7 +516,7 @@ def warranty_update_task(data: dict) -> None:
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
 
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
-
+        data["inward_date"] = (data["inward_date"]) if data["inward_date"] else None
         task_id = data.pop("task_id")
         
         db.session.query(models.Warranty).filter(
@@ -530,7 +529,7 @@ def warranty_update_task(data: dict) -> None:
         data["partner_id"] = get_partnerid(partner_name = data.pop("partner_name"))
 
         data["est_days"] = int(data["est_days"]) if data["est_days"] else None
-        
+        data["inward_date"] = (data["inward_date"]) if data["inward_date"] else None
         user = models.Warranty(**data)
         db.session.add(user)
         db.session.commit()
@@ -572,6 +571,13 @@ def get_all_customer_phone() -> list:
     customers_phone = models.Customer.query.with_entities(models.Customer.phone_no)
     customers_phone = customers_phone.all()
     return customers_phone
+
+def get_all_partner_name() -> list:
+    partners_name = models.Partners.query.with_entities(models.Partners.partner_name)
+    partners_name = partners_name.all()
+    return partners_name
+
+
 
 def get_product(product_name: str) -> models.Products:
     return models.Products.query.filter_by(product_name=product_name).first()

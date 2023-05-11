@@ -1,7 +1,7 @@
 
 @media (max-device-width: 600px) {
     .col{
-
+      
       overflow-wrap: break-word;  
     }
   }

@@ -36,7 +36,7 @@ def technician_post():
     if data.get("ftype"):
         return render_template(
             "technician.html",
-            technicians=crud.get_all_technicians(filter=data)
+            technicians=crud.get_all_technicians(filter=data),
             
         )
     
@@ -74,22 +74,35 @@ def partners():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("partners.html", partners=crud.get_all_partners())
+    
+    names = crud.get_all_partner_name()
+    
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    return render_template("partners.html", partners=crud.get_all_partners(),name=(name_lit),flag=0)
 
 @app.post("/admin/partners")
 def partners_add():
     data = dict(request.form)
+    names = crud.get_all_partner_name()
+    
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+
+    
     if data.get("ftype"):
         return render_template(
             "partners.html",
-            partners=crud.get_all_partners(filter=data)
+            partners=crud.get_all_partners(filter=data),name=(name_lit),flag=0
         )
     try:
         crud.create_partners(data)
     except Exception as e:
         return render_template(
             "partners.html",
-            partners=crud.get_all_partners(),
+            partners=crud.get_all_partners(),name=(name_lit),
             errors=str(e).split(",")
         )
     return redirect(url_for("partners"))
@@ -310,7 +323,13 @@ def instore():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("instore.html", tasks=crud.get_all_instoretasks())
+    
+    names = crud.get_all_customer_phone()
+    
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    return render_template("instore.html", tasks=crud.get_all_instoretasks(),phone=(name_lit))
 
 @app.post("/admin/instore")
 def instore_filter_task():
@@ -318,11 +337,17 @@ def instore_filter_task():
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     data = dict(request.form)
+    
+    names = crud.get_all_customer_phone()
+    
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
     if data.get("ftype"):
         return render_template(
             "instore.html",
             tasks=crud.get_all_instoretasks(filter=data),
-            technicians=crud.get_all_technicians(),
+            technicians=crud.get_all_technicians(),phone=(name_lit)
             
         )
     crud.create_task(data)
@@ -357,6 +382,18 @@ def instore_add_task_view():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
+    names = crud.get_all_customer_name()
+    
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+
+    phone = crud.get_all_customer_phone()
+    
+    phone_lit =[]
+    for i in phone:
+        phone_lit.append(i[0])
+
     if request.method == "POST":
         print('heloo')
         data =dict(request.form)
@@ -366,7 +403,7 @@ def instore_add_task_view():
         return redirect(url_for("instore"))
     else:
         return render_template(
-        "instore_add_task.html", technicians=crud.get_all_technicians(),tasks={}, flag=False
+        "instore_add_task.html", technicians=crud.get_all_technicians(),tasks={}, flag=False,name=(name_lit),phone=(phone_lit)
     )
 
 
@@ -410,15 +447,43 @@ def chiplevel_filter():
 def chiplevel_add(task_id):
     data = dict(request.form)
     admin = util.current_user_info(request)
+    names = crud.get_all_partner_name()
+    
+    partner_name = data.get("partner_name")
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    
+
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("chiplevel_add_task.html", flag=True, tasks=crud.get_instoretask_by_id(task_id),chiplevel=crud.get_chiplevel_by_id(task_id),partners=crud.get_all_partners())
+    return render_template("chiplevel_add_task.html", flag=True,name=(name_lit), tasks=crud.get_instoretask_by_id(task_id),chiplevel=crud.get_chiplevel_by_id(task_id),partners=crud.get_all_partners())
 
 @app.post("/admin/chiplevel/task/<task_id>")
 def chiplevel_add_task(task_id):
     data = dict(request.form)
-    crud.update_chiplevel_task(data)
-    return redirect("/admin/chiplevel/task/"+task_id)
+    names = crud.get_all_partner_name()
+    
+    partner_name = data.get("partner_name")
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    user = crud.get_partner(partner_name)
+    if user:
+        crud.update_chiplevel_task(data)
+    else:
+        error = "Partner Not Available"
+        return render_template("chiplevel_add_task.html", 
+                               flag=True,name=(name_lit),
+                               errors=error, tasks=crud.get_instoretask_by_id(task_id),
+                               chiplevel=crud.get_chiplevel_by_id(task_id),
+                               partners=crud.get_all_partners())
+    
+    return render_template("chiplevel_add_task.html", 
+                               flag=True,name=(name_lit),
+                                tasks=crud.get_instoretask_by_id(task_id),
+                               chiplevel=crud.get_chiplevel_by_id(task_id),
+                               partners=crud.get_all_partners())
 
 
 @app.get("/admin/warranty")
@@ -445,12 +510,30 @@ def warranty_add(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-    return render_template("warranty_add_task.html",flag=True, tasks=crud.get_instoretask_by_id(task_id),warranty=crud.get_warranty_by_id(task_id),partners=crud.get_all_partners())
+    
+    names = crud.get_all_partner_name()
+    names = crud.get_all_partner_name()
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    
+    return render_template("warranty_add_task.html",flag=True,name=name_lit, tasks=crud.get_instoretask_by_id(task_id),warranty=crud.get_warranty_by_id(task_id),partners=crud.get_all_partners())
 
 @app.post("/admin/warranty/task/<task_id>")
 def warranty_update_task(task_id):
     data = dict(request.form)
-    crud.warranty_update_task(data)
+    partner_name = data.get("partner_name")
+    names = crud.get_all_partner_name()
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    user = crud.get_partner(partner_name)
+    if user:
+        crud.warranty_update_task(data)
+    else:
+        error = "Partner Not Available"
+        return render_template("warranty_add_task.html",flag=True,name=name_lit,errors=error, tasks=crud.get_instoretask_by_id(task_id),warranty=crud.get_warranty_by_id(task_id),partners=crud.get_all_partners())
+
     return redirect("/admin/warranty/task/"+task_id)
 
 @app.get("/admin/expenditure")

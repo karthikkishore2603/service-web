@@ -25,7 +25,7 @@ def is_username_available(username: str, role: str) -> bool:
 
 def is_partner_available(partner_name: str) -> bool:
     user = crud.get_partner(partner_name)
-    if user:
+    if  user:
         return True
     return False
 

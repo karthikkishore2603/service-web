@@ -107,6 +107,13 @@ class Products(db.Model):
     product_name = Column(String(20), nullable=False)
     product_company = Column(String(20))
 
+class Items(db.Model):
+    __tablename__ = "items"
+    item_id = Column(Integer, primary_key=True, autoincrement=True)
+    task_id = Column(Integer, ForeignKey("onsite_task.task_id"))
+    item_name = Column(String(30), nullable=False)
+    serial_no = Column(String(25))
+    nos = Column(Integer)
 
 class Partners(db.Model):
     __tablename__ = "partners"
@@ -141,7 +148,7 @@ class Warranty(db.Model):
 
     status = Column(String(20))
     outward_date = Column(Date, nullable=False)
-    inward_date = Column(Date, nullable=False)
+    inward_date = Column(Date)
     est_days = Column(Integer)
    
     work = Column(String(20))

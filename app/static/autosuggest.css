@@ -6,7 +6,7 @@
     font-family: "Poppins", sans-serif;
   }
   
-  input[type="text"] {
+  input {
       
     padding: 15px 10px;
     border: none;
@@ -22,7 +22,7 @@
   .list {
     width: 100px;
     position: absolute;
-   
+    z-index: 1;
     background-color: #ffffff;
   }
   .list-items {
@@ -38,7 +38,7 @@
   .list1 {
     width: 100px;
     position: absolute;
-   
+    z-index: 1;
     background-color: #ffffff;
   }
   .list1-items {

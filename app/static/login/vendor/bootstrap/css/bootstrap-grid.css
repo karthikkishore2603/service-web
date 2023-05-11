@@ -82,6 +82,7 @@ html {
 .col-xl-auto {
   position: relative;
   width: 100%;
+  z-index: -1;
   min-height: 1px;
   padding-right: 15px;
   padding-left: 15px;

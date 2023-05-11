@@ -1,10 +1,8 @@
-1. autosuggestion 
 
 2. display table edit (add filter buttons)
 
-3. add table items for storing ons4ite materail
+3. add table items for storing onsite materail
 
-4. edit instore report download
 
 5. display no rows when table is empty
 
