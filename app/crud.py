@@ -298,7 +298,7 @@ def create_instore_task(data: dict) -> None:
 
 
 def get_all_instoretasks(filter: dict = None) -> list:
-    tasks = models.InstoreTask.query.order_by(models.InstoreTask.date.desc())
+    tasks = models.InstoreTask.query.order_by(models.InstoreTask.status=="Delivered" and models.InstoreTask.date.desc())
     if filter:
         if filter["fphone"]:
             customer = get_customer_by_phone(filter["fphone"])

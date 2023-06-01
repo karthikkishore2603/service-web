@@ -1,13 +1,25 @@
-from twilio.rest import Client
 
-account_sid = 'AC37ca79359a0955d820790a0e0215035b'
-auth_token = '4abcc021af46254fceb9332f7d0a2bb6'
-client = Client(account_sid, auth_token)
+import time 
+from  pywhatkit import *
+import pyautogui
+from pynput.keyboard import Key, Controller
 
-message = client.messages.create(
-  from_='+16203878145',
-  body='hello check',
-  to='+918438799436'
-)
+keyboard = Controller()
 
-print(message.sid)
+
+msg="hello"
+try:
+    
+    pywhatkit.sendwhatmsg_instantly(
+        phone_no="+919487529436", 
+        message=msg,
+        tab_close=True
+    )
+    time.sleep(10)
+    pyautogui.click()
+    time.sleep(2)
+    keyboard.press(Key.enter)
+    keyboard.release(Key.enter)
+    print("Message sent!")
+except Exception as e:
+    print(str(e))

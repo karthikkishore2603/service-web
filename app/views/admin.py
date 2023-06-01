@@ -1,5 +1,9 @@
 from flask import render_template, request, redirect, url_for, make_response,json,Response, jsonify
 import pymysql
+import time 
+import pywhatkit
+import pyautogui
+from pynput.keyboard import Key, Controller
 
 from .. import app, crud, util, models, pdf
  #pip install flask-mysql
@@ -206,9 +210,12 @@ def onsite_add_task():
             technicians=crud.get_all_technicians(),
             
         )
-    
+    ph=data.get("phone_no")
+    a="+91"+(ph)
+    print(a)
     try:
         crud.create_task(data)
+        sendmsg(ph_no=a,msg="Your task is created successfully")
     except Exception as e:
         return render_template(
             "onsite.html",
@@ -673,7 +680,7 @@ def instore_download_report(task_id):
     try:
         task = crud.get_instoretask_by_id(task_id)
         
-        pdf = FPDF(orientation = 'l', unit = 'mm', format = 'A5')
+        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
         pdf.add_page()
          
         page_width = 180
@@ -729,9 +736,8 @@ def instore_download_report(task_id):
 
         pdf.set_font('Times', '', 15)
         pdf.set_x(135)
-        pdf.cell(page_width, 0.0, 'Product Details: '+str(task.product.product_company), ln=3)
+        pdf.cell(page_width, 0.0, 'Problem: '+str(task.problem).capitalize(), ln=3)
         pdf.ln(10)
-
         
         pdf.set_font('Times', '', 15)
         pdf.cell(page_width, 0.0, 'Power Cable: '+str(task.power_cable).capitalize(), align='L', ln=3)
@@ -748,8 +754,9 @@ def instore_download_report(task_id):
         pdf.ln(10)
 
         pdf.set_font('Times', '', 15)
-        pdf.cell(page_width, 0.0, 'Problem: '+str(task.problem).capitalize(), align='L', ln=3)
+        pdf.cell(page_width, 0.0, 'Product Details: '+str(task.product.product_company),align='L', ln=3)
         pdf.ln(0)
+
 
         pdf.set_font('Times', '', 15)
         pdf.set_x(135)
@@ -779,3 +786,24 @@ def instore_download_report(task_id):
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
     except Exception as e:
         print(e)
+import webbrowser as web
+
+def sendmsg(ph_no,msg):
+    keyboard = Controller()
+
+
+    try:
+        
+        pywhatkit.sendwhatmsg_instantly(
+            phone_no=ph_no, 
+            message=msg,
+            tab_close=True
+        )
+        time.sleep(10)
+        pyautogui.click()
+        time.sleep(5)
+        keyboard.press(Key.enter)
+        keyboard.release(Key.enter)
+        print("Message sent!")
+    except Exception as e:
+        print(str(e))
