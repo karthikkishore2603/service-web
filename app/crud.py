@@ -289,9 +289,17 @@ def create_instore_task(data: dict) -> None:
     data["final_charge"] = int(data["final_charge"]) if data["final_charge"] else None
     data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
     data["discount"] = int(data["discount"]) if data["discount"] else None
-    data["delivery_date"] = datetime.date(data["delivery_date"]) if data["delivery_date"] else None
-
     task = models.InstoreTask(**data)
+    
+    if data["status"] == "open":
+        #task.open_date = datetime.now()
+        task = models.InstoreTask(open_date=datetime.now(), **data)
+    if data["status"] == "closed":
+        #task.pending_date = datetime.now()
+        task = models.InstoreTask(close_date=datetime.now(), **data)
+    if data["status"] == "Delivered":
+        #task.pending_date = datetime.now()
+        task = models.InstoreTask(delivery_date=datetime.now(), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -330,6 +338,18 @@ def get_all_instoretasks(filter: dict = None) -> list:
 def get_instoretask_by_id(task_id) -> models.InstoreTask:
     return models.InstoreTask.query.filter_by(task_id=task_id).first()
 
+def get_instoretask_by_open_date(open_date) -> models.InstoreTask:
+    return models.InstoreTask.query.filter_by(open_date=open_date).all()
+
+
+def get_instoretask_by_not_open_date(open_date) -> models.InstoreTask:
+    return models.InstoreTask.query.filter(models.InstoreTask.open_date != open_date and models.InstoreTask.status == "open").all()
+
+def get_instoretask_by_close_date(close_date) -> models.InstoreTask:
+    return models.InstoreTask.query.filter_by(close_date=close_date).all()
+
+def get_instoretask_by_delivery_date(current_date) -> models.InstoreTask:
+    return models.InstoreTask.query.filter_by(delivery_date=current_date).all()
 
 def update_instoretasks(data) -> list:
     if util.is_instore_task_available(data["task_id"]):
@@ -367,8 +387,18 @@ def update_instoretasks(data) -> list:
         data["final_charge"] = int(data["final_charge"]) if data["final_charge"] else None
         data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None       
         data["discount"] = int(data["discount"]) if data["discount"] else None
-        data["delivery_date"] = (data["delivery_date"]) if data["delivery_date"] else None
 
+    
+        if data["status"] == "closed":
+            data["close_date"] = datetime.now().date()
+            #data = models.InstoreTask(close_date=datetime.now())
+
+        if data["status"] == "Delivered":
+            data["delivery_date"] = datetime.now().date()
+            #data = models.InstoreTask(delivery_date=datetime.now())
+        
+
+        
         db.session.query(models.InstoreTask).filter(
             models.InstoreTask.task_id == task_id
         ).update(data)

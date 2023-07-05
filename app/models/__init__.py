@@ -95,6 +95,9 @@ class InstoreTask(db.Model):
     charger = Column(String(3))
     power_cable = Column(String(3))
     delivery_date = Column(Date)
+    open_date = Column(Date)
+    close_date = Column(Date)
+    delivered_by = Column(String(20))
 
     technician = relationship("Technician")
     customer = relationship("Customer")

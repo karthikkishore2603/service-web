@@ -1,12 +1,8 @@
 from flask import render_template, request, redirect, url_for, make_response,json,Response, jsonify
 import pymysql
 import time 
-import pywhatkit
-import pyautogui
-from pynput.keyboard import Key, Controller
-
+from datetime import datetime
 from .. import app, crud, util, models, pdf
- #pip install flask-mysql
 from fpdf import FPDF
  
 @app.get("/admin/dashboard")
@@ -210,12 +206,8 @@ def onsite_add_task():
             technicians=crud.get_all_technicians(),
             
         )
-    ph=data.get("phone_no")
-    a="+91"+(ph)
-    print(a)
     try:
         crud.create_task(data)
-        sendmsg(ph_no=a,msg="Your task is created successfully")
     except Exception as e:
         return render_template(
             "onsite.html",
@@ -548,8 +540,28 @@ def expenditure():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
-   
+    
     return render_template("expenditure.html")
+
+@app.post("/admin/expenditure")
+def expenditure_post():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    names = request.form.getlist('name[]')
+    ages = request.form.getlist('age[]')
+
+    # Process the received data here
+    # You can perform any necessary operations on the data (e.g., store it in a database)
+
+    # Example: Print the received data
+    for name, age in zip(names, ages):
+        print("Name:", name)
+        print("Age:", age)
+        print("---")
+
+    return "Data received and processed successfully"
+
 
 
 @app.get("/admin/order")
@@ -773,37 +785,254 @@ def instore_download_report(task_id):
         pdf.cell(page_width, 0.0, 'Advance/Recived Amt: '+str(task.recived_charge), ln=3)
         pdf.ln(10)
 
-        if task.status=="Delivered":
-            pdf.set_font('Times','',15) 
-            pdf.cell(page_width, 0.0, 'Deliverd on:'+str(task.delivery_date), align='L',ln=3)
+        #if task.status=="Delivered":
+         #   pdf.set_font('Times','',15) 
+          #  pdf.cell(page_width, 0.0, 'Deliverd on:'+str(task.delivery_date), align='L',ln=3)
 
         pdf.ln(20)
         pdf.set_font('Times','',15) 
         pdf.set_x(135)
         pdf.cell(page_width, 0.0, 'For Com Care')
 
-        print('pdf created')
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
     except Exception as e:
         print(e)
-import webbrowser as web
 
-def sendmsg(ph_no,msg):
-    keyboard = Controller()
-
-
+@app.route('/download/instore/day/report/pdf')
+def instore_download_daily_report():
+    
     try:
         
-        pywhatkit.sendwhatmsg_instantly(
-            phone_no=ph_no, 
-            message=msg,
-            tab_close=True
-        )
-        time.sleep(10)
-        pyautogui.click()
-        time.sleep(5)
-        keyboard.press(Key.enter)
-        keyboard.release(Key.enter)
-        print("Message sent!")
+        date = datetime.now().date().strftime("%d/%m/%y")
+        open_date = datetime.now().date().strftime("%y/%m/%d")
+        current_date = open_date
+        task = crud.get_instoretask_by_open_date(open_date)
+        count_task = len(task)
+        close_date = crud.get_instoretask_by_close_date(current_date)
+        count_close_task = len(close_date)
+        delviery_date = crud.get_instoretask_by_delivery_date(current_date)
+        count_delivery_task = len(delviery_date)
+
+
+        o_task = crud.get_instoretask_by_not_open_date(open_date)
+        count_o_task = len(o_task)
+        
+        
+       
+        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
+        pdf.add_page()
+         
+        page_width = 180
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(0)
+
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 5, 'COM CARE SERVICES', align='C')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',15)
+        pdf.cell(page_width, 0.0, 'Instore Daily Report', align='C')
+        pdf.ln(10)
+
+        col_width = page_width/6
+
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Task Created on ' +str(date)+' - '+str(count_task),align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(13, 10, 'ID', border=1)
+        pdf.cell(28, 10, 'Date', border=1)
+        pdf.cell(45, 10, 'Customer Name', border=1)
+        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        pdf.cell(col_width,10,  'Product Type',border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_task == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        for row in task:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(13, 10, str(row.task_id), border=1)
+            pdf.cell(28, 10, str(row.open_date), border=1)
+            pdf.cell(45, 10, str(row.customer.name), border=1)
+            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            pdf.cell(30, 10, str(row.product.product_name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
+
+        
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Task Completed on ' +str(date)+' - '+str(count_close_task),align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(13, 10, 'ID', border=1)
+        pdf.cell(28, 10, 'Date', border=1)
+        pdf.cell(45, 10, 'Customer Name', border=1)
+        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        pdf.cell(col_width,10,  'Product Type',border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_close_task == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+
+        for row in close_date:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(13, 10, str(row.task_id), border=1)
+            pdf.cell(28, 10, str(row.open_date), border=1)
+            pdf.cell(45, 10, str(row.customer.name), border=1)
+            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            pdf.cell(30, 10, str(row.product.product_name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
+
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Task Delivered on ' +str(date)+' - '+str(count_delivery_task),align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(13, 10, 'ID', border=1)
+        pdf.cell(28, 10, 'Date', border=1)
+        pdf.cell(45, 10, 'Customer Name', border=1)
+        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        pdf.cell(col_width,10,  'Product Type',border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_delivery_task == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+        for row in delviery_date:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(13, 10, str(row.task_id), border=1)
+            pdf.cell(28, 10, str(row.open_date), border=1)
+            pdf.cell(45, 10, str(row.customer.name), border=1)
+            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            
+            pdf.cell(30, 10, str(row.product.product_name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
+
+
+
+        
+
+
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
     except Exception as e:
-        print(str(e))
+        print(e)
+
+@app.route('/download/instore/pemding/report/pdf')
+def instore_download_pending_report():
+    
+    try:
+        
+        date = datetime.now().date().strftime("%d/%m/%y")
+        open_date = datetime.now().date().strftime("%y/%m/%d")
+        current_date = open_date
+        task = crud.get_instoretask_by_open_date(open_date)
+        count_task = len(task)
+        close_date = crud.get_instoretask_by_close_date(current_date)
+        count_close_task = len(close_date)
+        delviery_date = crud.get_instoretask_by_delivery_date(current_date)
+        count_delivery_task = len(delviery_date)
+
+
+        o_task = crud.get_instoretask_by_not_open_date(open_date)
+        count_o_task = len(o_task)
+        
+        
+       
+        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
+        pdf.add_page()
+         
+        page_width = 180
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(0)
+
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 5, 'COM CARE SERVICES', align='C')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',15)
+        pdf.cell(page_width, 0.0, 'Instore Task Pending', align='C')
+        pdf.ln(10)
+
+        col_width = page_width/6
+
+
+        
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Task Pending'+' - '+str(count_o_task) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(13, 10, 'ID', border=1)
+        pdf.cell(28, 10, 'Date', border=1)
+        pdf.cell(45, 10, 'Customer Name', border=1)
+        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        pdf.cell(col_width,10,  'Product Type',border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_o_task == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+        for row in o_task:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(13, 10, str(row.task_id), border=1)
+            pdf.cell(28, 10, str(row.open_date), border=1)
+            pdf.cell(45, 10, str(row.customer.name), border=1)
+            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            pdf.cell(30, 10, str(row.product.product_name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
+
+
+
+        pdf.set_font('Times','',16) 
+        pdf.cell(page_width, 10,'dd'+open_date,  align='C')
+        pdf.ln(20)
+        
+
+
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
+    except Exception as e:
+        print(e)

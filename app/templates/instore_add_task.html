@@ -59,13 +59,12 @@
             {% endfor %}
         </select>
         </div>
-        <div class="col" >
-          <label id="myTextbox1">Delivery Date</label>
-          <input type="Date" format="dd/mm/yyyy" id="myTextbox" name="delivery_date" value='{{tasks.delivery_date if flag }}' class="form-control" >
-          
-        </div>
         <div class="col">
+          <label>Delivered By</label>
+          <input type="text" name="delivered_by" value='{{ tasks.delivered_by  if flag and tasks.delivered_by}}' class="form-control">
           </div>
+          <div class="col">
+            </div>
       </div>
 
       <div class="row">
@@ -287,6 +286,7 @@
           word1 += i.substr(name_input.value.length)
           listItem.innerHTML = word1;
           document.querySelector(".list").appendChild(listItem);
+      
         }
       }
     });
