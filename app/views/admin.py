@@ -946,7 +946,7 @@ def instore_download_daily_report():
         
 
 
-        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=day_report.pdf'})
     except Exception as e:
         print(e)
 
@@ -1033,6 +1033,6 @@ def instore_download_pending_report():
         
 
 
-        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})
     except Exception as e:
         print(e)
