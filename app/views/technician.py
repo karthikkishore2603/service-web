@@ -3,18 +3,20 @@ from flask import render_template, request, redirect, url_for
 from .. import app, crud, util, models
 
 
-@app.get("/tech/dashboard")
+@app.get("/tech/work")
 def tech_dashboard():
     technician = util.current_user_info(request)
     print(technician)
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
-    return render_template("tech_dashboard.html", technician=technician , 
+    
+    return  render_template ("tech_work.html", technician=technician ,work = crud.get_work_by_tech_id(technician.technician_id))
+    """return render_template("tech_dashboard.html", technician=technician , 
                            get_onsitetask_tech_count=crud.get_onsitetask_tech_count(username=technician.username),
                            get_instore_task_tech_count=crud.get_instore_task_tech_count(username=technician.username)
                            ,get_instore_task_tech_closed_count=crud.get_instore_task_tech_closed_count(username=technician.username))
 
-
+"""
 @app.get("/tech/onsite")
 def tech_onsite():
     technician = util.current_user_info(request)
@@ -224,5 +226,41 @@ def tech_instore_task_update(task_id):
         "tech_instore_add_task.html",
         flag=True,
         tasks=crud.get_instoretask_by_id(task_id),
-        technicians=crud.get_all_technicians(),
+        technicians=crud.get_all_technicians()
     )
+
+
+
+#####WORK#######
+@app.get("/tech/work")
+def tech_work():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="technician") or not technician:
+        return render_template("check.html")
+    return render_template(
+        "tech_work.html",technician=technician,work = crud.get_work_by_tech_id(technician.technician_id)
+            
+    )
+
+
+@app.post("/tech/work")
+def work_add_task():
+    technician = util.current_user_info(request)
+    if (not util.is_user_authenticated(request,type="technician") or not technician) :
+        return render_template("check.html")
+    data = dict(request.form)
+    print(data)
+    
+    if data.get("ftype"):
+        return render_template(
+            "tech_work.html",technician=technician,work = crud.get_work_by_tech_id(technician.technician_id,filter=data)
+            
+        )
+    try:
+        crud.add_work(data,technician.technician_id)
+    except Exception as e:
+        return render_template(
+            "tech_work.html",
+        )
+    
+    return redirect(url_for("tech_work"))

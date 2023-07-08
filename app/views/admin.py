@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from .. import app, crud, util, models, pdf
 from fpdf import FPDF
+import pytz
  
 @app.get("/admin/dashboard")
 def admin_dashboard():
@@ -607,6 +608,26 @@ def quotation_create():
 
     return render_template("quotation.html", quotation=crud.get_all_quotation())
 
+#####WORK#######
+@app.get("/admin/work")
+def work():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    return render_template(
+        "work.html",tasks=crud.get_work_all()
+    )
+
+@app.post("/admin/work")
+def work_filter():
+    data = dict(request.form)
+    
+    if data.get("ftype"):
+        return render_template(
+            "work.html",tasks=crud.get_work_all(filter=data))
+    return render_template(
+        "work.html",tasks=crud.get_work_all(filter=data)
+    )
 
 ############# PDF GENERATION #####################
 
@@ -706,7 +727,7 @@ def instore_download_report(task_id):
         pdf.ln(5)
 
         pdf.set_font('Times','',16) 
-        pdf.cell(page_width, 10, 'SERVICE REPORT',  align='C')
+        pdf.cell(page_width, 10, 'SERVICE REPORT (Customer Copy)',  align='C')
         pdf.ln(20)
         
         pdf.set_font('Times', '', 15)
@@ -789,10 +810,112 @@ def instore_download_report(task_id):
          #   pdf.set_font('Times','',15) 
           #  pdf.cell(page_width, 0.0, 'Deliverd on:'+str(task.delivery_date), align='L',ln=3)
 
-        pdf.ln(20)
+        pdf.ln(15)
         pdf.set_font('Times','',15) 
         pdf.set_x(135)
         pdf.cell(page_width, 0.0, 'For Com Care')
+
+        pdf.ln(10)
+        pdf.cell(0, 0.0, '-----------'*10)
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(20)
+
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 5, 'COM CARE SERVICES', align='C')
+        pdf.ln(5)
+
+        pdf.set_font('Times','',16) 
+        pdf.cell(page_width, 10, 'SERVICE REPORT (Office Copy)',  align='C')
+        pdf.ln(20)
+        
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Task ID: '+str(task.task_id), ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(82)
+        pdf.cell(page_width, 0.0, 'Date: '+str(task.date),ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Status: '+str(task.status),ln=3)
+        pdf.ln(10)
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Customer Name: '+(str(task.customer.name)).capitalize(), align='L',ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0,'Phone no:'+str(task.customer.phone_no),ln=3)
+        pdf.ln(10)
+    
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Est Days: '+str(task.est_days), align='L',ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Est Charges: '+str(task.est_charge), align='L',ln=3)
+        pdf.ln(10)
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Product Type: '+str(task.product.product_name), align='L',ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Problem: '+str(task.problem).capitalize(), ln=3)
+        pdf.ln(10)
+        
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Power Cable: '+str(task.power_cable).capitalize(), align='L', ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(82)
+        pdf.cell(page_width, 0.0, 'Charger: '+str(task.charger).capitalize(), ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Bag: '+str(task.bag).capitalize(), align='L', ln=3)
+        pdf.ln(10)
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Product Details: '+str(task.product.product_company),align='L', ln=3)
+        pdf.ln(0)
+
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Other Items: '+str(task.items_received), ln=3)
+        pdf.ln(10)
+
+
+        pdf.set_font('Times', '', 15)
+        pdf.cell(page_width, 0.0, 'Service Charges: '+str(task.final_charge), align='L', ln=3)
+        pdf.ln(0)
+
+        pdf.set_font('Times', '', 15)
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Advance/Recived Amt: '+str(task.recived_charge), ln=3)
+        pdf.ln(10)
+
+        #if task.status=="Delivered":
+         #   pdf.set_font('Times','',15) 
+          #  pdf.cell(page_width, 0.0, 'Deliverd on:'+str(task.delivery_date), align='L',ln=3)
+
+        pdf.ln(15)
+        pdf.set_font('Times','',15) 
+        pdf.set_x(135)
+        pdf.cell(page_width, 0.0, 'Customer Sign')
+
+
 
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=employee_report.pdf'})
     except Exception as e:
@@ -803,8 +926,8 @@ def instore_download_daily_report():
     
     try:
         
-        date = datetime.now().date().strftime("%d/%m/%y")
-        open_date = datetime.now().date().strftime("%y/%m/%d")
+        date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
+        open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
         current_date = open_date
         task = crud.get_instoretask_by_open_date(open_date)
         count_task = len(task)
@@ -862,7 +985,7 @@ def instore_download_daily_report():
 
             pdf.set_font('Times','',12)
             pdf.cell(13, 10, str(row.task_id), border=1)
-            pdf.cell(28, 10, str(row.open_date), border=1)
+            pdf.cell(28, 10, str(row.date), border=1)
             pdf.cell(45, 10, str(row.customer.name), border=1)
             pdf.cell(23, 10, str(row.service_type), border=1)
             pdf.cell(25, 10, str(row.technician.name), border=1)
@@ -955,8 +1078,8 @@ def instore_download_pending_report():
     
     try:
         
-        date = datetime.now().date().strftime("%d/%m/%y")
-        open_date = datetime.now().date().strftime("%y/%m/%d")
+        date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
+        open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
         current_date = open_date
         task = crud.get_instoretask_by_open_date(open_date)
         count_task = len(task)
@@ -1025,6 +1148,93 @@ def instore_download_pending_report():
             pdf.cell(col_width,10,str(row.problem),border=1)
             pdf.ln(10)
 
+
+
+        pdf.set_font('Times','',16) 
+        pdf.cell(page_width, 10,'dd'+open_date,  align='C')
+        pdf.ln(20)
+        
+
+
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})
+    except Exception as e:
+        print(e)
+
+
+
+@app.route('/download/engineer/work/report/pdf')
+def work_report():
+    
+    try:
+        
+        date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
+        open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
+        current_date = open_date
+        work = crud.get_work_by_open_date(open_date)
+        
+        #technicians=crud.get_work_by_tech()
+        #print(technicians)
+        #tech_id = technicians.technician_id
+        #work_tech = crud.get_work_by_tech(tech_id)
+        #print(work_tech)
+
+
+        count_work = len(work)
+        
+        
+       
+        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
+        pdf.add_page()
+         
+        page_width = 180
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(0)
+        
+
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 5, 'COM CARE SERVICES', align='C')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',15)
+        pdf.cell(page_width, 0.0, 'Onsite Work Completed', align='C')
+        pdf.ln(10)
+
+        col_width = page_width/6
+
+
+        
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Work Completed'+' - '+str(count_work) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(13, 10, 'ID', border=1)
+        pdf.cell(28, 10, 'Date', border=1)
+        pdf.cell(45, 10, 'Customer Name', border=1)
+        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_work == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+        for row in work:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(13, 10, str(row.work_id), border=1)
+            pdf.cell(28, 10, str(row.service_date), border=1)
+            pdf.cell(45, 10, str(row.customer_name), border=1)
+            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
 
 
         pdf.set_font('Times','',16) 

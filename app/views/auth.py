@@ -9,6 +9,7 @@ from flask import (
 
 from .. import app, crud, util, constants, schemas
 from datetime import timedelta, datetime
+import pytz
 
 
 @app.get("/")
@@ -52,7 +53,7 @@ def login_verify():
         response.set_cookie(
             constants.AUTH_TOKEN_COOKIE_NAME,
             jwt_token,
-            expires=(datetime.now() + access_token_expires),
+            expires=(datetime.now(pytz.timezone('Asia/Kolkata')) + access_token_expires),
         )
         return response
 
@@ -73,7 +74,7 @@ def login_verify():
         response.set_cookie(
             constants.AUTH_TOKEN_COOKIE_NAME,
             jwt_token,
-            expires=(datetime.now() + access_token_expires),
+            expires=(datetime.now(pytz.timezone('Asia/Kolkata')) + access_token_expires),
         )
         return response
     else:

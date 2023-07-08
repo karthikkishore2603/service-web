@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block title %}COM CAR{%endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard-styles.css') }}" />
+<script src="https://kit.fontawesome.com/623b0bceda.js" crossorigin="anonymous"></script>
+{% endblock %}
+{% block inner_content %}
+
+
+{% include "sidebar_new_admin.html" %}
+
+<div class="page-content p-4" id="content">
+<div class="main-container">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                        <div class="title">
+                            <h4><i class="micon dw dw-settings2 mtext"></i></h4>
+                        </div>
+
+
+    <div class="container-fluid right-content">
+        <!-- Add non-sidebar contents here -->
+
+        <h1 class="h2">Work</h1>
+
+      
+        <form action="/admin/work" method="post">
+            <div class="input-group" style="padding-top: 10px;">
+                <input type="hidden" name="ftype" value="on" />
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Date</label>
+                    <input type="date" id="form1" class="form-control" name="fdate" />
+
+                </div>
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Engineer</label>
+                    <input type="search" style="text-transform: capitalize;" size="7" placeholder="Engineer" id="form1" class="form-control" name="ftechnician" />
+
+                </div>
+                
+                <div class="form-outline" style="padding-left: 10px;padding-bottom: 5px;">
+                    <label>Service Type</label>
+                    
+                <select class="form-control" name="fstype" > 
+                    <option value="">Select an Service Type</option>
+                    <option value="installation" id="installation">Installation</option>
+                    <option value="service" id="service">Service</option>
+                    <option value="warranty" id="warranty">Warranty</option>
+                </select>
+                </div>
+                
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="table-responsive">
+            
+            <table id="myTable"class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Work.ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {% for task in tasks -%}
+                    <tr>
+                        <td>
+                            {{ task.work_id }}
+                        </td>
+                        <td>
+                            <p style="text-transform: capitalize;">{{ task.service_date }}</p>
+                        </td>
+                        <td>
+                            <p style="text-transform: capitalize;">{{ task.customer_name }}</p>
+                        </td>
+                        <td>
+                            <p style="text-transform: capitalize;">{{ task.status }}</p>
+                        </td>
+
+                    </tr>
+
+                    {% endfor -%}
+                </tbody>
+            </table>
+
+        </div> 
+
+
+    </div>
+    </main>
+
+
+
+    {% endblock %}

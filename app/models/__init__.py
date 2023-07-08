@@ -178,4 +178,22 @@ class OnsiteItems(db.Model):
     item_name = Column(String(20))
     item_serial = Column(String(20))
 
+class Work(db.Model):
+    __tablename__ = "work"
+    work_id = Column(Integer, primary_key=True, autoincrement=True)
+    t_name = Column(String(2),default="ON")
+    service_date = Column(Date, nullable=False)
+    creation_date = Column(Date)
+    customer_name = Column(String(30))
+    service_type = Column(String(20), nullable=False)
+    problem = Column(String(20), nullable=False)
+    status = Column(String(20))
+    servicecharges = Column(Integer)
+    receivedamount = Column(Integer)
+    start_time = Column(String(20))
+    end_time = Column(String(20))
+    technician_id = Column(Integer, ForeignKey("technician"))
+
+    technician = relationship("Technician")
+
 db.create_all()

@@ -1,5 +1,6 @@
 from . import db, models, util
 from datetime import datetime
+import pytz
 
 
 def get_password(username: str, role: str) -> str:
@@ -152,9 +153,7 @@ def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
 
 def get_instore_by_tech_id(technician_id) -> models.InstoreTask:
     return (
-        models.InstoreTask.query.filter_by(technician_id=technician_id).all()
-
-        
+        models.InstoreTask.query.filter_by(technician_id=technician_id).all()        
     )
 
 
@@ -253,10 +252,46 @@ def create_task(data: dict) -> None:
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
-    task = models.OnsiteTask(creation_date=datetime.now(), **data)
+    task = models.OnsiteTask(creation_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
+
+def add_work(data: dict,tecnician_id) -> None:
+
+    data["technician_id"] = tecnician_id
+    task = models.Work(creation_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
+    db.session.add(task)
+    db.session.commit()
+    db.session.flush()
+
+def get_work_by_tech_id(technician_id,filter: dict=None) -> models.Work:
+    if filter:
+        if filter["fdate"]:
+            return models.Work.query.filter_by(technician_id=technician_id,service_date=filter["fdate"]).all()
+    return models.Work.query.filter_by(technician_id=technician_id).all()
+
+def get_work_all(filter: dict=None) -> models.Work:
+    if filter:
+        if filter["fdate"]:
+            return models.Work.query.filter_by(service_date=filter["fdate"]).all()
+        if filter["ftechnician"]:
+            tech_id=get_technician_id_by_name(filter["ftechnician"])
+            if tech_id:
+                return models.Work.query.filter_by(technician_id=tech_id[0]).all()  
+            else:
+                return models.Work.query.filter_by(technician_id=None).all()
+        if filter["fstype"]:
+            return models.Work.query.filter_by(service_type=filter["fstype"]).all()
+        
+    return models.Work.query.all()
+
+def get_work_by_tech() -> models.Work:
+    return models.Work.query.order_by(models.Work.technician_id).all()
+
+
+def get_work_by_open_date(open_date) -> models.Work:
+    return models.Work.query.filter_by(creation_date=open_date).order_by(models.Work.technician_id).all()
 
 
 def create_instore_task(data: dict) -> None:
@@ -292,14 +327,14 @@ def create_instore_task(data: dict) -> None:
     task = models.InstoreTask(**data)
     
     if data["status"] == "open":
-        #task.open_date = datetime.now()
-        task = models.InstoreTask(open_date=datetime.now(), **data)
+        #task.open_date = datetime.now(pytz.timezone('Asia/Kolkata'))
+        task = models.InstoreTask(open_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     if data["status"] == "closed":
-        #task.pending_date = datetime.now()
-        task = models.InstoreTask(close_date=datetime.now(), **data)
+        #task.pending_date = datetime.now(pytz.timezone('Asia/Kolkata'))
+        task = models.InstoreTask(close_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     if data["status"] == "Delivered":
-        #task.pending_date = datetime.now()
-        task = models.InstoreTask(delivery_date=datetime.now(), **data)
+        #task.pending_date = datetime.now(pytz.timezone('Asia/Kolkata'))
+        task = models.InstoreTask(delivery_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -390,12 +425,12 @@ def update_instoretasks(data) -> list:
 
     
         if data["status"] == "closed":
-            data["close_date"] = datetime.now().date()
-            #data = models.InstoreTask(close_date=datetime.now())
+            data["close_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
+            #data = models.InstoreTask(close_date=datetime.now(pytz.timezone('Asia/Kolkata')))
 
         if data["status"] == "Delivered":
-            data["delivery_date"] = datetime.now().date()
-            #data = models.InstoreTask(delivery_date=datetime.now())
+            data["delivery_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
+            #data = models.InstoreTask(delivery_date=datetime.now(pytz.timezone('Asia/Kolkata')))
         
 
         
