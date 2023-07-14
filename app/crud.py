@@ -329,7 +329,7 @@ def create_instore_task(data: dict) -> None:
     if data["status"] == "open":
         #task.open_date = datetime.now(pytz.timezone('Asia/Kolkata'))
         task = models.InstoreTask(open_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
-    if data["status"] == "closed":
+    if data["status"] == "ready":
         #task.pending_date = datetime.now(pytz.timezone('Asia/Kolkata'))
         task = models.InstoreTask(close_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     if data["status"] == "Delivered":
@@ -424,7 +424,7 @@ def update_instoretasks(data) -> list:
         data["discount"] = int(data["discount"]) if data["discount"] else None
 
     
-        if data["status"] == "closed":
+        if data["status"] == "ready":
             data["close_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
             #data = models.InstoreTask(close_date=datetime.now(pytz.timezone('Asia/Kolkata')))
 
@@ -549,7 +549,7 @@ def get_instore_task_tech_count(username: str,status="Open") -> int:
     tasks=tasks.count()
     return tasks
 
-def get_instore_task_tech_closed_count(username: str,status="Closed") -> int:
+def get_instore_task_tech_ready_count(username: str,status="ready") -> int:
     tasks = (
         models.InstoreTask.query.filter(
             models.InstoreTask.technician_id == models.Technician.technician_id,
@@ -566,7 +566,10 @@ def get_onsite_count(status="Pending") -> int:
 def get_instore_count_open(status="Open") -> int:
     return models.InstoreTask.query.filter_by(status=status).count()
 
-def get_instore_count_pending(status="Closed") -> int:
+def get_instore_count_pending(status="ready") -> int:
+    return models.InstoreTask.query.filter_by(status=status).count()
+
+def get_instore_count_return(status="return") -> int:
     return models.InstoreTask.query.filter_by(status=status).count()
 
 def get_chiplevel_count_sent(status="Sent") -> int:

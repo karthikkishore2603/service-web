@@ -50,7 +50,7 @@
         <div class="col">
           <label>Status</label>
           <select class="form-control" name="status">
-            {% for status in ["open","closed","Delivered"] %}
+            {% for status in ["open","ready","Delivered"] %}
             <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
             {% endfor %}
         </select>

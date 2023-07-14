@@ -12,7 +12,7 @@ def admin_dashboard():
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template("admin_dashboard.html", onsite_task_count=crud.get_onsite_count(), instore_task_count_open=crud.get_instore_count_open()
-    ,instore_task_count_pending=crud.get_instore_count_pending(), get_chiplevel_count_sent=crud.get_chiplevel_count_sent(),
+    ,instore_task_count_pending=crud.get_instore_count_pending(),instore_task_count_return = crud.get_instore_count_return(), get_chiplevel_count_sent=crud.get_chiplevel_count_sent(),
     get_warranty_count_sent=crud.get_warranty_count_sent(),)
 
 
@@ -233,7 +233,7 @@ def admin_onsite_update_status(task_id):
         if flag:
             message="Status updated"
         else:
-            message="Already closed"
+            message="Already ready"
     return render_template(
         "onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
@@ -1166,7 +1166,7 @@ def instore_download_pending_report():
 def work_report():
     
     try:
-        
+        a= request.user_agent.string
         date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
         open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
         current_date = open_date

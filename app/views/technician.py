@@ -14,7 +14,7 @@ def tech_dashboard():
     """return render_template("tech_dashboard.html", technician=technician , 
                            get_onsitetask_tech_count=crud.get_onsitetask_tech_count(username=technician.username),
                            get_instore_task_tech_count=crud.get_instore_task_tech_count(username=technician.username)
-                           ,get_instore_task_tech_closed_count=crud.get_instore_task_tech_closed_count(username=technician.username))
+                           ,get_instore_task_tech_ready_count=crud.get_instore_task_tech_ready_count(username=technician.username))
 
 """
 @app.get("/tech/onsite")
@@ -84,7 +84,7 @@ def tech_onsite_task_update(task_id):
         except Exception as e:
             message = str(e).split(",")
     else:
-        message="Already closed"
+        message="Already ready"
     
     return render_template(
         "tech_onsite_task_view.html",
@@ -109,7 +109,7 @@ def tech_onsite_update_status(task_id):
         if flag:
             message="Status updated"
         else:
-            message="Already closed"
+            message="Already ready"
     return render_template(
         "tech_onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
