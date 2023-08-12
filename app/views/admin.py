@@ -615,10 +615,36 @@ def work():
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     return render_template(
-        "work.html",tasks=crud.get_work_all()
+        "work.html",tasks=crud.get_work_all(),technicians=crud.get_all_technicians()
     )
 
 @app.post("/admin/work")
+def work_add():
+    
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    
+    data = dict(request.form)
+    
+    print(data) 
+    
+    try:
+        crud.add_work(data)
+    except Exception as e:
+        return render_template(
+            "work.html",
+        )
+    if data.get("ftype"):
+        return render_template(
+            "work.html",technician=technician,works=crud.get_work(), technicians=crud.get_all_technicians()
+            
+        )
+    return redirect(url_for("work"))
+
+
+
+@app.post("/admin/work/fil")
 def work_filter():
     data = dict(request.form)
     
@@ -626,7 +652,7 @@ def work_filter():
         return render_template(
             "work.html",tasks=crud.get_work_all(filter=data))
     return render_template(
-        "work.html",tasks=crud.get_work_all(filter=data)
+        "work.html",
     )
 
 ############# PDF GENERATION #####################

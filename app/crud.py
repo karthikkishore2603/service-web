@@ -257,9 +257,8 @@ def create_task(data: dict) -> None:
     db.session.commit()
     db.session.flush()
 
-def add_work(data: dict,tecnician_id) -> None:
+def add_work(data) -> list:
 
-    data["technician_id"] = tecnician_id
     task = models.Work(creation_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     db.session.add(task)
     db.session.commit()
@@ -270,6 +269,12 @@ def get_work_by_tech_id(technician_id,filter: dict=None) -> models.Work:
         if filter["fdate"]:
             return models.Work.query.filter_by(technician_id=technician_id,service_date=filter["fdate"]).all()
     return models.Work.query.filter_by(technician_id=technician_id).all()
+
+def get_work() -> models.Work:
+    return models.Work.query.all()
+
+def get_work_by_id(work_id) -> models.Work:
+    return models.Work.query.filter_by(work_id=work_id).first()
 
 def get_work_all(filter: dict=None) -> models.Work:
     if filter:

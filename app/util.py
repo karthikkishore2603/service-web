@@ -58,6 +58,13 @@ def is_instore_task_available(task_id: int) -> bool:
         return False
     else:
         return True
+    
+def is_on_work_available(work_id: int) -> bool:
+    work = crud.get_work_by_id(work_id)
+    if work == None:
+        return False
+    else:
+        return True
 
 def is_chiplevel_task_available(task_id: int) -> bool:
     task = crud.get_chiplevel_by_id(task_id)
