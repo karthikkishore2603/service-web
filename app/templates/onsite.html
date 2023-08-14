@@ -104,23 +104,13 @@
                                 <label>Customer Name</label>
                                 <input type="text"  style="text-transform: capitalize;"style="text-transform: capitalize;" list="customer_name" class="form-control" placeholder="Customer Name"
                                     name="customer_name" required>
-                                {% for cus in customers -%}
-                                <datalist id="customer_name">
-                                    <option value="{{ cus.name }}">{{ cus.name }}</option>
-
-                                </datalist>
-                                {% endfor -%}
+                                
                             </div>
                             <div >
                                 <label>Customer PhNo.</label>
                                 <input type="text"  style="text-transform: capitalize;"list="phone_no" class="form-control" placeholder="Phone No"
                                     name="phone_no" required>
-                                {% for cus in customers -%}
-                                <datalist id="phone_no">
-                                    <option value="{{ cus.phone_no }}">{{ cus.phone_no }}</option>
-
-                                </datalist>
-                                {% endfor -%}
+                                
                             </div>
 
                             <div>
@@ -140,7 +130,7 @@
                             <div >
                                 <label>Engineer 2</label>
                                 <select class="form-control" name="technician_id_2">
-                                    <option value="0">Select Engineer</option>
+                                    <option value=" ">Select Engineer</option>
                                     {% for technician in technicians -%}
                                     <option value="{{ technician.technician_id }}" id="installation">{{ technician.name
                                         }}</option>
@@ -196,7 +186,7 @@
                             <p style="text-transform: capitalize;">{{ task.date }}</p>
                         </td>
                         <td>
-                            <p style="text-transform: capitalize;">{{ task.customer.name }}</p>
+                            <p style="text-transform: capitalize;">{{ task.customer_name }}</p>
                         </td>
                         <td>
                             <p style="text-transform: capitalize;">{{ task.status }}</p>

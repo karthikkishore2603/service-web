@@ -43,8 +43,8 @@
           <h1>View Task</h1>
         </div>
         <div class="col">
-          <a href="{{ url_for('onsite_download_report',task_id=tasks.task_id) }}" target="_blank"><button type="button"
-              class="btn btn-dark">Download</button></a>
+          <!a href="{{ url_for('onsite_download_report',task_id=tasks.task_id) }}" target="_blank"><!button type="button"
+              class="btn btn-dark">Download<!/button><!/a>
         </div>
       </div>
 
@@ -84,13 +84,13 @@
       <h3 style="font-family: 'Times New Roman', serif;">Customer Name</h3>
     </div>
     <div class="col">
-      <h3 style="font-family:  Tahoma, sans-serif;text-transform: capitalize;">{{ tasks.customer.name }}</h3>
+      <h3 style="font-family:  Tahoma, sans-serif;text-transform: capitalize;">{{ tasks.customer_name }}</h3>
     </div>
     <div class="col">
       <h3 style="font-family: 'Times New Roman', serif; ">Phone No</h3>
     </div>
     <div class="col">
-      <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.customer.phone_no }}</h3>
+      <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.phone_no }}</h3>
     </div>
   </div>
 

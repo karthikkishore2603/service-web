@@ -257,7 +257,7 @@ def onsite_task_view(task_id):
 @app.get("/admin/viewtask/<task_id>/<t_name>")
 def task_view(task_id,t_name):
     admin = util.current_user_info(request)
-    print(t_name)
+    
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
     tasks=crud.task_by_id(task_id)
@@ -686,7 +686,7 @@ def onsite_download_report(task_id):
         pdf.ln(10)
 
         pdf.set_font('Arial', '', 14)
-        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer.name)+'                                                          Phone no:'+str(task.customer.phone_no), align='L')
+        pdf.cell(page_width, 0.0, 'Customer Name: '+str(task.customer_name)+'                                                          Phone no:'+str(task.customer.phone_no), align='L')
         pdf.ln(10)
 
 
@@ -1192,10 +1192,11 @@ def instore_download_pending_report():
 def work_report():
     
     try:
-        a= request.user_agent.string
-        date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
+        #a= request.user_agent.string
+        #date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
         open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
-        current_date = open_date
+        print(open_date)
+        #current_date = open_date
         work = crud.get_work_by_open_date(open_date)
         
         #technicians=crud.get_work_by_tech()
@@ -1205,7 +1206,7 @@ def work_report():
         #print(work_tech)
 
 
-        count_work = len(work)
+        #count_work = len(work)
         
         
        
@@ -1228,7 +1229,7 @@ def work_report():
         pdf.ln(10)
 
         col_width = page_width/6
-
+        """
 
         
         pdf.set_font('Times','B',13)
@@ -1266,7 +1267,7 @@ def work_report():
         pdf.set_font('Times','',16) 
         pdf.cell(page_width, 10,'dd'+open_date,  align='C')
         pdf.ln(20)
-        
+        """
 
 
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})

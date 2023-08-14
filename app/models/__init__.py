@@ -41,7 +41,12 @@ class OnsiteTask(db.Model):
     t_name = Column(String(2),default="ON")
     date = Column(Date, nullable=False)
     creation_date = Column(Date)
-    customer_id = Column(Integer, ForeignKey("customer.customer_id"))
+    #customer_id = Column(Integer, ForeignKey("customer.customer_id"))
+    customer_name = Column(String(30))
+    phone_no = Column(BigInteger)
+    address = Column(String(25))
+
+
     technician_id = Column(Integer, ForeignKey("technician.technician_id"))
     technician_id_2 = Column(Integer, ForeignKey("technician.technician_id"))
     service_type = Column(String(20), nullable=False)
@@ -49,7 +54,7 @@ class OnsiteTask(db.Model):
     status = Column(String(20), default="Pending")
     technician = relationship("Technician", foreign_keys=[technician_id])
     technician2 = relationship("Technician", foreign_keys=[technician_id_2])
-    customer = relationship("Customer")
+    #customer = relationship("Customer")
 
 
 class Resources(db.Model):

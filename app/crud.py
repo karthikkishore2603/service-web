@@ -233,13 +233,13 @@ def get_technician(username: str) -> models.Technician:
 
 def create_task(data: dict) -> None:
     errors = ""
-    
+    """"
     if not util.is_phone_valid(data["phone_no"]):
         errors += "Invalid phone number,"
 
     if errors:
-        raise Exception(errors[:-1])
-
+        raise Exception(errors[:-1])  """  
+    """
     customer_data = {}
     customer_data.update(
         {
@@ -251,8 +251,10 @@ def create_task(data: dict) -> None:
     
     if not util.is_customer_available(customer_data["phone_no"]):
         create_customer(customer_data)
-    data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
+    data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id"""
+    
     task = models.OnsiteTask(creation_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
+    
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -295,8 +297,8 @@ def get_work_by_tech() -> models.Work:
     return models.Work.query.order_by(models.Work.technician_id).all()
 
 
-def get_work_by_open_date(open_date) -> models.Work:
-    return models.Work.query.filter_by(creation_date=open_date).order_by(models.Work.technician_id).all()
+def get_work_by_open_date(open_date) -> models.OnsiteTask:
+    return models.OnsiteTask.query.filter_by(creation_date=open_date).order_by(models.Work.technician_id).all()
 
 
 def create_instore_task(data: dict) -> None:
