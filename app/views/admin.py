@@ -1099,7 +1099,7 @@ def instore_download_daily_report():
     except Exception as e:
         print(e)
 
-@app.route('/download/instore/pemding/report/pdf')
+@app.route('/download/instore/pending/report/pdf')
 def instore_download_pending_report():
     
     try:
@@ -1117,7 +1117,12 @@ def instore_download_pending_report():
 
         o_task = crud.get_instoretask_by_not_open_date(open_date)
         count_o_task = len(o_task)
+
+        o_task_ready = crud.get_instoretask_by_not_open_date_by_ready(open_date)
+        count_o_task_ready = len(o_task_ready)
         
+        o_task_return = crud.get_instoretask_by_not_open_date_by_return(open_date)
+        count_o_task_return = len(o_task_return)
         
        
         pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
@@ -1146,10 +1151,10 @@ def instore_download_pending_report():
         pdf.ln(10)
 
         pdf.set_font('Times','B',13)
-        pdf.cell(13, 10, 'ID', border=1)
-        pdf.cell(28, 10, 'Date', border=1)
-        pdf.cell(45, 10, 'Customer Name', border=1)
-        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(10, 10, 'ID', border=1)
+        pdf.cell(23, 10, 'Date', border=1)
+        pdf.cell(43, 10, 'Customer Name', border=1)
+        pdf.cell(35, 10, 'Phone No', border=1)
         pdf.cell(25, 10, 'Engineer', border=1)
         pdf.cell(col_width,10,  'Product Type',border=1)
         
@@ -1164,15 +1169,84 @@ def instore_download_pending_report():
         for row in o_task:
 
             pdf.set_font('Times','',12)
-            pdf.cell(13, 10, str(row.task_id), border=1)
-            pdf.cell(28, 10, str(row.open_date), border=1)
-            pdf.cell(45, 10, str(row.customer.name), border=1)
-            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(10, 10, str(row.task_id), border=1)
+            pdf.cell(23, 10, str(row.open_date), border=1)
+            pdf.cell(43, 10, str(row.customer.name), border=1)
+            pdf.cell(35, 10, str(row.customer.phone_no), border=1)
             pdf.cell(25, 10, str(row.technician.name), border=1)
             pdf.cell(30, 10, str(row.product.product_name), border=1)
             
             pdf.cell(col_width,10,str(row.problem),border=1)
             pdf.ln(10)
+
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Task Ready for delivery'+' - '+str(count_o_task_ready) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(10, 10, 'ID', border=1)
+        pdf.cell(23, 10, 'Date', border=1)
+        pdf.cell(43, 10, 'Customer Name', border=1)
+        pdf.cell(35, 10, 'Phone No', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        pdf.cell(col_width,10,  'Product Type',border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_o_task_ready == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+        for row in o_task_ready:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(10, 10, str(row.task_id), border=1)
+            pdf.cell(23, 10, str(row.open_date), border=1)
+            pdf.cell(43, 10, str(row.customer.name), border=1)
+            pdf.cell(35, 10, str(row.customer.phone_no), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            pdf.cell(30, 10, str(row.product.product_name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
+
+        
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Task Return for delivery'+' - '+str(count_o_task_return) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(10, 10, 'ID', border=1)
+        pdf.cell(23, 10, 'Date', border=1)
+        pdf.cell(43, 10, 'Customer Name', border=1)
+        pdf.cell(35, 10, 'Phone No', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        pdf.cell(col_width,10,  'Product Type',border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.ln(10)
+
+        if count_o_task_return == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+        for row in o_task_return:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(10, 10, str(row.task_id), border=1)
+            pdf.cell(23, 10, str(row.open_date), border=1)
+            pdf.cell(43, 10, str(row.customer.name), border=1)
+            pdf.cell(35, 10, str(row.customer.phone_no), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            pdf.cell(30, 10, str(row.product.product_name), border=1)
+            
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.ln(10)
+
 
 
 
@@ -1193,11 +1267,15 @@ def work_report():
     
     try:
         #a= request.user_agent.string
-        #date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
+        date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
         open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
+        #open_date = "2021-05-20"
         print(open_date)
         #current_date = open_date
         work = crud.get_work_by_open_date(open_date)
+        print(work)
+        onsite_task_status = crud.get_onsite_task_by_status()
+        print(onsite_task_status)
         
         #technicians=crud.get_work_by_tech()
         #print(technicians)
@@ -1206,7 +1284,7 @@ def work_report():
         #print(work_tech)
 
 
-        #count_work = len(work)
+        count_work = len(work)
         
         
        
@@ -1225,15 +1303,15 @@ def work_report():
         pdf.ln(10)
 
         pdf.set_font('Times','B',15)
-        pdf.cell(page_width, 0.0, 'Onsite Work Completed', align='C')
+        pdf.cell(page_width, 0.0, 'Onsite Work Status', align='C')
         pdf.ln(10)
 
         col_width = page_width/6
-        """
+        
 
         
         pdf.set_font('Times','B',13)
-        pdf.cell(page_width,10,'Work Completed'+' - '+str(count_work) ,align='L')
+        pdf.cell(page_width,10,'Work Status'+' - '+str(count_work) ,align='L')
         pdf.ln(10)
 
         pdf.set_font('Times','B',13)
@@ -1244,6 +1322,7 @@ def work_report():
         pdf.cell(25, 10, 'Engineer', border=1)
         
         pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.cell(col_width,10,  'Status',border=1)
         pdf.ln(10)
 
         if count_work == 0:
@@ -1254,20 +1333,95 @@ def work_report():
         for row in work:
 
             pdf.set_font('Times','',12)
-            pdf.cell(13, 10, str(row.work_id), border=1)
-            pdf.cell(28, 10, str(row.service_date), border=1)
+            pdf.cell(13, 10, str(row.task_id), border=1)
+            pdf.cell(28, 10, str(row.date), border=1)
             pdf.cell(45, 10, str(row.customer_name), border=1)
             pdf.cell(23, 10, str(row.service_type), border=1)
             pdf.cell(25, 10, str(row.technician.name), border=1)
-            
             pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.cell(col_width, 10, str(row.status), border=1)
             pdf.ln(10)
 
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})
+    except Exception as e:
+        print(e)
 
+@app.route('/download/engineer/work/pending/report/pdf')
+def work_report_status():
+    
+    try:
+        #a= request.user_agent.string
+        date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
+        open_date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%y/%m/%d")
+        #open_date = "2021-05-20"
+        print(open_date)
+        #current_date = open_date
+        work = crud.get_onsite_task_by_status()
+        print(work)
+        count_work = len(work)
+        
+        
+       
+        pdf = FPDF(orientation = 'p', unit = 'mm', format = 'A4')
+        pdf.add_page()
+         
+        page_width = 180
+
+        pdf.set_font('Times','B',30) 
+        pdf.cell(page_width, 0.0, '', align='C')
+        pdf.ln(0)
+        
+
+        pdf.set_font('Times','B',20) 
+        pdf.cell(page_width, 5, 'COM CARE SERVICES', align='C')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',15)
+        pdf.cell(page_width, 0.0, 'Onsite Work Status', align='C')
+        pdf.ln(10)
+
+        col_width = page_width/6
+        
+
+
+        pdf.ln()
+        pdf.set_font('Times','B',13)
+        pdf.cell(page_width,10,'Work pending'+' - '+str(count_work) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','B',13)
+        pdf.cell(13, 10, 'ID', border=1)
+        pdf.cell(28, 10, 'Date', border=1)
+        pdf.cell(45, 10, 'Customer Name', border=1)
+        pdf.cell(23, 10, 'Type', border=1)
+        pdf.cell(25, 10, 'Engineer', border=1)
+        
+        pdf.cell(col_width,10,  'Problem',border=1)
+        pdf.cell(col_width,10,  'Status',border=1)
+        pdf.ln(10)
+
+        if count_work == 0:
+            pdf.set_font('Times','B',13)
+            pdf.cell(194,10,'No Task Created on ' +str(date),border=1,align='C')
+            pdf.ln(10)
+        
+        for row in work:
+
+            pdf.set_font('Times','',12)
+            pdf.cell(13, 10, str(row.task_id), border=1)
+            pdf.cell(28, 10, str(row.date), border=1)
+            pdf.cell(45, 10, str(row.customer_name), border=1)
+            pdf.cell(23, 10, str(row.service_type), border=1)
+            pdf.cell(25, 10, str(row.technician.name), border=1)
+            pdf.cell(col_width,10,str(row.problem),border=1)
+            pdf.cell(col_width, 10, str(row.status), border=1)
+            pdf.ln(10)
+
+        """
         pdf.set_font('Times','',16) 
         pdf.cell(page_width, 10,'dd'+open_date,  align='C')
-        pdf.ln(20)
-        """
+        pdf.ln(20)"""
+        
 
 
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})

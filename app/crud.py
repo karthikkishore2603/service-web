@@ -298,8 +298,10 @@ def get_work_by_tech() -> models.Work:
 
 
 def get_work_by_open_date(open_date) -> models.OnsiteTask:
-    return models.OnsiteTask.query.filter_by(creation_date=open_date).order_by(models.Work.technician_id).all()
+    return models.OnsiteTask.query.filter_by(creation_date=open_date).order_by(models.OnsiteTask.technician_id).all()
 
+def get_onsite_task_by_status() -> models.OnsiteTask:
+    return models.OnsiteTask.query.filter_by(status = 'pending').order_by(models.OnsiteTask.technician_id).all()
 
 def create_instore_task(data: dict) -> None:
     customer_data = {}
@@ -386,6 +388,13 @@ def get_instoretask_by_open_date(open_date) -> models.InstoreTask:
 
 def get_instoretask_by_not_open_date(open_date) -> models.InstoreTask:
     return models.InstoreTask.query.filter(models.InstoreTask.open_date != open_date and models.InstoreTask.status == "open").all()
+
+
+def get_instoretask_by_not_open_date_by_ready(open_date) -> models.InstoreTask:
+    return models.InstoreTask.query.filter(models.InstoreTask.open_date != open_date and models.InstoreTask.status == "ready").all()
+
+def get_instoretask_by_not_open_date_by_return(open_date) -> models.InstoreTask:
+    return models.InstoreTask.query.filter(models.InstoreTask.open_date != open_date and models.InstoreTask.status == "return").all()
 
 def get_instoretask_by_close_date(close_date) -> models.InstoreTask:
     return models.InstoreTask.query.filter_by(close_date=close_date).all()
