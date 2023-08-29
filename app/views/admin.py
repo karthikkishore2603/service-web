@@ -5,6 +5,26 @@ from datetime import datetime
 from .. import app, crud, util, models, pdf
 from fpdf import FPDF
 import pytz
+
+@app.route('/sign')
+def index():
+    return render_template('check.html')
+
+@app.route('/sign', methods=['POST'])
+def submit_signature():
+    data = dict(request.form)
+    
+    #signature_data = request.form['signature_data']
+    crud.add_customer_review(data)
+    #print(signature_data)
+
+    return "Signature submitted successfully!"
+
+@app.route('/sign/<review_id>')
+def get_signature(review_id):
+    signature = crud.get_customer_review_by_id(review_id)
+    print(signature)
+    return render_template('check.html', signature=signature)
  
 @app.get("/admin/dashboard")
 def admin_dashboard():

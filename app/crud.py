@@ -14,6 +14,14 @@ def get_password(username: str, role: str) -> str:
     else:
         return None
 
+def add_customer_review(data: dict) -> None:
+    customer_review = models.Customer_review(**data)
+    db.session.add(customer_review)
+    db.session.commit()
+    db.session.flush()
+
+def get_customer_review_by_id(review_id) -> models.Customer_review:
+    return models.Customer_review.query.filter_by(review_id =review_id).first()
 
 def create_admin(data: dict) -> None:
     errors = ""

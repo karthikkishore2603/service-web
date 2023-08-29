@@ -68,7 +68,7 @@
           <h3 style="font-family: 'Times New Roman', serif; ">Customer Name</h3>
         </div>
         <div class="col">
-          <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.customer.name }}</h3>
+          <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.customer_name }}</h3>
         </div>
       </div>
       <div class="row" >
@@ -76,7 +76,7 @@
           <h3 style="font-family: 'Times New Roman', serif; ">Phone No</h3>
         </div>
         <div class="col">
-          <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.customer.phone_no }}</h3>
+          <h3 style="font-family:  Tahoma, sans-serif;">{{ tasks.customer_phone_no }}</h3>
         </div>
       </div>
 
@@ -146,8 +146,14 @@
       <button type="submit" style="max-width: 100px;" class="btn btn-dark">Update</button>
       </form>
     
-      <button type="button" style="margin-left: 10px;max-width: 100px;" data-toggle="modal" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
-    
+      <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;margin-right: 10px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
+ 
+      {% if tasks.status == 'Completed' %}
+  
+  <a href="{{ url_for('tech_onsite_customer_review', task_id=tasks.task_id) }}">
+  <button type="submit" style="max-width: 150px;margin-top: 10px;" class="btn btn-dark">Customer Review</button></a>
+  {% endif %}
+  
       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

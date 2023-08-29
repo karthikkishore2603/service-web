@@ -201,4 +201,13 @@ class Work(db.Model):
 
     technician = relationship("Technician")
 
+class Customer_review(db.Model):
+    __tablename__ = "customer_review"
+    review_id = Column(Integer, primary_key=True, autoincrement=True)
+    task_id = Column(Integer, ForeignKey("onsite_task.task_id"))
+    signature = Column(String(max))
+
+    onsitetask = relationship("OnsiteTask")
+
+
 db.create_all()

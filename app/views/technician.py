@@ -264,3 +264,50 @@ def work_add_task():
         )
     
     return redirect(url_for("tech_work"))
+
+@app.get("/tech/onsite/<task_id>/customerreview")
+def tech_onsite_customer_review(task_id):
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    
+    return render_template(
+        "customer_review.html",
+        tasks=crud.get_onsitetask_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id),task_id=task_id,
+        message="",
+    )
+
+@app.post("/tech/onsite/<task_id>/customerreview")
+def tech_onsite_customer_review_update(task_id):
+    data = dict(request.form)
+    print(data)
+
+    try:
+        crud.add_customer_review(data)
+    except Exception as e:
+        return render_template(
+            "customer_review.html",
+            tasks=crud.get_onsitetask_by_id(task_id),
+            resources=crud.get_resources_by_id(task_id),
+            message=str(e).split(",")
+        )
+    """
+    data["task_id"] = task_id
+    message = ""
+    task = crud.get_onsitetask_by_id(task_id)
+    if task and (task.status == "Pending"):
+        try:
+            crud.update_onsitetasks(data)
+            message = "Task Updated Successfully"
+        except Exception as e:
+            message = str(e).split(",")
+    else:
+        message="Already ready"
+    """
+    return render_template(
+        "customer_review.html",
+        tasks=crud.get_onsitetask_by_id(task_id),
+        resources=crud.get_resources_by_id(task_id),technicians=crud.get_all_technicians(),task_id=task_id,
+    
+    )

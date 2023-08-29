@@ -150,12 +150,19 @@
         name="review" required>
     </div>
 
+
+
   </div>
 
   <button type="submit" style="max-width: 100px;" class="btn btn-dark">Update</button>
   </form>
 
-  <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
+  <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;margin-right: 10px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
+  {% if tasks.status == 'Completed' %}
+  
+  <a href="{{ url_for('onsite_customer_review', task_id=tasks.task_id) }}">
+  <button type="submit" style="max-width: 150px;" class="btn btn-dark">Customer Review</button></a>
+  {% endif %}
 <br>
 <br>
 <h1></h1>
@@ -184,4 +191,8 @@
   </div>
 </div>
 </div></div></div>
+
+
+
+
 {% endblock %}
