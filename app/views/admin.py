@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, make_response,json,Response, jsonify
 import pymysql
 import time 
-from datetime import datetime
+from datetime import datetime, timedelta
 from .. import app, crud, util, models, pdf
 from fpdf import FPDF
 import pytz
@@ -31,6 +31,13 @@ def admin_dashboard():
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
+
+    start_date = datetime.now() - timedelta(days=datetime.now().weekday() )
+    end_date = datetime.now()
+    week_report = crud.get_week_report(start_date,end_date)
+    print(end_date)
+    print(start_date)
+    print(week_report)
     return render_template("admin_dashboard.html", onsite_task_count=crud.get_onsite_count(), instore_task_count_open=crud.get_instore_count_open()
     ,instore_task_count_pending=crud.get_instore_count_pending(),instore_task_count_return = crud.get_instore_count_return(), get_chiplevel_count_sent=crud.get_chiplevel_count_sent(),
     get_warranty_count_sent=crud.get_warranty_count_sent(),)
@@ -1368,7 +1375,7 @@ def work_report():
 
 @app.route('/download/engineer/work/pending/report/pdf')
 def work_report_status():
-    
+    get_tech_task()
     try:
         #a= request.user_agent.string
         date = datetime.now(pytz.timezone('Asia/Kolkata')).date().strftime("%d/%m/%y")
@@ -1447,3 +1454,4 @@ def work_report_status():
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})
     except Exception as e:
         print(e)
+

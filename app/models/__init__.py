@@ -63,6 +63,7 @@ class Resources(db.Model):
     material = Column(String(20), nullable=False)
     service_charge = Column(Integer, nullable=True)
     received_charge = Column(Integer, nullable=True)
+    update_date = Column(Date)
     
     review = Column(String(70))
 
@@ -103,6 +104,7 @@ class InstoreTask(db.Model):
     open_date = Column(Date)
     close_date = Column(Date)
     delivered_by = Column(String(20))
+    update_date = Column(Date)
 
     technician = relationship("Technician")
     customer = relationship("Customer")
@@ -206,6 +208,7 @@ class Customer_review(db.Model):
     review_id = Column(Integer, primary_key=True, autoincrement=True)
     task_id = Column(Integer, ForeignKey("onsite_task.task_id"))
     signature = Column(String(max))
+    ratings  = Column(String(20))
 
     onsitetask = relationship("OnsiteTask")
 

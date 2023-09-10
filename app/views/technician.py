@@ -10,7 +10,7 @@ def tech_dashboard():
     if not util.is_user_authenticated(request) or not technician:
         return render_template("check.html")
     
-    return  render_template ("tech_work.html", technician=technician ,work = crud.get_work_by_tech_id(technician.technician_id))
+    return  render_template ("tech_dashboard.html", technician=technician ,work = crud.get_work_by_tech_id(technician.technician_id))
     """return render_template("tech_dashboard.html", technician=technician , 
                            get_onsitetask_tech_count=crud.get_onsitetask_tech_count(username=technician.username),
                            get_instore_task_tech_count=crud.get_instore_task_tech_count(username=technician.username)

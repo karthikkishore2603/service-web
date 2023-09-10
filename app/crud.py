@@ -2,6 +2,8 @@ from . import db, models, util
 from datetime import datetime
 import pytz
 
+def get_week_report(start_date, end_date) -> list:
+    return models.InstoreTask.query.filter(models.InstoreTask.close_date >= start_date, models.InstoreTask.close_date <= end_date).count()
 
 def get_password(username: str, role: str) -> str:
     if role == "admin":
@@ -61,7 +63,6 @@ def get_all_technicians(filter: dict = None) -> list:
             technicians = technicians.filter_by(name=filter["ftechnician"])    
     technicians = technicians.all()
     return technicians
-
 
 
 def get_all_admins() -> list:
@@ -192,12 +193,14 @@ def update_onsitetasks(data) -> list:
 
     if util.is_task_rsources_available(data["task_id"]):
         task_id = data.pop("task_id")
+        data["update_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
         db.session.query(models.Resources).filter(
             models.Resources.task_id == task_id
         ).update(data)
         db.session.commit()
         db.session.flush()
     else:
+        data["update_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
         update_tasks = models.Resources(**data)
         db.session.add(update_tasks)
         db.session.commit()
@@ -352,6 +355,7 @@ def create_instore_task(data: dict) -> None:
     if data["status"] == "Delivered":
         #task.pending_date = datetime.now(pytz.timezone('Asia/Kolkata'))
         task = models.InstoreTask(delivery_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
+    task = models.InstoreTask(update_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -456,7 +460,7 @@ def update_instoretasks(data) -> list:
             data["delivery_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
             #data = models.InstoreTask(delivery_date=datetime.now(pytz.timezone('Asia/Kolkata')))
         
-
+        data["update_date"] = datetime.now(pytz.timezone('Asia/Kolkata')).date()
         
         db.session.query(models.InstoreTask).filter(
             models.InstoreTask.task_id == task_id

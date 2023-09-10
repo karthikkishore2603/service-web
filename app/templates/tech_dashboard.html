@@ -21,6 +21,12 @@
 
 
    <h1>Welcome {{technician.name}}</h1>
+
+   <a href="{{ url_for('tech_onsite') }}">
+   <button type="submit" style="max-width: 100px;" class="btn btn-dark">Onsite</button></a>
+   
+   <a href="{{ url_for('tech_instore') }}">
+   <button type="submit" style="max-width: 100px;" class="btn btn-dark">Instore</button></a>
    <div class="row">
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">

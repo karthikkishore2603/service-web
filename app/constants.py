@@ -12,7 +12,7 @@ AUTH_TOKEN_COOKIE_NAME = "_AUTH"
 
 
 # SQL database constants
-DATABASE_NAME = "service"
+DATABASE_NAME = "servicecc"
 MYSQL_USER = "karthik"
 MYSQL_PASSWORD = "password"
 MYSQL_PORT = "localhost:3306"

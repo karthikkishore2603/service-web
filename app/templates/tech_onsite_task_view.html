@@ -148,11 +148,10 @@
     
       <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;margin-right: 10px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
  
-      {% if tasks.status == 'Completed' %}
   
   <a href="{{ url_for('tech_onsite_customer_review', task_id=tasks.task_id) }}">
   <button type="submit" style="max-width: 150px;margin-top: 10px;" class="btn btn-dark">Customer Review</button></a>
-  {% endif %}
+  
   
       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">

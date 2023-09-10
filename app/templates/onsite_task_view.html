@@ -145,9 +145,8 @@
         name="received_charge" required>
     </div>
     <div class="mb-3">
-      <label>Review</label>
-      <input type="text"  style="text-transform: capitalize;"class="form-control" value="{{ resources.review }}" placeholder="Customer Feedback"
-        name="review" required>
+      <input type="text"  style="text-transform: capitalize;"class="form-control" value="0" placeholder="Customer Feedback"
+        name="review" required hidden>
     </div>
 
 
@@ -158,11 +157,10 @@
   </form>
 
   <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;margin-right: 10px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
-  {% if tasks.status == 'Completed' %}
+  <!--
+  <a href="{{ url_for('tech_onsite_customer_review', task_id=tasks.task_id) }}">
+  <button type="submit" style="max-width: 150px;" class="btn btn-dark">Customer Review</button></a>-->
   
-  <a href="{{ url_for('onsite_customer_review', task_id=tasks.task_id) }}">
-  <button type="submit" style="max-width: 150px;" class="btn btn-dark">Customer Review</button></a>
-  {% endif %}
 <br>
 <br>
 <h1></h1>
