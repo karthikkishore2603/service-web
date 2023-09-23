@@ -156,14 +156,58 @@ def get_onsitetask_by_tech_id(technician_id) -> models.OnsiteTask:
         models.OnsiteTask.query.filter_by(technician_id=technician_id).all()
         + models.OnsiteTask.query.filter_by(technician_id_2=technician_id).all() +
         models.InstoreTask.query.filter_by(technician_id=technician_id).all()
-        
-        
     )
 
+from datetime import datetime, timedelta
+from sqlalchemy import and_
+
+def get_task_by_week_tech_id()-> models.OnsiteItems:
+
+    # Get today's date
+    q = datetime.now().date()
+    today = (q - timedelta(days=1))
+    # Calculate the start date of the current week (assuming Monday is the start of the week)
+    start_of_week = today - timedelta(days=today.weekday())
+
+    # Iterate through the dates from the start of the week to today
+    current_date = start_of_week
+    while current_date <= today:
+        #print(current_date.strftime("%Y-%m-%d"))
+        current_date += timedelta(days=1)
+    print(start_of_week)
+    print(current_date)
+
+    task_ids = models.Resources.query.filter(and_(
+        models.Resources.update_date >= start_of_week,
+        models.Resources.update_date <= current_date
+    )).with_entities(models.Resources.task_id).all()
+
+    tech_s = [result.task_id for result in task_ids]
+
+    return (models.OnsiteTask.query.filter(models.OnsiteTask.task_id.in_(tech_s)).all()+ models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= start_of_week,
+                                                   models.InstoreTask.update_date <= current_date)).order_by(models.InstoreTask.technician_id).all())
+
+def get_onsite_task_by_week() -> models.OnsiteTask:
+
+    s_date = '2023-09-18'
+    e_date = '2023-09-23'
+
+    return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date)).all())
+
+def get_instore_task_by_week() -> models.InstoreTask:
+    s_date = '2023-09-18'
+    e_date = '2023-09-23'
+
+    return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date)).all())
+ 
+
+    
 def get_instore_by_tech_id(technician_id) -> models.InstoreTask:
     return (
         models.InstoreTask.query.filter_by(technician_id=technician_id).all()        
     )
+
+
 
 
 def get_partner_by_id(partner_id) -> models.Chiplevel:
@@ -327,17 +371,17 @@ def create_instore_task(data: dict) -> None:
         create_customer(customer_data)
     data["customer_id"] = get_customer_by_phone(customer_data["phone_no"]).customer_id
 
-    product_detail = {}
+    """product_detail = {}
     product_detail.update(
         {
             "product_name": data.pop("product_name"),
-            "product_company": data.pop("product_company"),
+            "product_company": data.pop("product_company")
         }
-    )
+    )"""
 
-    if not util.is_product_available(product_detail["product_name"]):
-        create_product(product_detail)
-    data["product_id"] = get_product(product_detail["product_name"]).product_id
+    #if not util.is_product_available(product_detail["product_name"]):
+     #   create_product(product_detail)
+    #data["product_id"] = get_product(product_detail["product_name"]).product_id
 
     data["est_days"] = int(data["est_days"]) if data["est_days"] else None
     data["est_charge"] = int(data["est_charge"]) if data["est_charge"] else None
@@ -345,6 +389,7 @@ def create_instore_task(data: dict) -> None:
     data["recived_charge"] = int(data["recived_charge"]) if data["recived_charge"] else None
     data["discount"] = int(data["discount"]) if data["discount"] else None
     task = models.InstoreTask(**data)
+    task = models.InstoreTask(update_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     
     if data["status"] == "open":
         #task.open_date = datetime.now(pytz.timezone('Asia/Kolkata'))
@@ -355,7 +400,6 @@ def create_instore_task(data: dict) -> None:
     if data["status"] == "Delivered":
         #task.pending_date = datetime.now(pytz.timezone('Asia/Kolkata'))
         task = models.InstoreTask(delivery_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
-    task = models.InstoreTask(update_date=datetime.now(pytz.timezone('Asia/Kolkata')), **data)
     db.session.add(task)
     db.session.commit()
     db.session.flush()
@@ -431,17 +475,17 @@ def update_instoretasks(data) -> list:
             customer_data["phone_no"]
         ).customer_id
 
-        product_detail = {}
+        """product_detail = {}
         product_detail.update(
             {
                 "product_name": data.pop("product_name"),
-                "product_company": data.pop("product_company"),
+                "product_company": data.pop("product_company")
             }
-        )
+        )"""
 
-        if not util.is_product_available(product_detail["product_name"]):
-            create_product(product_detail)
-        data["product_id"] = get_product(product_detail["product_name"]).product_id
+        #if not util.is_product_available(product_detail["product_name"]):
+         #   create_product(product_detail)
+        #data["product_id"] = get_product(product_detail["product_name"]).product_id
 
         task_id = data.pop("task_id")
 

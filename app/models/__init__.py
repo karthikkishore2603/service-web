@@ -105,6 +105,8 @@ class InstoreTask(db.Model):
     close_date = Column(Date)
     delivered_by = Column(String(20))
     update_date = Column(Date)
+    product_name_in = Column(String(40))
+    product_company_in = Column(String(40)) 
 
     technician = relationship("Technician")
     customer = relationship("Customer")

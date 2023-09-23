@@ -122,17 +122,17 @@
       <div class="row">
         <div class="col">
           <label>Product Type<span style="color: red;">*</span></label>
-          <select class="form-control" name="product_name" required>
-            <option value="" id="product_name">Select an option</option>
-            {% for product_name in ["Laptop","Desktop_CPU","Printer","Monitor","CCTV", "PC_Accessories","Other_Accessories"] -%}
-            <option value={{product_name}} {{ 'selected' if flag and product_name == tasks.product.product_name  }} id="product_name">{{ product_name }}</option>
+          <select class="form-control" name="product_name_in" required>
+            <option value="" id="product_name_in">Select an option</option>
+            {% for product_name_in in ["Laptop","Desktop_CPU","Printer","Monitor","CCTV", "PC_Accessories","Other_Accessories"] -%}
+            <option value={{product_name_in}} {{ 'selected' if flag and product_name_in == tasks.product_name_in  }} id="product_name_in">{{ product_name_in }}</option>
             {% endfor -%}
         </select>
         </div>
         <div class="col">
           <label>Product Model<span style="color: red;">*</span></label>
           <input type="text" 
- style="text-transform: capitalize;"name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control" required>
+ style="text-transform: capitalize;"name="product_company_in" value='{{ tasks.product_company_in  if flag}}'  class="form-control" required>
         </div>
       </div>
  
@@ -244,6 +244,22 @@
       </div>
       <input type="text"  style="display: none;">
     </form>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>Product Type<span style="color: red;">*</span></label>
+        <select class="form-control" name="product_name" required disabled>
+          <option value="" id="product_name">Select an option</option>
+          {% for product_name in ["Laptop","Desktop_CPU","Printer","Monitor","CCTV", "PC_Accessories","Other_Accessories"] -%}
+          <option value={{product_name}} {{ 'selected' if flag and product_name == tasks.product.product_name  }} id="product_name">{{ product_name }}</option>
+          {% endfor -%}
+      </select>
+      </div>
+      <div class="col">
+        <label>Product Model<span style="color: red;">*</span></label>
+        <input type="text" 
+style="text-transform: capitalize;"name="product_company" value='{{ tasks.product.product_company  if flag}}'  class="form-control" required disabled>
+      </div>
     </div>
     <input type="text"  id="myTextbox1" style="display: none;">
     
