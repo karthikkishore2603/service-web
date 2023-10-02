@@ -21,12 +21,26 @@
 
                           
     <div class="container-fluid right-content">
+
+      <script>
+        function charge_update() {
+          var x = document.getElementById("status").value;
+          var y = document.getElementById("final_charge").value;
+          if (x == "Delivered" && y == ""){
+            
+            alert("Please Enter Service Charge");
+            
+            return false;
+            
+          }
+        }
+      </script>
       
 <form  method="post"  id="todo-form">
       <div class="row">
         <div class="col"><h1>Add Task</h1></div>
         <div class="col">
-    <button class="btn btn-dark" type="submit"  data-bs-toggle="modal" data-bs-target="#">Save</button>
+    <button class="btn btn-dark" type="submit"  data-bs-toggle="modal" data-bs-target="#" onclick="return charge_update()" >Save</button>
 
     {% if flag and tasks.service_type=='Chiplevel' %}
     <a href="{{ url_for('chiplevel_add',  task_id=tasks.task_id) }}">
@@ -53,7 +67,7 @@
         </div>
         <div class="col">
           <label>Status</label>
-          <select class="form-control" name="status" id="myDropdown" onchange="showTextbox()">
+          <select class="form-control" name="status" id="status" onchange="showTextbox()">
             {% for status in ["open","ready","return","Delivered"] %}
             <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
             {% endfor %}
@@ -231,7 +245,7 @@
       <div class="row">
         <div class="col">
           <label>Service Charges</label>
-          <input type="number" name="final_charge" value='{{ tasks.final_charge if flag and tasks.final_charge}}'  class="form-control">
+          <input type="number" id="final_charge" name="final_charge" value='{{ tasks.final_charge if flag and tasks.final_charge}}'  class="form-control">
         </div>
         <div class="col">
           <label>Recived Charges</label>

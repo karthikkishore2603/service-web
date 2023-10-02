@@ -189,14 +189,14 @@ def get_task_by_week_tech_id()-> models.OnsiteItems:
 
 def get_onsite_task_by_week() -> models.OnsiteTask:
 
-    s_date = '2023-09-18'
-    e_date = '2023-09-23'
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
 
     return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date)).all())
 
 def get_instore_task_by_week() -> models.InstoreTask:
-    s_date = '2023-09-18'
-    e_date = '2023-09-23'
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
 
     return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date)).all())
  
@@ -406,7 +406,7 @@ def create_instore_task(data: dict) -> None:
 
 
 def get_all_instoretasks(filter: dict = None) -> list:
-    tasks = models.InstoreTask.query.order_by(models.InstoreTask.status=="Delivered" and models.InstoreTask.date.desc())
+    tasks = models.InstoreTask.query.order_by(models.InstoreTask.date.desc())
     if filter:
         if filter["fphone"]:
             customer = get_customer_by_phone(filter["fphone"])
