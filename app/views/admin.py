@@ -1463,6 +1463,10 @@ def work_report_status():
 def onsite_report_weekly():
 
     task = (crud.get_onsite_task_by_week())
+    tamil = len((crud.get_onsite_task_by_week_by_tech1()))
+    vasu = len((crud.get_onsite_task_by_week_by_tech2()))
+    vithuran = len((crud.get_onsite_task_by_week_by_tech4()))
+    aravindh = (len(crud.get_onsite_task_by_week_by_tech5()))
 
     count_work = len(task)
     
@@ -1487,7 +1491,7 @@ def onsite_report_weekly():
         pdf.ln(7)
 
         pdf.set_font('Times','B',15)
-        pdf.cell(page_width, 0.0, '2023.09.18 to 2023.9.23', align='C')
+        pdf.cell(page_width, 0.0, '02.10.2023 to 07.10.2023', align='C')
         pdf.ln(10)
 
         col_width = page_width/6
@@ -1496,6 +1500,19 @@ def onsite_report_weekly():
         
         pdf.set_font('Times','B',13)
         pdf.cell(page_width,10,'Work done'+' - '+str(count_work) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Vasu '+' - '+str(vasu) ,align='L')
+        pdf.ln(10)
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Tamil '+' - '+str(tamil) ,align='L')
+        pdf.ln(10)
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Vithuran '+' - '+str(vithuran) ,align='L')
+        pdf.ln(10)
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Aravindh '+' - '+str(aravindh) ,align='L')
         pdf.ln(10)
 
         pdf.set_font('Times','B',13)
@@ -1542,6 +1559,11 @@ def onsite_report_weekly():
 def instore_report_weekly():
 
     task = (crud.get_instore_task_by_week())
+    tamil = len((crud.get_instore_task_by_week_by_tech1()))
+    vasu = len((crud.get_instore_task_by_week_by_tech2()))
+    vithuran = len((crud.get_instore_task_by_week_by_tech3()))
+    aravindh = (len(crud.get_instore_task_by_week_by_tech4()))
+    
 
     count_work = len(task)
     
@@ -1566,7 +1588,7 @@ def instore_report_weekly():
         pdf.ln(7)
 
         pdf.set_font('Times','B',15)
-        pdf.cell(page_width, 0.0, '2023.09.18 to 2023.9.23', align='C')
+        pdf.cell(page_width, 0.0, '02.10.2023 to 07.10.2023', align='C')
         pdf.ln(10)
 
         col_width = page_width/6
@@ -1575,6 +1597,19 @@ def instore_report_weekly():
         
         pdf.set_font('Times','B',13)
         pdf.cell(page_width,10,'Work done'+' - '+str(count_work) ,align='L')
+        pdf.ln(10)
+
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Vasu '+' - '+str(vasu) ,align='L')
+        pdf.ln(10)
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Tamil '+' - '+str(tamil) ,align='L')
+        pdf.ln(10)
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Vithuran '+' - '+str(vithuran) ,align='L')
+        pdf.ln(10)
+        pdf.set_font('Times','',13)
+        pdf.cell(page_width,10,'Aravindh '+' - '+str(aravindh) ,align='L')
         pdf.ln(10)
 
         pdf.set_font('Times','B',13)

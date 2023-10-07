@@ -194,11 +194,65 @@ def get_onsite_task_by_week() -> models.OnsiteTask:
 
     return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date)).all())
 
+def get_onsite_task_by_week_by_tech1() -> models.OnsiteTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date, models.InstoreTask.update_date <= e_date, models.OnsiteTask.technician_id == 1)).all())
+
+def get_onsite_task_by_week_by_tech2() -> models.OnsiteTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date, models.InstoreTask.update_date <= e_date, models.OnsiteTask.technician_id == 2)).all())
+def get_onsite_task_by_week_by_tech4() -> models.OnsiteTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date, models.InstoreTask.update_date <= e_date, models.OnsiteTask.technician_id == 4)).all())
+def get_onsite_task_by_week_by_tech5() -> models.OnsiteTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.OnsiteTask.query.filter(and_(models.OnsiteTask.creation_date >= s_date, models.OnsiteTask.creation_date <= e_date, models.InstoreTask.update_date <= e_date, models.OnsiteTask.technician_id == 5)).all())
+
 def get_instore_task_by_week() -> models.InstoreTask:
     s_date = '2023-10-02'
     e_date = '2023-10-07'
 
     return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date)).all())
+ 
+def get_instore_task_by_week_by_tech1() -> models.InstoreTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date, models.InstoreTask.technician_id == 1)).all())
+ 
+def get_instore_task_by_week_by_tech2() -> models.InstoreTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date, models.InstoreTask.technician_id == 2)).all())
+ 
+def get_instore_task_by_week_by_tech3() -> models.InstoreTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date, models.InstoreTask.technician_id == 4)).all())
+ 
+def get_instore_task_by_week_by_tech4() -> models.InstoreTask:
+
+    s_date = '2023-10-02'
+    e_date = '2023-10-07'
+
+    return (models.InstoreTask.query.filter(and_(models.InstoreTask.update_date >= s_date, models.InstoreTask.update_date <= e_date, models.InstoreTask.technician_id == 5)).all())
  
 
     
