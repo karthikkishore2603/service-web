@@ -126,11 +126,110 @@
     </div>
   </div>
 
+  <h1>Materials</h1>
+
+  <table>
+    <thead>
+        <tr>
+            <th>Sl No</th>
+            <th>Item Name</th>
+            <th>Serial No</th>
+            <th>Nos</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="data-table">
+        {% for record in data %}
+              <tr>
+                  <td><input type="text" name="sl_no" value="{{ record.sl_no }}" /></td>
+                  <td><input type="text" name="item_name" value="{{ record.item_name }}" /></td>
+                  <td><input type="text" name="serial_no" value="{{ record.serial_no }}" /></td>
+                  <td><input type="text" name="nos" value="{{ record.nos }}" /></td>
+                  <td><select name="mat_status"><option value="Taken from office">Taken from office</option><option value="Bill to customer">Bill to customer</option><option value="Return to office">Return to office</option></select></td>
+                  <td><input type="hidden" name="task_id" value="{{ record.task_id }}" /></td>
+                  <td><button class="delete-row">Delete</button></td>
+              </tr>
+              {% endfor %}
+    </tbody>
+  </table>
+  
+  <button id="addRowButton">Add Row</button>
+  <button id="submitDataButton">Submit Data</button>
+  
+  <script>
+    document.getElementById('addRowButton').addEventListener('click', function () {
+        // Add a new row with input fields
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" name="sl_no" /></td>
+            <td><input type="text" name="item_name" /></td>
+            <td><input type="text" name="serial_no" /></td>
+            <td><input type="text" name="nos" /></td>
+            <td><select name="mat_status"><option value="Taken from office">Taken from office</option><option value="Bill to customer">Bill to customer</option><option value="Return to office">Return to office</option></select></td>
+            <td><input type="hidden" name="task_id" value="{{ tasks.task_id }}" /></td>
+            <td><button class="delete-row">Delete</button></td>
+        `;
+        document.getElementById('data-table').appendChild(newRow);
+    });
+    document.getElementById('submitDataButton').addEventListener('click', function () {
+        const tableData = [];
+        const tableRows = document.querySelectorAll('#data-table tr');
+        tableRows.forEach(function (row, index) {
+            const inputFields = row.querySelectorAll('input');
+            if (inputFields.length > 0) {
+                const rowData = {
+                  sl_no: inputFields[0].value,
+                  item_name: inputFields[1].value,
+                  serial_no: inputFields[2].value,
+                  nos: inputFields[3].value,
+                  mat_status: inputFields[4].value,
+                  task_id: inputFields[5].value,
+                };
+                tableData.push(rowData);
+            }
+        });
+  
+        // Send the data to the Flask application using fetch
+        fetch('/receive_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tableData),
+        })
+        fetch('/receive_data', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(tableData),
+      })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                // You can update the UI to show a success message here
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle any errors that occur during the POST request
+            });
+  
+    });
+  
+    // Add an event listener for the "Delete" buttons
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('delete-row')) {
+            const row = event.target.parentElement.parentElement;
+            row.remove();
+        }
+    });
+  </script>
+
+
   <div class="modal-body">
     <div class="mb-3">
-      <label>Materials</label>
-      <input type="textarea" style="text-transform: capitalize;" class="form-control" value="{{ resources.material }}"  placeholder="Materials" name="material"
-        required>
+      <input type="hidden" style="text-transform: capitalize;" class="form-control" value="0"  placeholder="Materials" name="material"
+        required disabled>
     </div>
     <div class="mb-3">
       <label>Service Charges</label>
@@ -163,6 +262,8 @@
   
 <br>
 <br>
+<!----->
+
 <h1></h1>
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">

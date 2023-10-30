@@ -122,6 +122,7 @@ class Products(db.Model):
 class Items(db.Model):
     __tablename__ = "items"
     item_id = Column(Integer, primary_key=True, autoincrement=True)
+    sl_no = Column(Integer)
     task_id = Column(Integer, ForeignKey("onsite_task.task_id"))
     item_name = Column(String(30), nullable=False)
     serial_no = Column(String(25))

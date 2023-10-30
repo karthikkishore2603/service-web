@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, make_response,jso
 import pymysql
 import time 
 from datetime import datetime, timedelta
-from .. import app, crud, util, models, pdf
+from .. import app, crud, util, models, pdf,db
 from fpdf import FPDF
 import pytz
 
@@ -274,11 +274,13 @@ def onsite_task_view(task_id):
     admin = util.current_user_info(request)
     if not util.is_user_authenticated(request,type="admin") or not admin:
         return render_template("check.html")
+
+    data = models.Items.query.filter_by(task_id=task_id).all()
     return render_template(
         "onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
         resources=crud.get_resources_by_id(task_id),
-        message=None,
+        message=None,data=data
     )
 
 @app.get("/admin/viewtask/<task_id>/<t_name>")
@@ -1649,3 +1651,46 @@ def instore_report_weekly():
         return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'inline;filename=pending_report.pdf'})
     except Exception as e:
         print(e)
+
+
+@app.route('/receive_data', methods=['POST'])
+def receive_data():
+    data = request.json  # Assuming the data is sent as JSON
+    # Process the received data here
+    for item in data:
+        new_data = models.Items(
+            sl_no=item['sl_no'],
+            task_id = item['task_id'],
+            nos=item['nos'],
+            item_name=item['item_name'],
+            serial_no=item['serial_no'],
+            mat_status=item['mat_status']
+        )
+        task_id = item['task_id']
+        sl_no = item['sl_no']
+        print(item['sl_no'])
+        print(models.Items.query.filter_by(sl_no =item['sl_no']).first())
+        a = (models.Items.query.filter_by(sl_no =item['sl_no']).first())
+        from sqlalchemy import and_
+        #if models.Items.query.filter(models.InstoreTask.close_date >= start_date, models.InstoreTask.close_d)ate <= end_date).count()
+        if models.Items.query.filter(and_(models.Items.task_id == task_id, models.Items.sl_no == sl_no)).with_entities(models.Items.sl_no).first():
+        #if  models.Items.query.filter_by(sl_no =item['sl_no']).all() :
+            #if models.Items.query.filter_by(task_id =item['task_id'], sl_no=item['sl_no']).all():
+            print(models.Items.query.filter_by(sl_no =item['sl_no']).first() and models.Items.query.filter_by(task_id =item['task_id']).first())
+            db.session.query(models.Items).filter(models.Items.sl_no == sl_no, models.Items.task_id == task_id ).update({models.Items.nos: item['nos'],models.Items.item_name: item['item_name'],models.Items.serial_no: item['serial_no']})
+            db.session.commit()
+            db.session.flush()
+            print("upadates")
+        else:
+            db.session.add(new_data)
+            db.session.commit()
+            db.session.flush()
+            print('ok')
+        print(models.Items.query.filter_by(task_id =22).first())
+            
+    return render_template("check.html")
+
+@app.route('/receive_data', methods=['GET'])
+def send_data():
+    data = models.Items.query.all()
+    return jsonify(data)
