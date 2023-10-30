@@ -33,7 +33,7 @@ def tech_onsite():
 def tech_onsite_add_task():
     technician = util.current_user_info(request)
     data = dict(request.form)
-
+    
     if data.get("ftype"):
         return render_template(
             "tech_onsite.html",
@@ -64,10 +64,11 @@ def tech_onsite_add_task():
 @app.get("/tech/onsite/viewtask/<task_id>")
 def tech_onsite_task_view(task_id):
     print((crud.get_resources_by_id(task_id)))
+    data = models.Items.query.filter_by(task_id=task_id).all()
     return render_template(
         "tech_onsite_task_view.html",
         tasks=crud.get_onsitetask_by_id(task_id),
-        resources=crud.get_resources_by_id(task_id), technicians=crud.get_all_technicians(),
+        resources=crud.get_resources_by_id(task_id), technicians=crud.get_all_technicians(),data=data,
     )
 
 

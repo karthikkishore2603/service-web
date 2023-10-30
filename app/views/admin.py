@@ -1652,11 +1652,12 @@ def instore_report_weekly():
     except Exception as e:
         print(e)
 
-
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
+    print("HEllo")
     data = request.json  # Assuming the data is sent as JSON
     # Process the received data here
+    print(data)
     for item in data:
         new_data = models.Items(
             sl_no=item['sl_no'],
@@ -1677,7 +1678,7 @@ def receive_data():
         #if  models.Items.query.filter_by(sl_no =item['sl_no']).all() :
             #if models.Items.query.filter_by(task_id =item['task_id'], sl_no=item['sl_no']).all():
             print(models.Items.query.filter_by(sl_no =item['sl_no']).first() and models.Items.query.filter_by(task_id =item['task_id']).first())
-            db.session.query(models.Items).filter(models.Items.sl_no == sl_no, models.Items.task_id == task_id ).update({models.Items.nos: item['nos'],models.Items.item_name: item['item_name'],models.Items.serial_no: item['serial_no']})
+            db.session.query(models.Items).filter(models.Items.sl_no == sl_no, models.Items.task_id == task_id ).update({models.Items.nos: item['nos'],models.Items.item_name: item['item_name'],models.Items.serial_no: item['serial_no'],models.Items.mat_status: item['mat_status']})
             db.session.commit()
             db.session.flush()
             print("upadates")
@@ -1688,9 +1689,5 @@ def receive_data():
             print('ok')
         print(models.Items.query.filter_by(task_id =22).first())
             
-    return render_template("check.html")
+    return jsonify({'message': 'Data received successfully'})
 
-@app.route('/receive_data', methods=['GET'])
-def send_data():
-    data = models.Items.query.all()
-    return jsonify(data)

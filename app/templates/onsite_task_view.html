@@ -126,7 +126,44 @@
     </div>
   </div>
 
-  <h1>Materials</h1>
+  
+  <div class="modal-body">
+    <div class="mb-3">
+      <input type="hidden" style="text-transform: capitalize;" class="form-control" value="0"  placeholder="Materials" name="material"
+        required disabled>
+    </div>
+    <div class="mb-3">
+      <label>Service Charges</label>
+      <input type="text" 
+ style="text-transform: capitalize;"class="form-control" value="{{ resources.service_charge }}" placeholder="Service Charge"
+        name="service_charge" >
+    </div>
+    <div class="mb-3">
+      <label>Received Charges</label>
+      <input type="text" 
+ style="text-transform: capitalize;"class="form-control" value="{{ resources.received_charge }}" placeholder="Received Charge"
+        name="received_charge" >
+    </div>
+    <div class="mb-3">
+      <input type="text"  style="text-transform: capitalize;"class="form-control" value="0" placeholder="Customer Feedback"
+        name="review" required hidden>
+    </div>
+
+
+    <button type="submit" style="max-width: 100px;" class="btn btn-dark">Update</button>
+    <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;margin-right: 10px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
+  
+  </div>
+
+</form>
+
+  <!--
+  <a href="{{ url_for('tech_onsite_customer_review', task_id=tasks.task_id) }}">
+  <button type="submit" style="max-width: 150px;" class="btn btn-dark">Customer Review</button></a>-->
+  
+<br>
+<br>
+<h1>Materials</h1>
 
   <table>
     <thead>
@@ -139,17 +176,20 @@
         </tr>
     </thead>
     <tbody id="data-table">
-        {% for record in data %}
+      {% for record in data %}
               <tr>
-                  <td><input type="text" name="sl_no" value="{{ record.sl_no }}" /></td>
-                  <td><input type="text" name="item_name" value="{{ record.item_name }}" /></td>
-                  <td><input type="text" name="serial_no" value="{{ record.serial_no }}" /></td>
-                  <td><input type="text" name="nos" value="{{ record.nos }}" /></td>
-                  <td><select name="mat_status"><option value="Taken from office">Taken from office</option><option value="Bill to customer">Bill to customer</option><option value="Return to office">Return to office</option></select></td>
+                  <td><input type="text" name="sl_no"  value="{{ record.sl_no }}"/></td>
+                  <td><input type="text" name="item_name"  value="{{ record.item_name }}"/></td>
+                  <td><input type="text" name="serial_no"  value="{{ record.serial_no }}" /></td>
+                  <td><input type="text" name="nos"value="{{ record.nos }}"/></td>
+                  <td><select name="mat_status">
+                    <option value="Taken from office" {% if record.mat_status == 'Taken from office' %}selected{% endif %}>Taken from office</option>
+                    <option value="Bill to customer" {% if record.mat_status == 'Bill to customer' %}selected{% endif %}>Bill to customer</option>
+                    <option value="Return to office" {% if record.mat_status == 'Return to office' %}selected{% endif %}>Return to office</option></select></td>
                   <td><input type="hidden" name="task_id" value="{{ record.task_id }}" /></td>
                   <td><button class="delete-row">Delete</button></td>
               </tr>
-              {% endfor %}
+      {% endfor %}
     </tbody>
   </table>
   
@@ -175,7 +215,7 @@
         const tableData = [];
         const tableRows = document.querySelectorAll('#data-table tr');
         tableRows.forEach(function (row, index) {
-            const inputFields = row.querySelectorAll('input');
+            const inputFields = row.querySelectorAll('input,select');
             if (inputFields.length > 0) {
                 const rowData = {
                   sl_no: inputFields[0].value,
@@ -189,80 +229,34 @@
             }
         });
   
-        // Send the data to the Flask application using fetch
         fetch('/receive_data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tableData),
-        })
-        fetch('/receive_data', {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(tableData),
-      })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-                // You can update the UI to show a success message here
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify(tableData),
             })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle any errors that occur during the POST request
-            });
-  
-    });
-  
-    // Add an event listener for the "Delete" buttons
-    document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('delete-row')) {
-            const row = event.target.parentElement.parentElement;
-            row.remove();
-        }
-    });
-  </script>
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message);
+                    // You can update the UI to show a success message here
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle any errors that occur during the POST request
+                });
+        });
+
+        // Add an event listener for the "Delete" buttons
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('delete-row')) {
+                const row = event.target.parentElement.parentElement;
+                row.remove();
+            }
+        });
+    </script>
 
 
-  <div class="modal-body">
-    <div class="mb-3">
-      <input type="hidden" style="text-transform: capitalize;" class="form-control" value="0"  placeholder="Materials" name="material"
-        required disabled>
-    </div>
-    <div class="mb-3">
-      <label>Service Charges</label>
-      <input type="text" 
- style="text-transform: capitalize;"class="form-control" value="{{ resources.service_charge }}" placeholder="Service Charge"
-        name="service_charge" required>
-    </div>
-    <div class="mb-3">
-      <label>Received Charges</label>
-      <input type="text" 
- style="text-transform: capitalize;"class="form-control" value="{{ resources.received_charge }}" placeholder="Received Charge"
-        name="received_charge" required>
-    </div>
-    <div class="mb-3">
-      <input type="text"  style="text-transform: capitalize;"class="form-control" value="0" placeholder="Customer Feedback"
-        name="review" required hidden>
-    </div>
-
-
-
-  </div>
-
-  <button type="submit" style="max-width: 100px;" class="btn btn-dark">Update</button>
-  </form>
-
-  <button type="button" data-toggle="modal" style="margin-left: 10px;max-width: 100px;margin-right: 10px;" class="btn btn-dark" data-target="#exampleModalCenter">Close</button>
-  <!--
-  <a href="{{ url_for('tech_onsite_customer_review', task_id=tasks.task_id) }}">
-  <button type="submit" style="max-width: 150px;" class="btn btn-dark">Customer Review</button></a>-->
-  
-<br>
-<br>
-<!----->
 
 <h1></h1>
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -288,10 +282,9 @@
       </div>
     </div>
   </div>
+
+
+
 </div>
 </div></div></div>
-
-
-
-
 {% endblock %}

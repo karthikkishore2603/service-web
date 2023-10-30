@@ -127,6 +127,7 @@ class Items(db.Model):
     item_name = Column(String(30), nullable=False)
     serial_no = Column(String(25))
     nos = Column(Integer)
+    mat_status = Column(String(20))
 
 class Partners(db.Model):
     __tablename__ = "partners"
