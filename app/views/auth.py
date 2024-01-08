@@ -44,7 +44,7 @@ def login_verify():
         jwt_token = util.create_access_token(
             schemas.TokenData(
                 username=username,
-                id=admin_login.admin_id,
+                id=str(admin_login.admin_id),
                 user_type="admin",
             ),
             access_token_expires,

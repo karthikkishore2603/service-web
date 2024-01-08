@@ -217,4 +217,4 @@ class Customer_review(db.Model):
     onsitetask = relationship("OnsiteTask")
 
 
-db.create_all()
+# db.create_all()
