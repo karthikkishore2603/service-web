@@ -68,7 +68,7 @@
         <div class="col">
           <label>Status</label>
           <select class="form-control" name="status" id="status" onchange="showTextbox()">
-            {% for status in ["open","ready","return","Delivered"] %}
+            {% for status in ["Open","Ready","Delivered"] %}
             <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
             {% endfor %}
         </select>
@@ -85,12 +85,12 @@
         <div class="col">
           <label>Customer Name<span style="color: red;">*</span></label>
           <input type="text"  style="text-transform: capitalize;" name="customer_name" id="name_lit" value="{{ tasks.customer.name  if flag}}" autocomplete="off" class="form-control" required>
-          <ul class="list"></ul>
+          <!-- <ul class="list"></ul> -->
         </div>
         <div class="col">
           <label>Phone No<span style="color: red;">*</span></label>
           <input type="number" name="phone_no" id="phone_lit" value='{{ tasks.customer.phone_no  if flag }}' class="form-control" autocomplete="off" required>
-          <ul class="list1"></ul>
+          <!-- <ul class="list1"></ul> -->
         </div>
       </div>
 
@@ -259,6 +259,7 @@
       <input type="text"  style="display: none;">
     </form>
     </div>
+    <!----
     <div class="row">
       <div class="col">
         <label>Product Type<span style="color: red;">*</span></label>
@@ -276,7 +277,7 @@ style="text-transform: capitalize;"name="product_company" value='{{ tasks.produc
       </div>
     </div>
     <input type="text"  id="myTextbox1" style="display: none;">
-    
+    ---->
 </div>
 
 <script>

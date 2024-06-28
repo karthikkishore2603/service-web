@@ -6,6 +6,11 @@ from .. import app, crud, util, models, pdf,db
 from fpdf import FPDF
 import pytz
 
+from  .. import msgtest
+
+
+
+
 @app.route('/sign')
 def index():
     return render_template('check.html')
@@ -429,8 +434,22 @@ def instore_add_task_view():
         print('heloo')
         data =dict(request.form)
         print(data)
+        model = data.get("product_company_in")
+        product = data.get("product_name_in")
+        date = data.get("date")
+        bag = data.get("bag")
+        charger = data.get("charger")
+        power_cable = data.get("power_cable")
+        problem = data.get("problem")
+        phoneno = data.get("phone_no")
+        print("1",phoneno)
+        # print customer name
+        print(data.get("customer_name"))
 
         crud.create_instore_task(data)
+        
+        msgtest.send_whatsapp_message(model,product,date,bag,charger,power_cable,problem,phoneno)
+        print("msg sent")
         return redirect(url_for("instore"))
     else:
         return render_template(
@@ -446,7 +465,20 @@ def instore_task_update(task_id):
     
     data = dict(request.form)
     data["task_id"] = task_id
+    model = data.get("product_company_in")
+    product = data.get("product_name_in")
+    date = data.get("date")
+    bag = data.get("bag")
+    charger = data.get("charger")
+    power_cable = data.get("power_cable")
+    problem = data.get("problem")
+    phoneno = data.get("phone_no")
+    service_charge = data.get("final_charge")
+    status = data.get("status")
     crud.update_instoretasks(data)
+
+    if status=="Delivered":
+        msgtest.send_delivered_message(model,product,date,bag,charger,power_cable,problem,phoneno,service_charge)
     return render_template(
         "instore_add_task.html",
         flag=True,

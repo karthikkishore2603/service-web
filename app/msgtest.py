@@ -1,25 +1,159 @@
+import requests
 
-import time 
-from  pywhatkit import *
-import pyautogui
-from pynput.keyboard import Key, Controller
-
-keyboard = Controller()
-
-
-msg="hello"
-try:
+def send_whatsapp_message(model,product,date,bag,charger,power_cable,problem,phoneno):
+    print(phoneno)
     
-    pywhatkit.sendwhatmsg_instantly(
-        phone_no="+919487529436", 
-        message=msg,
-        tab_close=True
-    )
-    time.sleep(10)
-    pyautogui.click()
-    time.sleep(2)
-    keyboard.press(Key.enter)
-    keyboard.release(Key.enter)
-    print("Message sent!")
-except Exception as e:
-    print(str(e))
+    phoneno1 = "91"+str(phoneno)
+    print(phoneno1)
+    url = f'https://graph.facebook.com/v18.0/106885295759687/messages'
+
+    headers = {
+        'Authorization': f'Bearer EAAK3LGk3JkABO7l9CQBRqLq5lNvU753Yt2EYroPuZBMtMjZCNWSQGHSfPdkoUvcvm4g4DFDwfqbLD3vDx16yWCb1Y8ZAGb4ZAAYgWxdOiF7YOQPZBZBHrRI2kPbmL7hM18QulIu0YSIbmKd6ZCeMCFXLdHarYoZA2gHynjcJca7ZCMFpvHZCndZBZAOQ7WLGlzvwjWF7',
+        'Content-Type': 'application/json'
+    }
+
+    name = "kishore"
+    ss="ss"
+    product = product
+    model = model
+    date = date
+    bag = bag
+    charger = charger
+    power_cable = power_cable
+    problem = problem
+
+    payload = {
+        "messaging_product": "whatsapp",
+        "to": phoneno1,
+        "type": "template",
+        "template": {
+            "name": "service_msg",
+            "language": {
+                "code": "en_us"
+                },
+            "components": [
+                {
+                "type": "BODY",
+                "parameters": [
+                    {
+                        "type": "text",
+                        "text": model
+                        },
+                    {
+                        "type": "text",
+                        "text": product
+                        },
+                        {
+                        "type": "text",
+                        "text": date
+                        },{
+                        "type": "text",
+                        "text": bag
+                        },{
+                        "type": "text",
+                        "text": charger
+                        },
+                    {
+                        "type": "text",
+                        "text": power_cable
+                        },
+                        {
+                        "type": "text",
+                        "text": problem
+                        },
+                    ]
+                }
+                ]
+            }
+        }
+            
+     
+        
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        print("Message sent successfully.")
+    else:
+        print(response)
+        print("Failed to send message.")
+
+
+
+
+
+
+def send_delivered_message(model,product,date,bag,charger,power_cable,problem,phoneno,service_charge):
+    phoneno1 = "91"+str(phoneno)
+    print(phoneno1)
+    url = f'https://graph.facebook.com/v18.0/106885295759687/messages'
+
+    headers = {
+        'Authorization': f'Bearer EAAK3LGk3JkABO7l9CQBRqLq5lNvU753Yt2EYroPuZBMtMjZCNWSQGHSfPdkoUvcvm4g4DFDwfqbLD3vDx16yWCb1Y8ZAGb4ZAAYgWxdOiF7YOQPZBZBHrRI2kPbmL7hM18QulIu0YSIbmKd6ZCeMCFXLdHarYoZA2gHynjcJca7ZCMFpvHZCndZBZAOQ7WLGlzvwjWF7',
+        'Content-Type': 'application/json'
+    }
+
+    name = "kishore"
+    ss="ss"
+    product = product
+    model = model
+    date = date
+    bag = bag
+    charger = charger
+    power_cable = power_cable
+    problem = problem
+    service_charge = service_charge
+    payload = {
+        "messaging_product": "whatsapp",
+        "to": phoneno1,
+        "type": "template",
+        "template": {
+            "name": "delivery_msg",
+            "language": {
+                "code": "en_us"
+                },
+            "components": [
+                {
+                "type": "BODY",
+                "parameters": [
+                    {
+                        "type": "text",
+                        "text": model
+                        },
+                    {
+                        "type": "text",
+                        "text": product
+                        },
+                        {
+                        "type": "text",
+                        "text": bag
+                        },{
+                        "type": "text",
+                        "text": charger
+                        },
+                    {
+                        "type": "text",
+                        "text": power_cable
+                        },
+                        {
+                        "type": "text",
+                        "text": service_charge
+                        },
+                        
+                    ]
+                }
+                ]
+            }
+        }
+            
+     
+        
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        print("Message sent successfully.")
+    else:
+        print(response)
+        print("Failed to send message.")
+
