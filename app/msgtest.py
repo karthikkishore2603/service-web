@@ -1,9 +1,10 @@
 import requests
+import json
 
-def send_whatsapp_message(model,product,date,bag,charger,power_cable,problem,phoneno):
-    print(phoneno)
-    
-    phoneno1 = "91"+str(phoneno)
+def send_whatsapp_message(data):
+    print(data)
+    print(data.get('cphoneno'))
+    phoneno1 = "91"+str(data.get('cphoneno'))
     print(phoneno1)
     url = f'https://graph.facebook.com/v18.0/106885295759687/messages'
 
@@ -14,13 +15,13 @@ def send_whatsapp_message(model,product,date,bag,charger,power_cable,problem,pho
 
     name = "kishore"
     ss="ss"
-    product = product
-    model = model
-    date = date
-    bag = bag
-    charger = charger
-    power_cable = power_cable
-    problem = problem
+    # product = product
+    # model = model
+    # date = date
+    # bag = bag
+    # charger = charger
+    # power_cable = power_cable
+    # problem = problem
 
     payload = {
         "messaging_product": "whatsapp",
@@ -37,29 +38,29 @@ def send_whatsapp_message(model,product,date,bag,charger,power_cable,problem,pho
                 "parameters": [
                     {
                         "type": "text",
-                        "text": model
+                        "text": data.get("product_model")
                         },
                     {
                         "type": "text",
-                        "text": product
+                        "text": data.get("product_type")
                         },
                         {
                         "type": "text",
-                        "text": date
+                        "text": data.get("service_date")
                         },{
                         "type": "text",
-                        "text": bag
+                        "text": data.get("bag")
                         },{
                         "type": "text",
-                        "text": charger
+                        "text": data.get("charger")
                         },
                     {
                         "type": "text",
-                        "text": power_cable
+                        "text": data.get("power_cable")
                         },
                         {
                         "type": "text",
-                        "text": problem
+                        "text": data.get("problem")
                         },
                     ]
                 }
@@ -77,6 +78,13 @@ def send_whatsapp_message(model,product,date,bag,charger,power_cable,problem,pho
     else:
         print(response)
         print("Failed to send message.")
+        try:
+            error_response = response.json()
+            print(json.dumps(error_response, indent=4))
+        except json.JSONDecodeError:
+            print('Response content is not in JSON format')
+            print(response.text)
+
 
 
 
