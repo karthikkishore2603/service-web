@@ -3,8 +3,8 @@ import json
 
 def send_whatsapp_message(data):
     print(data)
-    print(data.get('cphoneno'))
-    phoneno1 = "91"+str(data.get('cphoneno'))
+    print(data.cphoneno)
+    phoneno1 = "91"+str(data.cphoneno)
     print(phoneno1)
     url = f'https://graph.facebook.com/v18.0/106885295759687/messages'
 
@@ -38,29 +38,29 @@ def send_whatsapp_message(data):
                 "parameters": [
                     {
                         "type": "text",
-                        "text": data.get("product_model")
+                        "text": data.product_model
                         },
                     {
                         "type": "text",
-                        "text": data.get("product_type")
+                        "text": data.product_type
                         },
                         {
                         "type": "text",
-                        "text": data.get("service_date")
+                        "text": data.service_date
                         },{
                         "type": "text",
-                        "text": data.get("bag")
+                        "text": data.bag
                         },{
                         "type": "text",
-                        "text": data.get("charger")
+                        "text": data.charger
                         },
                     {
                         "type": "text",
-                        "text": data.get("power_cable")
+                        "text": data.power_cable
                         },
                         {
                         "type": "text",
-                        "text": data.get("problem")
+                        "text": data.problem
                         },
                     ]
                 }

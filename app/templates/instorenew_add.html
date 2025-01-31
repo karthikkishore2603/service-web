@@ -12,52 +12,6 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='autosuggest.css') }}" /> 
 
-<script>
-    function disableTextBox1() {
-        var selectBox = document.getElementById('product_status');
-        var selectedValue = selectBox.value;
-
-        var textbox1 = document.getElementById('hard_disk_condition');
-        var battery_condition = document.getElementById('battery_condition');
-        var display = document.getElementById('display')
-      
-
-        if (selectedValue === 'Unable_to_Check') {
-            textbox1.disabled = true;
-            battery_condition.disabled = true;
-            display.disabled = true;
-            
-        } else {
-            textbox1.disabled = false;
-            battery_condition.disabled = false;
-            display.disabled = false
-            
-        }
-    }
-
-    function disableTextBox2() {
-        var selectBox = document.getElementById('product_type');
-        var selectedValue = selectBox.value;
-
-        var textbox1 = document.getElementById('hard_disk_condition');
-        var battery_condition = document.getElementById('battery_condition');
-        var display = document.getElementById('display')
-
-        if (selectedValue === 'Printer') {
-            textbox1.disabled = true;
-            battery_condition.disabled = true;
-            display.disabled = true;
-            charger.disabled = true;
-            charger_no.disabled = true;
-        } else {
-            textbox1.disabled = false;
-            battery_condition.disabled = false;
-            display.disabled = false
-            charger.disabled = false
-            charger_no.disabled = false
-        }
-    }
-</script>
 
 <div class="page-content p-4" id="content">
 <div class="main-container">
@@ -82,24 +36,27 @@
 
     {% if flag and tasks.task_id %}
     <a href="{{ url_for('instorenew_download_report',task_id=tasks.task_id) }}" target="_blank"><button type="button"
-      class="btn btn-dark">Download</button></a>
+      class="btn btn-dark">Print</button></a>
       {% endif %}
 
       </div>
 
     </div>
 
+   
+
+
 
     <div class="row_view">
         <div class="col_view">
             <label>Service Date<span style="color: red;">*</span></label>
-            <input type="date" name="service_date" id="service_date" value="{{ tasks.service_date if flag }}" class="form-control instore-input">
+            <input type="date" name="service_date" id="service_date" value="{{ tasks.service_date if flag }}" class="form-control instore-input" required>
         </div> 
 
         <div class="col_view">
             <label>Status<span style="color: red;">*</span></label>
-            <select name="status" id="status" class="form-control instore-input">
-                {% for status in ["Open","Checking","Ready","Delivered"] %}
+            <select name="status" id="status" class="form-control instore-input" required>
+                {% for status in ["Open","Ready","Delivered"] %}
                 <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
                 {% endfor %}
                 
@@ -111,19 +68,19 @@
     <div class="row_view">
         <div class="col_view">
             <label>Customer Name<span style="color: red;">*</span></label>
-            <input type="text" name="cname" placeholder="Customer Name" value="{{ tasks.cname if flag }}" class="form-control instore-input">
+            <input type="text" name="cname" placeholder="Customer Name" value="{{ tasks.cname if flag }}" class="form-control instore-input" required>
         </div>
 
         <div class="col_view">
             <label>Customer Phone No<span style="color: red;">*</span></label>
-            <input type="number" name="cphoneno" placeholder="Customer Phone No" value="{{ tasks.cphoneno if flag }}" class="form-control instore-input">
+            <input type="number" name="cphoneno" placeholder="Customer Phone No" value="{{ tasks.cphoneno if flag }}" class="form-control instore-input"> 
         </div>
     </div>
 
     <div class="row_view">
         <div class="col_view">
             <label>Service Type<span style="color: red;">*</span></label>
-            <select name="service_type" class="form-control instore-input" id="service_type" >
+            <select name="service_type" class="form-control instore-input" id="service_type" required>
                 <option value="">Select an Service Type</option>
                 {% for work in ["Service","Chiplevel","Warranty"] %}
             <option value={{work}} {{  'selected' if  flag and work == tasks.service_type   }}>{{work}}</option>
@@ -133,7 +90,7 @@
 
         <div class="col_view">
             <label>Engineer<span style="color: red;">*</span></label>
-            <select class="form-control" name="engineer_assign">
+            <select class="form-control" name="engineer_assign" required>
               <option value="">Select an Engineer</option>
               {% for technician in technicians -%}
             <option value={{technician.name}} {{ 'selected' if flag and technician.name == tasks.engineer_assign   }}>{{ technician.name }}</option>
@@ -159,7 +116,7 @@
     <div class="row_view">
         <div class="col_view">
             <label>Product Type<span style="color: red;">*</span></label>
-          <select class="form-control" name="product_type" id="product_type" onchange="disableTextBox2()">
+          <select class="form-control" name="product_type" id="product_type" onchange="disableTextBox2()" required>
             <option value="" id="product_type">Select an option</option>
             {% for product_name_in in ["Laptop","Desktop_CPU","Printer","Monitor","CCTV", "PC_Accessories","Other_Accessories"] -%}
             <option value={{product_name_in}} {{ 'selected' if flag and product_name_in == tasks.product_type  }} id="product_name_in">{{ product_name_in }}</option>
@@ -169,7 +126,7 @@
 
         <div class="col_view">
             <label>Product Model<span style="color: red;">*</span></label>
-            <input type="text" style="text-transform: capitalize;"name="product_model" value='{{ tasks.product_model  if flag}}'  class="form-control" >   
+            <input type="text" style="text-transform: capitalize;"name="product_model" value='{{ tasks.product_model  if flag}}'  class="form-control" required>   
         </div>
     </div>
 
@@ -177,7 +134,7 @@
     <div class="row_view">
         <div class="col_view">
             <label>Problem<span style="color: red;">*</span></label>
-            <input type="text"  style="text-transform: capitalize;"name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" >
+            <input type="text"  style="text-transform: capitalize;"name="problem" value='{{ tasks.problem  if flag}}'  class="form-control" required>
         </div>
 
         <div class="col_view">
@@ -191,7 +148,7 @@
             <label>Power Cable<span style="color: red;">*</span></label>
             <div >
 
-            <input type="radio" style="width: 20px;height: 20px;" name="power_cable" id="yes" value="yes" 
+            <input type="radio" style="width: 20px;height: 20px;" name="power_cable" id="yes" value="yes" required
             {% if flag and 'yes' in tasks.power_cable %}
                     checked
                 {% endif %} ></input><label for="yes">Yes</label>
@@ -207,7 +164,7 @@
             <label>Charger<span style="color: red;">*</span></label>
             <div  >
   
-            <input type="radio" style="width: 20px;height: 20px;" id="charger" name="charger" id="yes1" value="yes"
+            <input type="radio" style="width: 20px;height: 20px;" id="charger" name="charger" id="yes1" value="yes" required 
             {% if flag and 'yes' in tasks.charger %}
                 checked
             {% endif %} 
@@ -225,7 +182,7 @@
         <div class="col_view">
             <label>Bag<span style="color: red;">*</span></label>
             <div >
-            <input type="radio" style="width: 20px;height: 20px;"  name="bag" id="yes2" value="yes"
+            <input type="radio" style="width: 20px;height: 20px;"  name="bag" id="yes2" value="yes" required
             {% if 'yes' in tasks.bag %}
                 checked
             {% endif %} 

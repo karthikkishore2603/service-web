@@ -17,5 +17,5 @@ class User(BaseModel):
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
-    id: Union[str, None] = None
+    id: Union[str,int, None] = None
     user_type: Union[str, None] = None

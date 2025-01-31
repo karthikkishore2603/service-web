@@ -2,7 +2,7 @@ from email.policy import default
 from logging import NullHandler
 import string
 from tokenize import Double
-from .. import db
+from .. import db, app
 from sqlalchemy import (
     BigInteger,
     Boolean,
@@ -247,4 +247,5 @@ class InstoreNew(db.Model):
     discount = Column(Integer)
     payment_status = Column(String(20))
 
-db.create_all()
+with app.app_context():
+    db.create_all()

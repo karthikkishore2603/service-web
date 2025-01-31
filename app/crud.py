@@ -888,3 +888,32 @@ def get_instoretasks_by_tech(username: str, filter: dict = None) -> list:
     tasks = tasks.all()
 
     return tasks
+
+
+def get_all_instoretasksnew(filter: dict = None) -> list:
+    print("hello")
+    tasks = models.InstoreNew.query.order_by(models.InstoreNew.service_date.desc())
+    if filter:
+        if filter["fphone"]:
+            tasks = tasks.filter_by(cphoneno=filter["fphone"])
+        if filter["fid"]:
+            tasks = tasks.filter_by(task_id=filter["fid"])
+            print(tasks)
+        if filter["fdate"]:
+            print(filter["fdate"])
+            tasks = tasks.filter_by(service_date=filter["fdate"])
+            print(tasks)
+        if filter["fstype"]:
+            tasks = tasks.filter_by(service_type=filter["fstype"])
+        if filter["fstatus"]:
+            tasks = tasks.filter_by(status=filter["fstatus"])
+        
+        if filter["ftechnician"]:
+            tech_id=get_technician_id_by_name(filter["ftechnician"])
+            if tech_id:
+                tasks = tasks.filter_by(technician_id=tech_id[0])
+            else:
+                tasks = tasks.filter_by(technician_id=None)
+                
+    tasks = tasks.all()
+    return tasks
