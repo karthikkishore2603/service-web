@@ -247,5 +247,26 @@ class InstoreNew(db.Model):
     discount = Column(Integer)
     payment_status = Column(String(20))
 
+
+class OnsiteNew(db.Model):
+    __tablename__ = "onsite_new"
+    task_id = Column(Integer, primary_key=True, autoincrement=True)
+    creation_date = Column(Date)
+    urgency = Column(String(20))
+    status = Column(String(40))
+    on_service_date = Column(Date)
+    cname = Column(String(30))
+    cphoneno = Column(String(20))
+    caddress = Column(String(20))
+    service_type = Column(String(20))
+    engineer_assign = Column(String(20))
+    problem = Column(String(40))
+    remarks = Column(String(100))
+    service_charge = Column(Integer)
+    received_charge = Column(Integer)
+    discount = Column(Integer)
+    payment_status = Column(String(20))
+
+    
 with app.app_context():
     db.create_all()

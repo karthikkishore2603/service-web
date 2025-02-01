@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, make_response,json,Response, jsonify, send_file
 import pymysql
 from .. import app, crud, util, models, pdf,db
-
+from sqlalchemy import or_
 from fpdf import FPDF
 import pytz
 from  .. import msgtest
@@ -99,6 +99,157 @@ def instorenew_task_update_by_id(task_id):
         "instorenew_add.html",
         flag=True,
         tasks=get_instorenew_by_id(task_id),technicians=crud.get_all_technicians()
+    )
+
+
+
+
+###############################################################################################################################################
+@app.get('/admin/onsitenew')
+def onsitenew():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    
+    onsitenew = get_onsitenew()
+   
+    return render_template('onsitenew.html', onsitenew=onsitenew)
+
+def add_onsitenew(data: dict):
+    onsite = models.OnsiteNew(**data)
+    db.session.add(onsite)
+    db.session.commit()
+    db.session.flush()
+
+def get_onsitenew():
+    onsitenew = models.OnsiteNew.query.order_by(models.OnsiteNew.task_id.desc()).all()
+    return onsitenew
+
+
+@app.route('/admin/onsitenew/add', methods=['GET', 'POST'])
+def onsitenew_add():
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    
+    creation_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%Y-%m-%d')
+
+
+    if request.method == 'POST':
+        data = dict(request.form)
+        
+        add_onsitenew(data)
+        # msgtest.send_whatsapp_message(data)
+        print(data)
+
+
+    return render_template('onsitenew_add.html',technicians=crud.get_all_technicians(),tasks={'creation_date': creation_date})
+
+
+@app.get("/admin/onsitenew/task/<task_id>")
+def onsitenew_task_view_by_id(task_id):
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    return render_template(
+        "onsitenew_add.html",
+        flag=True,
+        tasks=get_onsitenew_by_id(task_id),technicians=crud.get_all_technicians()
+    )
+
+def get_onsitenew_by_id(task_id):
+    onsitenew = models.OnsiteNew.query.filter_by(task_id=task_id).first()
+    return onsitenew
+
+
+@app.post("/admin/onsitenew/task/<task_id>")
+def onsitenew_task_update_by_id(task_id):
+    admin = util.current_user_info(request)
+    if not util.is_user_authenticated(request,type="admin") or not admin:
+        return render_template("check.html")
+    
+    data = dict(request.form)
+    task = get_onsitenew_by_id(task_id)
+    for key, value in data.items():
+        setattr(task, key, value)
+    db.session.commit()
+    return render_template(
+        "onsitenew_add.html",
+        flag=True,
+        tasks=get_onsitenew_by_id(task_id),technicians=crud.get_all_technicians()
+    )
+
+
+
+
+
+#ECH ONSITE3333333333333333333333333333333333333333333333333333333333333333333333333333
+
+@app.get("/tech/onsitenew")
+def tech_onsitenew():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    return render_template(
+        "tech_onsitenew.html",
+        tasks=get_onsitenew_by_engineer(username=technician.username), technicians=crud.get_all_technicians(),
+        technician=technician
+    )
+
+
+def get_onsitenew_by_engineer(username):
+    print(username)
+    #fetch boh onsite engineer assigned and unassigned
+    onsitenew = models.OnsiteNew.query.filter(or_(models.OnsiteNew.engineer_assign == username,models.OnsiteNew.engineer_assign == '')).all()
+    print(onsitenew)
+    return onsitenew
+
+@app.route('/tech/onsitenew/add', methods=['GET', 'POST'])
+def tech_onsitenew_add():
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    
+    creation_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%Y-%m-%d')
+
+
+    if request.method == 'POST':
+        data = dict(request.form)
+        
+        add_onsitenew(data)
+        # msgtest.send_whatsapp_message(data)
+        print(data)
+
+
+    return render_template('tech_onsitenew_add.html',technicians=technician,tasks={'creation_date': creation_date})
+
+@app.get("/tech/onsitenew/task/<task_id>")
+def tech_onsitenew_task_view_by_id(task_id):
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    return render_template(
+        "tech_onsitenew_add.html",
+        flag=True,
+        tasks=get_onsitenew_by_id(task_id),technicians=crud.get_all_technicians()
+    )
+
+
+@app.post("/tech/onsitenew/task/<task_id>")
+def tech_onsitenew_task_update_by_id(task_id):
+    technician = util.current_user_info(request)
+    if not util.is_user_authenticated(request) or not technician:
+        return render_template("check.html")
+    
+    data = dict(request.form)
+    task = get_onsitenew_by_id(task_id)
+    for key, value in data.items():
+        setattr(task, key, value)
+    db.session.commit()
+    return render_template(
+        "tech_onsitenew_add.html",
+        flag=True,
+        tasks=get_onsitenew_by_id(task_id),technicians=crud.get_all_technicians()
     )
 
 @app.route('/download/instorenew/report/pdf/<task_id>')
