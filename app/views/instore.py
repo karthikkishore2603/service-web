@@ -231,7 +231,7 @@ def tech_onsitenew_task_view_by_id(task_id):
     return render_template(
         "tech_onsitenew_add.html",
         flag=True,
-        tasks=get_onsitenew_by_id(task_id),technicians=crud.get_all_technicians()
+        tasks=get_onsitenew_by_id(task_id),technicians=technician
     )
 
 
