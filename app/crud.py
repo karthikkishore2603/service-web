@@ -917,3 +917,24 @@ def get_all_instoretasksnew(filter: dict = None) -> list:
                 
     tasks = tasks.all()
     return tasks
+
+def get_all_onsitetasksnew(filter: dict = None) -> list:
+    tasks = models.OnsiteNew.query.order_by(models.OnsiteNew.creation_date.desc())
+    if filter:
+        if filter["fphone"]:
+            tasks = tasks.filter_by(cphoneno=filter["fphone"])
+        if filter["fid"]:
+            tasks = tasks.filter_by(task_id=filter["fid"])
+        if filter["fdate"]:
+            tasks = tasks.filter_by(creation_date=filter["fdate"])
+            print(tasks)
+        if filter["fstype"]:
+            tasks = tasks.filter_by(service_type=filter["fstype"])
+        if filter["fstatus"]:
+            tasks = tasks.filter_by(status=filter["fstatus"])
+        if filter['fon_service_date']:
+            tasks = tasks.filter_by(on_service_date=filter["fon_service_date"])
+        if filter["ftechnician"]:
+            tasks = tasks.filter_by(engineer_assign=filter["ftechnician"])
+    tasks = tasks.all()
+    return tasks

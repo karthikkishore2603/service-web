@@ -115,6 +115,23 @@ def onsitenew():
    
     return render_template('onsitenew.html', onsitenew=onsitenew)
 
+@app.post("/admin/onsitenew")
+def onsitenew_filter():
+    data = dict(request.form)
+    names = crud.get_all_customer_phone()
+    
+    name_lit =[]
+    for i in names:
+        name_lit.append(i[0])
+    if data.get("ftype"):
+        print("hello", data)
+        return render_template(
+            "onsitenew.html",
+            onsitenew=crud.get_all_onsitetasksnew(filter=data),
+            technicians=crud.get_all_technicians(),phone=(name_lit)
+            
+        )
+    return redirect(url_for("onsitenew"))
 def add_onsitenew(data: dict):
     onsite = models.OnsiteNew(**data)
     db.session.add(onsite)
