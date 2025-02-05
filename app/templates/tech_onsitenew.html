@@ -84,51 +84,63 @@
         </form>
 ---->
     
-        <div class="table-responsive"> 
-            <br>
-            <h2 class="h3">Work</h2>
-            <table id="myTable" class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">ON.ID<a type="button" href="{{ url_for('instore_add_task_view') }}"> AA</a></th>
-                        <th scope="col">Creation Date</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Urgency Level</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">View</th>
-                    </tr>
-                </thead>
-                
-         
-                    {% for task in tasks -%}
-                    <tr>
-                        <td>
-                            {{ task.task_id }}
-                        </td>
-                        <td>
-                            <p style="text-transform: capitalize;"  >{{ task.creation_date }}</p>
-                        </td>
-                        <td>
-                            <p style="text-transform: capitalize;">{{ task.cname }}</p>
-                        </td>
-                        <td>
-                            <p style="text-transform: capitalize;">{{ task.urgency }}</p>
-                        </td>
-                        <td>
-                            <p style="text-transform: capitalize;">{{ task.status }}</p>
-                        
-                        
-                        <td>
-        
-                            <a href="{{ url_for('tech_onsitenew_task_view_by_id', task_id=task.task_id) }}"><button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#viewtask">View</button></a>
-                        </td>
-                    </tr>
 
-                    {% endfor -%}
-            </table>
-            
+<div class="d-none d-md-block"> <!-- Table for large screens -->
+    <div class="table-responsive">
+        <br>
+        <h2 class="h3">Work</h2>
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ON.ID<a type="button" href="{{ url_for('instore_add_task_view') }}"> AA</a></th>
+                    <th scope="col">Creation Date</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Urgency Level</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">View</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.task_id }}</td>
+                    <td><p style="text-transform: capitalize;">{{ task.creation_date }}</p></td>
+                    <td><p style="text-transform: capitalize;">{{ task.cname }}</p></td>
+                    <td><p style="text-transform: capitalize;">{{ task.urgency }}</p></td>
+                    <td><p style="text-transform: capitalize;">{{ task.status }}</p></td>
+                    <td>
+                        <a href="{{ url_for('tech_onsitenew_task_view_by_id', task_id=task.task_id) }}">
+                            <button role="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewtask">View</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Cards for mobile view -->
+<div class="d-block d-md-none">
+    <br>
+    <h2 class="h3">Work</h2>
+    <div class="row">
+        {% for task in tasks %}
+        <div class="col-12 mb-3">
+            <div class="card shadow-sm p-3">
+                <h5 class="card-title">Task ID: {{ task.task_id }}</h5>
+                <p class="mb-1"><strong>Service Date</strong>{{ task.on_service_date }}</p>
+                <p class="mb-1"><strong>Customer Name:</strong> {{ task.cname }}</p>
+                <p class="mb-1"><strong>Urgency Level:</strong> {{ task.urgency }}</p>
+                <p class="mb-1"><strong>Status:</strong> {{ task.status }}</p>
+                <a href="{{ url_for('tech_onsitenew_task_view_by_id', task_id=task.task_id) }}" class="btn btn-primary btn-sm mt-2">View</a>
+            </div>
         </div>
+        {% endfor %}
+    </div>
+</div>
 
+        
 </div>
 </main>
 
