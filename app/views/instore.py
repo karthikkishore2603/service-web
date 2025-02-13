@@ -217,7 +217,7 @@ def tech_onsitenew():
 def get_onsitenew_by_engineer(username):
     print(username)
     #fetch boh onsite engineer assigned and unassigned
-    onsitenew = models.OnsiteNew.query.filter(or_(models.OnsiteNew.engineer_assign == username,models.OnsiteNew.engineer_assign == '')).all()
+    onsitenew = models.OnsiteNew.query.filter(or_(models.OnsiteNew.engineer_assign == username,models.OnsiteNew.engineer_assign == '')).order_by(models.OnsiteNew.task_id.desc()).all()
     print(onsitenew)
     return onsitenew
 
