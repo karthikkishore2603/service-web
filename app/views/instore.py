@@ -1,13 +1,13 @@
 from flask import render_template, request, redirect, url_for, make_response,json,Response, jsonify, send_file
 import pymysql
 from .. import app, crud, util, models, pdf,db
-from sqlalchemy import or_
+from sqlalchemy import or_, case
 from fpdf import FPDF
 import pytz
 from  .. import msgtest
 from datetime import datetime
-from ..msgtest import send_whatsapp_message
-
+# from ..msgtest import send_whatsapp_message
+from .whatsapp_msg import send_whatsapp_msg
 
 @app.get('/admin/instorenew')
 def instorenew():
@@ -41,7 +41,7 @@ def instorenew_filter():
 
 def add_instorenew(data: dict):
     instask = models.InstoreNew(creation_date=datetime.now(pytz.timezone('Asia/Kolkata')),**data)
-    send_whatsapp_message(instask)
+    #send_whatsapp_message(instask)
     db.session.add(instask)
     db.session.commit()
     db.session.flush()
@@ -134,6 +134,7 @@ def onsitenew_filter():
     return redirect(url_for("onsitenew"))
 def add_onsitenew(data: dict):
     onsite = models.OnsiteNew(**data)
+    send_whatsapp_msg(data)
     db.session.add(onsite)
     db.session.commit()
     db.session.flush()
@@ -187,6 +188,12 @@ def onsitenew_task_update_by_id(task_id):
     
     data = dict(request.form)
     task = get_onsitenew_by_id(task_id)
+
+    previos_status = task.status
+    new_status = data.get('status')
+    if previos_status != new_status:
+        send_whatsapp_msg(data)
+
     for key, value in data.items():
         setattr(task, key, value)
     db.session.commit()
@@ -217,7 +224,17 @@ def tech_onsitenew():
 def get_onsitenew_by_engineer(username):
     print(username)
     #fetch boh onsite engineer assigned and unassigned
-    onsitenew = models.OnsiteNew.query.filter(or_(models.OnsiteNew.engineer_assign == username,models.OnsiteNew.engineer_assign == '')).order_by(models.OnsiteNew.task_id.desc()).all()
+    onsitenew = models.OnsiteNew.query.filter(
+        or_(
+            models.OnsiteNew.engineer_assign == username,
+            models.OnsiteNew.engineer_assign == ''
+        )
+    ).order_by(
+        case(
+            (models.OnsiteNew.status == 'open', 1),
+            else_=0
+        ).desc()
+    ).all()
     print(onsitenew)
     return onsitenew
 

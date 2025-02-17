@@ -74,7 +74,7 @@
         <div class="col_view">
             <label>Status</label>
             <select name="status" id="status" class="form-control instore-input" required>
-                {% for status in ["Open","Assigned","Attened","Completed_Payment_Pending", "Completed_payment_Done"] %}
+                {% for status in ["Open","Assigned","Completed"] %}
                 <option value={{status}} {{  'selected' if flag and status==tasks.status  }}>{{status}}</option>
                 {% endfor %}
                 
