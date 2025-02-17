@@ -5,10 +5,10 @@ url = 'http://localhost:3000/send-message'
 
 
 
-file_path = "C:/Users\KARTHIK/Downloads/36  Mahadhana Street  Opp VRS Thirumana Mahal Mayiladuthurai  609001 (2).pdf"
+#file_path = "C:/Users\KARTHIK/Downloads/36  Mahadhana Street  Opp VRS Thirumana Mahal Mayiladuthurai  609001 (2).pdf"
 
-with open(file_path, "rb") as file:
-    encoded_file = base64.b64encode(file.read()).decode('utf-8')
+# with open(file_path, "rb") as file:
+    # encoded_file = base64.b64encode(file.read()).decode('utf-8')
 
 def send_whatsapp_msg(onsite_data):
 
