@@ -8,6 +8,21 @@ from  .. import msgtest
 from datetime import datetime
 # from ..msgtest import send_whatsapp_message
 from .whatsapp_msg import send_whatsapp_msg
+import requests
+
+@app.route('/tally/whatsapp/msg', methods=['POST'])
+def receive_and_forward():
+    try:
+        json_data = request.json  # Get incoming JSON
+        destination_url = 'http://localhost:3000/send-message'  # Replace with actual msg.com URL
+
+        # Forward data to msg.com
+        response = requests.post(destination_url, json=json_data, headers={'Content-Type': 'application/json'})
+
+        return jsonify({'message': 'Data forwarded successfully', 'response': response.json()})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.get('/admin/instorenew')
 def instorenew():
