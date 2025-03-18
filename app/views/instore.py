@@ -149,7 +149,10 @@ def onsitenew_filter():
     return redirect(url_for("onsitenew"))
 def add_onsitenew(data: dict):
     onsite = models.OnsiteNew(**data)
-    send_whatsapp_msg(data)
+    try:
+        send_whatsapp_msg(data)
+    except Exception as e:
+        print(e)
     db.session.add(onsite)
     db.session.commit()
     db.session.flush()

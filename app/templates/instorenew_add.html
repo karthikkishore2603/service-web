@@ -90,7 +90,7 @@
 
         <div class="col_view">
             <label>Engineer<span style="color: red;">*</span></label>
-            <select class="form-control" name="engineer_assign" required>
+            <select class="form-control" name="engineer_assign">
               <option value="">Select an Engineer</option>
               {% for technician in technicians -%}
             <option value={{technician.name}} {{ 'selected' if flag and technician.name == tasks.engineer_assign   }}>{{ technician.name }}</option>
